@@ -13,10 +13,13 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.base.dialog.PasswordDialog;
 import com.gxb.gxswallet.config.AssetSymbol;
 import com.gxb.gxswallet.config.Configure;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.page.send.dialog.TransactionConfirmDialog;
 import com.gxb.gxswallet.page.send.model.Sender;
+import com.gxb.gxswallet.page.send.model.Transaction;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.gxb.sdk.models.wallet.AccountBalance;
 import com.jwsd.libzxing.OnQRCodeScanCallback;
@@ -38,7 +41,7 @@ import butterknife.OnClick;
  */
 
 public class SendActivity extends PresenterActivity<SendContract.Presenter>
-        implements SendContract.View {
+        implements SendContract.View, PasswordDialog.OnPasswordConfirmListener, TransactionConfirmDialog.OnTransactionConfirmListener {
 
     @BindView(R.id.topbar_send)
     QMUITopBar mTopBar;
@@ -62,6 +65,8 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     private List<WalletData> mWalletDataList;
     private String[] mWalletNames;
     private static final String SENDER_KEY = "sender";
+    private int mQueryFeeLoadingCode = generateLoadingId();
+    private int mSendLoadingCode = getContentLayoutId();
 
     public static void start(Activity activity, Sender sender) {
         Intent intent = new Intent(activity, SendActivity.class);
@@ -208,11 +213,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @OnClick(R.id.send_btn_send)
     void onSendBtnClick() {
-        String from = fromTv.getText().toString();
-        String to = toEt.getText().toString();
-        String amount = amountEt.getText().toString();
-        String memo = memoEt.getText().toString();
-        mPresenter.send(from, to, amount, memo);
+        new PasswordDialog().setPasswordConfirmListener(this).show(getSupportFragmentManager(), "password");
     }
 
     @OnClick(R.id.switch_account_send)
@@ -236,7 +237,20 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @Override
     public void onSendSuccess() {
+        dismissLoading(mSendLoadingCode);
+        showOk(getString(R.string.send_success));
+    }
 
+    @Override
+    public void onQueryFeeSuccess(double fee) {
+        dismissLoading(mQueryFeeLoadingCode);
+        TransactionConfirmDialog.newInstance(
+                new Transaction(Double.parseDouble(amountEt.getText().toString()),
+                        toEt.getText().toString(),
+                        memoEt.getText().toString(),
+                        fee, mSender.getCoin()))
+                .setOnTransactionConfirmListener(this)
+                .show(getSupportFragmentManager(), "confirm");
     }
 
     @Override
@@ -266,4 +280,23 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         QRCodeManager.getInstance().with(this).onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onConfirm(String password) {
+        showLoading(mQueryFeeLoadingCode, R.string.query_fee);
+        String from = fromTv.getText().toString();
+        String to = toEt.getText().toString();
+        String amount = amountEt.getText().toString();
+        String memo = memoEt.getText().toString();
+        mPresenter.queryFee(from, to, amount, mSender.getCoin(), memo);
+    }
+
+    @Override
+    public void onConfirm() {
+        showLoading(mSendLoadingCode, R.string.sending);
+        String from = fromTv.getText().toString();
+        String to = toEt.getText().toString();
+        String amount = amountEt.getText().toString();
+        String memo = memoEt.getText().toString();
+        mPresenter.send(from, to, amount, mSender.getCoin(), memo);
+    }
 }

@@ -103,20 +103,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void showOk(String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
-        dialog.show();
-        Run.onBackground(new Action() {
+    protected void showOk(final String message) {
+        Run.onUiSync(new Action() {
             @Override
             public void call() {
-                try {
-                    Thread.sleep(2000);
-                    dialog.dismiss();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
+                dialog.show();
+                Run.onBackground(new Action() {
+                    @Override
+                    public void call() {
+                        try {
+                            Thread.sleep(2000);
+                            dialog.dismiss();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
+
+
     }
 
     protected void showError(String message) {

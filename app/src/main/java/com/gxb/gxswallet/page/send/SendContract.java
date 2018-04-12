@@ -17,6 +17,9 @@ public class SendContract {
          * 发送成功后的回调
          */
         void onSendSuccess();
+
+        void onQueryFeeSuccess(double fee);
+
         /**
          * 获取账户余额成功回调
          *
@@ -33,9 +36,12 @@ public class SendContract {
          * @param from   账户名称(地址)
          * @param amount 数量
          */
-        void send(String from, String to, String amount, String memo);
+        void send(String from, String to, String amount, String coin, String memo);
+
+        void queryFee(String from, String to, String amount, String coin, String memo);
 
         List<WalletData> fetchWallet();
+
         void fetchWalletBalance(final WalletData wallet);
     }
 }

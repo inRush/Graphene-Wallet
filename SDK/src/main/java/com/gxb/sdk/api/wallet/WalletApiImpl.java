@@ -129,7 +129,7 @@ public class WalletApiImpl extends BaseApi implements WalletApi {
 
     @Override
     public void transfer(Object[] params, GxbCallBack callBack) {
-        String json = RpcRequest.createRequest(0, "transfer2", params, false);
+        String json = RpcRequest.createRequest(0, "transfer", params, false);
         mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
     }
 
