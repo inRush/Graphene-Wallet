@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language_code">en</string>
+    <string name="app_name">GXS Wallet</string>
+    <string name="input_activity_private_key">Enter your active private key here</string>
+    <string name="input_password">Password</string>
+    <string name="again_input_password">Confirm</string>
+    <string name="import_now">Import Now</string>
+    <string name="import_wallet">Import Wallet</string>
+    <string name="create_wallet">Create Wallet</string>
+    <string name="gxb">GXB</string>
+    <string name="private_key_not_allow_empty">Private key not allow empty</string>
+    <string name="password_not_allow_empty">Password not allow empty</string>
+    <string name="please_enter_password_again">Please confirm your password</string>
+    <string name="password_not_match">Confirm not pass</string>
+    <string name="activity_private_key_format_error">Activity private key format error</string>
+    <string name="home">Home</string>
+    <string name="geting_account">An account is being obtained</string>
+    <string name="system_exception">System exception</string>
+    <string name="price">Price</string>
+    <string name="being_obtained_exchange">Being obtained exchange</string>
+    <string name="_0_00">0.00</string>
+    <string name="gxs">GXS</string>
+</resources>

@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ע�������Ƿ�Ӧ�õĻص�
+ *注册区块是否被应用的回调
  * @author Wolkin
  *
  */
-public class SetBlockAppliedCallback extends GlobalAPI {
+public class SetBlockAppliedCallback extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

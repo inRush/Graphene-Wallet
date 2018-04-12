@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ע���ض����ݲ�ƷID�����ݽ��׻ص�
+ *注册特定数据产品ID的数据交易回调
  * @author Wolkin
  *
  */
-public class SetDataTransactionProductsSubscribeCallback extends GlobalAPI {
+public class SetDataTransactionProductsSubscribeCallback extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

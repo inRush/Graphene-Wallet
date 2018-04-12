@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/len_16"
+            android:text="@string/gxb"
+            android:textColor="@color/colorPrimary"
+            android:textSize="35sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/import_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_round_btn"
+            android:text="@string/import_wallet"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_18"/>
+
+        <Button
+            android:id="@+id/create_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_round_btn"
+            android:text="@string/create_wallet"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_18"/>
+    </LinearLayout>
+
+</FrameLayout>

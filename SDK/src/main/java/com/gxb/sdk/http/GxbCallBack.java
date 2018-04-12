@@ -10,7 +10,7 @@ public interface GxbCallBack {
     /**
      * 失败回调
      */
-    void onFailure();
+    void onFailure(Error error);
 
     /**
      * 成功回调

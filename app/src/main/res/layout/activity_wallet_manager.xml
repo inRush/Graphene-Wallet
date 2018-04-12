@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_wallet_manager"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        app:qmui_topbar_need_separator="false"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_wallet_manager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/qmui_config_color_background">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/create_wallet_wallet_manager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="@string/create_wallet"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/import_wallet_wallet_manager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/import_wallet"/>
+    </LinearLayout>
+</LinearLayout>

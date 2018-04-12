@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.gxb.gxswallet">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
         android:name=".App"
@@ -13,14 +24,34 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".page.main.MainActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".page.firstin.FirstInActivity"/>
+        <activity android:name=".page.importaccount.ImportWalletActivity"/>
+        <activity android:name=".page.send.SendActivity"/>
+        <activity android:name=".page.receive.ReceiveActivity"/>
+        <activity android:name=".page.launch.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".page.addcontact.AddContactActivity"/>
+        <activity android:name=".page.editcontact.EditContactActivity"/>
+        <activity android:name=".base.webview.RefreshAgentWebActivity"/>
+        <activity android:name=".page.quotationdetail.QuotationDetailActivity"/>
+        <activity android:name=".page.walletmanager.WalletManagerActivity"/>
+        <activity android:name=".page.createwallet.CreateWalletActivity"/>
+        <activity android:name=".page.backuptip.BackUpTipActivity"/>
+        <activity android:name=".page.walletdetail.WalletDetailActivity"/>
+        <activity android:name=".page.cointransaction.CoinTransactionHistoryActivity"/>
+        <activity android:name=".page.transaction_history_detail.TransactionHistoryDetailActivity"/>
+        <activity android:name=".page.choose_coin.ChooseCoinActivity"/>
+
+        <service android:name=".services.exchange.ExchangeService"/>
     </application>
 
 </manifest>

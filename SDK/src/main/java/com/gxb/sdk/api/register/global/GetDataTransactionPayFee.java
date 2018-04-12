@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ��ȡָ��ʱ�������ݽ��׵�������
+ * 获取指定时间内数据交易的手续费
  * @author Wolkin
  *
  */
-public class GetDataTransactionPayFee extends GlobalAPI {
+public class GetDataTransactionPayFee extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/symbol_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_18"
+            tools:text="GXS_BTC"/>
+
+        <TextView
+            android:id="@+id/name_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_alpha_80"
+            android:textSize="@dimen/font_16"
+            tools:text="Bit-Z"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/price_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@color/blue_400"
+            android:textSize="@dimen/font_18"
+            tools:text="0.0003379"/>
+
+        <TextView
+            android:id="@+id/price_rmb_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@color/black_alpha_80"
+            android:textSize="@dimen/font_16"
+            tools:text="￥18.13909"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/quote_exchange"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="10dp"
+        android:background="#165d78"
+        android:gravity="center"
+        android:textColor="@color/white"
+        tools:text="+2.22%"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="@color/black_alpha_16"
+        />
+
+</FrameLayout>

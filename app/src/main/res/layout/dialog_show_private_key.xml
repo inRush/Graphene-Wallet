@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/len_10"
+        android:text="@string/export_private_key"/>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/len_20"
+        android:layout_marginStart="@dimen/len_20"
+        android:layout_marginTop="@dimen/len_10"
+        android:padding="@dimen/len_6"
+        app:qmui_backgroundColor="@color/red_50"
+        app:qmui_borderColor="@color/red_200"
+        app:qmui_borderWidth="1dp"
+        app:qmui_radius="@dimen/len_6">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/dialog_private_key_notice"
+            android:textColor="@color/red_300"
+            android:textSize="@dimen/font_12"/>
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/len_20"
+        android:layout_marginStart="@dimen/len_20"
+        android:layout_marginTop="@dimen/len_20"
+        android:padding="@dimen/len_10"
+        app:qmui_backgroundColor="@color/black_alpha_16"
+        app:qmui_radius="@dimen/len_6">
+
+        <TextView
+            android:id="@+id/placeholder_dialog_private_key"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/dialog_private_key_placeholder"
+            android:textColor="@color/black_alpha_96"
+            android:textSize="@dimen/font_18"/>
+
+        <TextView
+            android:id="@+id/private_key_dialog_private_key"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout>
+
+
+    <net.qiujuer.genius.ui.widget.EditText
+        android:id="@+id/password_dialog_private_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/len_20"
+        android:layout_marginStart="@dimen/len_20"
+        android:hint="@string/input_password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/colorPrimary"
+        app:gLineColor="@color/colorPrimary"/>
+
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/btn_dialog_private_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/len_20"
+        android:layout_marginEnd="@dimen/len_20"
+        android:layout_marginStart="@dimen/len_20"
+        android:layout_marginTop="@dimen/len_20"
+        android:padding="@dimen/len_10"
+        android:text="@string/unlock_wallet"
+        app:qmui_borderColor="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:qmui_backgroundColor="@color/colorPrimary"
+        app:qmui_radius="@dimen/len_6"/>
+</LinearLayout>

@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ��ȡָ��ʱ�������ݽ��׵Ĳ�Ʒ����
+ * 获取指定时间内数据交易的产品费用
  * @author Wolkin
  *
  */
-public class GetDataTransactionProductCosts  extends GlobalAPI{
+public class GetDataTransactionProductCosts  extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

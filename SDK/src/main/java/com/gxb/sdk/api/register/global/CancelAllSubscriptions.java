@@ -5,7 +5,7 @@ package com.gxb.sdk.api.register.global;
  * @author Wolkin
  *
  */
-public class CancelAllSubscriptions extends GlobalAPI {
+public class CancelAllSubscriptions extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ע��δȷ�ϵĽ��׵Ļص�
+ *注册未确认的交易的回调
  * @author Wolkin
  *
  */
-public class SetPendingTransactionCallback extends GlobalAPI {
+public class SetPendingTransactionCallback extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

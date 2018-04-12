@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+    <item android:title="@string/function">
+        <menu>
+            <item
+                android:id="@+id/scan_drawer"
+                android:icon="@drawable/ic_scan"
+                android:title="@string/scan"/>
+            <item
+                android:id="@+id/create_wallet_drawer"
+                android:icon="@drawable/ic_wallet"
+                android:title="@string/create_wallet"/>
+            <item android:id="@+id/import_account_drawer" android:icon="@drawable/ic_import" android:title="@string/import_wallet"/>
+        </menu>
+    </item>
+
+</menu>

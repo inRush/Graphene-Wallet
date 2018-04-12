@@ -5,6 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/GXSWallet.iml" filepath="$PROJECT_DIR$/GXSWallet.iml" />
       <module fileurl="file://$PROJECT_DIR$/SDK/SDK.iml" filepath="$PROJECT_DIR$/SDK/SDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphenej/graphenej.iml" filepath="$PROJECT_DIR$/graphenej/graphenej.iml" />
+      <module fileurl="file://$PROJECT_DIR$/language/language.iml" filepath="$PROJECT_DIR$/language/language.iml" />
     </modules>
   </component>
 </project>

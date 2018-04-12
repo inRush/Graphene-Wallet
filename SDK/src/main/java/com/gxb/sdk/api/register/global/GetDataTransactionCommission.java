@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ��ȡָ��ʱ�������ݽ��׵�Ӷ��
+ * 获取指定时间内数据交易的佣金
  * @author Wolkin
  *
  */
-public class GetDataTransactionCommission extends GlobalAPI {
+public class GetDataTransactionCommission extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

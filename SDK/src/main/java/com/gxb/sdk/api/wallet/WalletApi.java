@@ -11,125 +11,155 @@ public interface WalletApi {
     /**
      * 通过账户名获取账户信息
      *
-     * @param paramStr <username>
+     * @param params   <username>
      * @param callBack 结果回调
      */
-    void getAccountByName(String paramStr, GxbCallBack callBack);
+    void getAccountByName(Object[] params, GxbCallBack callBack);
 
     /**
      * 获取资产账户信息
      *
-     * @param paramStr <assets>,<id>
+     * @param params   <assets>,<id>
      * @param callBack
      */
-    void getAccountBalances(String paramStr, GxbCallBack callBack);
+    void getAccountBalances(Object[] params, GxbCallBack callBack);
 
     /**
      * 获取链上注册的所有账户数量
      *
-     * @param paramStr Empty String
+     * @param params   Empty String
      * @param callBack
      */
-    void getAccountCount(String paramStr, GxbCallBack callBack);
+    void getAccountCount(Object[] params, GxbCallBack callBack);
 
     /**
      * 获取账户account_id相关的账户id
      *
-     * @param paramStr <account_id>
+     * @param params   <account_id>
      * @param callBack
      */
-    void getAccountReferences(String paramStr, GxbCallBack callBack);
+    void getAccountReferences(Object[] params, GxbCallBack callBack);
 
     /**
      * 账户查询
      *
-     * @param paramStr <account_ids> example : "1.2.1,1.2.3"
+     * @param params   <account_ids> example : "1.2.1,1.2.3"
      * @param callBack
      */
-    void getAccounts(String paramStr, GxbCallBack callBack);
+    void getAccounts(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过资产ID获取资产
      *
-     * @param paramStr <asset_ids> example : "1.2.1,1.2.3"
+     * @param params   <asset_ids> example : "1.2.1,1.2.3"
      * @param callBack
      */
-    void getAssets(String paramStr, GxbCallBack callBack);
+    void getAssets(Object[] params, GxbCallBack callBack);
 
     /**
      * 返回地址address上所有未领取的余额对象
-     * @param paramStr <<[address]>>
+     *
+     * @param params   <<[address]>>
      * @param callBack
      */
-    void getBalanceObjects(String paramStr, GxbCallBack callBack);
+    void getBalanceObjects(Object[] params, GxbCallBack callBack);
 
     /**
      * 获取符合条件的所有账户相关信息
-     * @param paramStr <names_or_ids> <subscribe>
+     *
+     * @param params   <names_or_ids> <subscribe>
      * @param callBack
      */
-    void getFullAccounts(String paramStr, GxbCallBack callBack);
+    void getFullAccounts(Object[] params, GxbCallBack callBack);
 
     /**
      * 返回所有指向公钥的帐户信息
-     * @param paramStr <key>
+     *
+     * @param params   <key>
      * @param callBack
      */
-    void getKeyReferences(String paramStr, GxbCallBack callBack);
+    void getKeyReferences(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过账户名和资产ID获取账户资产信息
-     * @param paramStr
+     *
+     * @param params
      * @param callBack
      */
-    void getNamedAccountBalances(String paramStr, GxbCallBack callBack);
+    void getNamedAccountBalances(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过账户余额ID获取可领取的资产信息
-     * @param paramStr <objs>
+     *
+     * @param params   <objs>
      * @param callBack
      */
-    void getVestedBalances(String paramStr, GxbCallBack callBack);
+    void getVestedBalances(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过账户ID获取归属该账户但暂时不可领取的余额信息
-     * @param paramStr <account_id>
+     *
+     * @param params   <account_id>
      * @param callBack
      */
-    void getVestingBalances(String paramStr, GxbCallBack callBack);
+    void getVestingBalances(Object[] params, GxbCallBack callBack);
 
     /**
      * 验证公钥是否已经被注册
-     * @param paramStr <public_key>
+     *
+     * @param params   <public_key>
      * @param callBack
      */
-    void isPublicKeyRegistered(String paramStr, GxbCallBack callBack);
+    void isPublicKeyRegistered(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过资产符号名称获取资产信息，并返回前limit个
-     * @param paramStr <lower_bound_symbol> <limit>
+     *
+     * @param params   <lower_bound_symbol> <limit>
      * @param callBack
      */
-    void listAssets(String paramStr, GxbCallBack callBack);
+    void listAssets(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过账户名获取账户信息
-     * @param paramStr <account_names>
+     *
+     * @param params   <account_names>
      * @param callBack
      */
-    void lookupAccountNames(String paramStr, GxbCallBack callBack);
+    void lookupAccountNames(Object[] params, GxbCallBack callBack);
 
     /**
      * 获取已注册账户的账户名和ID
-     * @param paramStr <limit> <lower_bound_name>
+     *
+     * @param params   <limit> <lower_bound_name>
      * @param callBack
      */
-    void lookupAccounts(String paramStr, GxbCallBack callBack);
+    void lookupAccounts(Object[] params, GxbCallBack callBack);
 
     /**
      * 通过资产符号获取资产列表
-     * @param paramStr <symbols_or_ids>
+     *
+     * @param params   <symbols_or_ids>
      * @param callBack
      */
-    void lookupAssetSymbols(String paramStr, GxbCallBack callBack);
+    void lookupAssetSymbols(Object[] params, GxbCallBack callBack);
+
+    /**
+     * 转账 不返回交易ID
+     *
+     * @param params   gxb1 gxb2 100 GXS "transfer memo" true
+     * @param callBack
+     */
+    void transfer(Object[] params, GxbCallBack callBack);
+
+    /**
+     * 转账 返回交易ID
+     *
+     * @param params   gxb1 gxb2 100 GXS "transfer memo" true
+     * @param callBack
+     */
+    void transfer2(Object[] params, GxbCallBack callBack);
+
+
+    void registerAccount2(Object[] params, GxbCallBack callBack);
 }

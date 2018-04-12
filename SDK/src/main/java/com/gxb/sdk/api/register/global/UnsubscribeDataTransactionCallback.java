@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ȡ��ע�����ݽ��׵Ļص�
+ * 取消注册数据交易的回调
  * @author Wolkin
  *
  */
-public class UnsubscribeDataTransactionCallback extends GlobalAPI {
+public class UnsubscribeDataTransactionCallback extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

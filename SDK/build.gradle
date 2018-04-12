@@ -3,8 +3,6 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 26
 
-
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
@@ -12,7 +10,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -22,13 +19,23 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-    implementation 'com.parkingwang:okhttp3-loginterceptor:latest.integration'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:0.5'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    provided fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleDependency,GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    api 'com.parkingwang:okhttp3-loginterceptor:latest.integration'
+    api 'com.google.code.gson:gson:2.8.1'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.59'
+    api project(':graphenej')
 }

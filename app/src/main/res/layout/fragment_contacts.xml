@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        app:qmui_topbar_need_separator="false"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/qmui_topbar_height">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:id="@+id/empty_view_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/qmui_topbar_height"
+        android:background="@color/qmui_config_color_white"
+        />
+
+
+</FrameLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/menu_quotation"
+        android:icon="@drawable/quotation"
+        android:title="@string/quotation"/>
+    <item
+        android:id="@+id/menu_contacts"
+        android:icon="@drawable/contacts"
+        android:title="@string/contacts"/>
+
+
+    <item
+        android:id="@+id/menu_my"
+        android:icon="@drawable/ic_account_box_black_24dp"
+        android:title="@string/my"/>
+</menu>

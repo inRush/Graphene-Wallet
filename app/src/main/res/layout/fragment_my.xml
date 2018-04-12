@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/len_10"
+            android:text="@string/my"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_16"/>
+
+        <LinearLayout
+            android:id="@+id/my_wallet_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/len_80"
+            android:layout_marginTop="@dimen/len_20"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/len_32"
+                android:layout_height="@dimen/len_32"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_wallet"
+                android:tint="@color/white"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/len_6"
+                android:text="@string/my_wallet"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_12"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/transaction_record_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/len_80"
+            android:layout_marginTop="@dimen/len_20"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/len_32"
+                android:layout_height="@dimen/len_32"
+                android:layout_gravity="center"
+                android:src="@drawable/record"
+                android:tint="@color/white"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/len_6"
+                android:text="@string/transaction_record"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_12"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/qmui_config_color_background">
+
+        <com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView
+            android:id="@+id/groupListView_my"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </ScrollView>
+</LinearLayout>

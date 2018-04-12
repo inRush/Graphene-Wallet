@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language_code">zh</string>
+    <string name="app_name">GXS Wallet</string>
+    <string name="input_activity_private_key">在此填入活跃权限私钥</string>
+    <string name="input_password">输入密码</string>
+    <string name="again_input_password">再次输入</string>
+    <string name="import_now">确认导入</string>
+    <string name="import_wallet">导入钱包</string>
+    <string name="create_wallet">创建钱包</string>
+    <string name="gxb">公信宝</string>
+    <string name="private_key_not_allow_empty">活动私钥不能为空</string>
+    <string name="password_not_allow_empty">密码不能为空</string>
+    <string name="please_enter_password_again">请再次输入密码</string>
+    <string name="password_not_match">两次输入密码不一致</string>
+    <string name="activity_private_key_format_error">活动私钥格式错误</string>
+    <string name="home">首页</string>
+    <string name="geting_account">正在获取账户</string>
+    <string name="system_exception">系统异常</string>
+    <string name="being_obtained_exchange">正在获取交易列表</string>
+    <string name="_0_00">0.00</string>
+    <string name="gxs">GXS</string>
+</resources>

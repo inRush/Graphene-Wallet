@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/switch_account"
+        android:title="@string/switch_account"/>
+    <item
+        android:id="@+id/switch_coin"
+        android:title="@string/switch_coin"/>
+</menu>

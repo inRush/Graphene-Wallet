@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_quotation_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        app:qmui_topbar_need_separator="false"/>
+
+    <include layout="@layout/item_exchange_recycler"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:padding="@dimen/len_10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/highest_price_24h"
+                android:textColor="@color/black_alpha_112"
+                android:textSize="@dimen/font_12"/>
+
+            <TextView
+                android:id="@+id/highest_price_quotation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0.00031599"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minimum_price_24h"
+                android:textColor="@color/black_alpha_112"
+                android:textSize="@dimen/font_12"/>
+
+            <TextView
+                android:id="@+id/minimum_price_quotation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0.00031599"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/volume_24h"
+                android:textColor="@color/black_alpha_112"
+                android:textSize="@dimen/font_12"/>
+
+            <TextView
+                android:id="@+id/volume_quotation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0.00031599"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.qmuiteam.qmui.widget.QMUITabSegment
+        android:id="@+id/tab_segment_quotation"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/tab_panel_bg"/>
+
+    <com.gxb.gxswallet.base.NoScrollViewPage
+        android:id="@+id/content_viewPager_quotation"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/qmui_config_color_white"/>
+
+</LinearLayout>

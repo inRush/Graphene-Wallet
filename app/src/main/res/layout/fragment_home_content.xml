@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh_layout_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/nav_menu_btn_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/len_10"
+            android:src="@drawable/ic_nav_menu"
+            android:tint="@color/white"/>
+
+        <ImageView
+            android:id="@+id/avatar_home"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/len_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_16"
+                tools:text="in-rush"/>
+
+            <ImageView
+                android:id="@+id/qrcode_home"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="@dimen/len_6"
+                android:padding="5dp"
+                android:src="@drawable/qrcode"
+                android:tint="@color/white"
+                />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/total_assets_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/len_16"
+                    android:layout_marginTop="@dimen/len_10"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_32"
+                    tools:text="0.00"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/len_16"
+                    android:text="@string/label_total_assets"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_12"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/choose_coin_home"
+                android:layout_width="@dimen/len_40"
+                android:layout_height="@dimen/len_40"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/len_20"
+                android:layout_marginTop="@dimen/len_10"
+                android:src="@drawable/add"
+                android:tint="@color/white"/>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/coin_recycler_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/len_20"
+            android:background="@color/white">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -5,7 +5,7 @@ package com.gxb.sdk.api.register.global;
  * @author Wolkin
  *
  */
-public class GetMerchantsTotalCount extends GlobalAPI {
+public class GetMerchantsTotalCount extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

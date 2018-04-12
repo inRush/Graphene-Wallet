@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.gxb.gxswallet.MainActivity"
+    android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.gxb.gxswallet.page.main.MainActivity">
 
-    <com.qmuiteam.qmui.widget.QMUITopBar
-        android:id="@+id/topbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/qmui_topbar_height"/>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#ffffff">
 
-    </LinearLayout>
+    </FrameLayout>
+
+    <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+        android:id="@+id/bottom_navigation_view_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="6dp"
+        app:itemIconTint="@color/navigation_color_selector"
+        app:itemTextColor="@color/navigation_color_selector"
+        app:menu="@menu/navigation_menu"/>
 </LinearLayout>

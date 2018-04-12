@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 26
+
     defaultConfig {
         applicationId "com.gxb.gxswallet"
         minSdkVersion 21
@@ -9,6 +10,27 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'license/LICENSE.dom-documentation.txt'
+        exclude 'license/LICENSE.dom-software.txt'
+        exclude 'license/README.dom.txt'
+        exclude 'license/README.sax.txt'
+        exclude 'license/NOTICE'
+        exclude 'license/LICENSE'
+        exclude 'license/*'
+
+        exclude 'lib/x86_64/darwin/libscrypt.dylib'
+        exclude 'lib/x86_64/freebsd/libscrypt.so'
+        exclude 'lib/x86_64/linux/libscrypt.so'
     }
     buildTypes {
         release {
@@ -16,17 +38,68 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+    configurations.all {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    dexOptions {
+        // fuck !!!! fuck !!!!!!
+        preDexLibraries = false
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
+    }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+greendao {
+    schemaVersion 9
+    daoPackage 'com.ping.greendao.gen'
+    targetGenDir 'src/main/java'
+}
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.0.0'
-    // 引入腾讯QMUI UI库
-    implementation 'com.qmuiteam:qmui:1.0.4'
+    provided fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    //    implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    // 引入multidex库,解决方法数65536的限制
+    implementation 'com.android.support:multidex:1.0.2'
+    // 引入logger日志库
     implementation 'com.orhanobut:logger:2.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:0.5'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // 引入BottomNavigationView增强库
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    // 引入ButterKnife库,简化控件使用
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    // hash头像
+    implementation 'io.apisense:rhino-android:1.0'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'com.caverock:androidsvg:1.2.1'
+    // 二维码
+    implementation 'com.github.jwkj:LibZXing:v1.1.2'
+    // 数据库ORM
+    implementation 'org.greenrobot:greendao:3.2.2'
+    // 浏览器
+    implementation 'com.just.agentweb:agentweb:4.0.2'
+    implementation 'com.just.agentweb:download:4.0.2'
+    implementation 'com.just.agentweb:filechooser:4.0.2'
+    // 图表
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    // android 6.0 权限
+    implementation 'pub.devrel:easypermissions:1.1.1'
+    implementation 'com.tencent.bugly:crashreport:2.6.5'
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+
+    // libs
     implementation project(':SDK')
+    implementation project(':common')
+    implementation project(':language')
 }

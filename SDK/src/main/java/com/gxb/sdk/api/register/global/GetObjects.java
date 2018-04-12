@@ -6,7 +6,7 @@ package com.gxb.sdk.api.register.global;
  *
  */
 
-public class GetObjects extends GlobalAPI {
+public class GetObjects extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

@@ -1,11 +1,11 @@
 package com.gxb.sdk.api.register.global;
 
 /**
- * ��ȡָ��ʱ�������ݽ��׵Ĵ���
+ * 获取指定时间内数据交易的次数
  * @author Wolkin
  *
  */
-public class GetDataTransactionTotalCount extends GlobalAPI {
+public class GetDataTransactionTotalCount extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

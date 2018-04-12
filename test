@@ -1,0 +1,1258 @@
+Configuration 'provided' in project ':SDK' is deprecated. Use 'compileOnly' instead.
+Configuration 'compile' in project ':SDK' is deprecated. Use 'implementation' instead.
+Configuration 'provided' in project ':app' is deprecated. Use 'compileOnly' instead.
+Configuration 'provided' in project ':common' is deprecated. Use 'compileOnly' instead.
+Configuration 'androidTestCompile' in project ':common' is deprecated. Use 'androidTestImplementation' instead.
+Configuration 'provided' in project ':language' is deprecated. Use 'compileOnly' instead.
+:app:dependencies
+
+------------------------------------------------------------
+Project :app
+------------------------------------------------------------
+
+androidJacocoAgent - The Jacoco agent to use to get coverage data.
+\--- org.jacoco:org.jacoco.agent:0.7.4.201502262128
+
+androidJacocoAnt - The Jacoco ant tasks to use to get execute Gradle tasks.
+\--- org.jacoco:org.jacoco.ant:0.7.4.201502262128
+     +--- org.jacoco:org.jacoco.core:0.7.4.201502262128
+     |    \--- org.ow2.asm:asm-debug-all:5.0.1
+     +--- org.jacoco:org.jacoco.report:0.7.4.201502262128
+     |    +--- org.jacoco:org.jacoco.core:0.7.4.201502262128 (*)
+     |    \--- org.ow2.asm:asm-debug-all:5.0.1
+     \--- org.jacoco:org.jacoco.agent:0.7.4.201502262128
+
+androidTestAnnotationProcessor - Classpath for the annotation processor for 'androidTest'. (n)
+No dependencies
+
+androidTestApi - API dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestApk - Apk dependencies for 'androidTest' sources (deprecated: use 'androidTestRuntimeOnly' instead). (n)
+No dependencies
+
+androidTestCompile - Compile dependencies for 'androidTest' sources (deprecated: use 'androidTestImplementation' instead). (n)
+No dependencies
+
+androidTestCompileOnly - Compile only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestDebugAnnotationProcessor - Classpath for the annotation processor for 'androidTestDebug'. (n)
+No dependencies
+
+androidTestDebugApi - API dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugApk - Apk dependencies for 'androidTestDebug' sources (deprecated: use 'androidTestDebugRuntimeOnly' instead). (n)
+No dependencies
+
+androidTestDebugCompile - Compile dependencies for 'androidTestDebug' sources (deprecated: use 'androidTestDebugImplementation' instead). (n)
+No dependencies
+
+androidTestDebugCompileOnly - Compile only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugImplementation - Implementation only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugProvided - Provided dependencies for 'androidTestDebug' sources (deprecated: use 'androidTestDebugCompileOnly' instead). (n)
+No dependencies
+
+androidTestDebugRuntimeOnly - Runtime only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugWearApp - Link to a wear app to embed for object 'androidTestDebug'. (n)
+No dependencies
+
+androidTestImplementation - Implementation only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestProvided - Provided dependencies for 'androidTest' sources (deprecated: use 'androidTestCompileOnly' instead). (n)
+No dependencies
+
+androidTestRuntimeOnly - Runtime only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestUtil - Additional APKs used during instrumentation testing.
+No dependencies
+
+androidTestWearApp - Link to a wear app to embed for object 'androidTest'. (n)
+No dependencies
+
+annotationProcessor - Classpath for the annotation processor for 'main'. (n)
+\--- com.jakewharton:butterknife-compiler:8.8.1 (n)
+
+api - API dependencies for 'main' sources. (n)
+No dependencies
+
+apk - Apk dependencies for 'main' sources (deprecated: use 'runtimeOnly' instead). (n)
+No dependencies
+
+archives - Configuration for archive artifacts.
+No dependencies
+
+compile - Compile dependencies for 'main' sources (deprecated: use 'implementation' instead).
+No dependencies
+
+compileOnly - Compile only dependencies for 'main' sources. (n)
+No dependencies
+
+debugAndroidTestAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debugAndroidTest
+No dependencies
+
+debugAndroidTestCompileClasspath - Resolved configuration for compilation for variant: debugAndroidTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    \--- com.squareup.okhttp3:okhttp:3.9.1
+|         \--- com.squareup.okio:okio:1.13.0
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    \--- net.qiujuer.genius:kit-handler:2.0.0
+\--- project :language
+
+debugAndroidTestRuntimeClasspath - Resolved configuration for runtime for variant: debugAndroidTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    +--- com.squareup.okhttp3:okhttp:3.9.1
+|    |    \--- com.squareup.okio:okio:1.13.0
+|    +--- com.parkingwang:okhttp3-loginterceptor:latest.integration -> 0.5
+|    |    \--- com.squareup.okhttp3:okhttp:3.4.0 -> 3.9.1 (*)
+|    +--- com.google.guava:guava:18.0
+|    +--- org.java-websocket:Java-WebSocket:1.3.0
+|    \--- org.bouncycastle:bcpkix-jdk15on:1.59
+|         \--- org.bouncycastle:bcprov-jdk15on:1.59
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    +--- net.qiujuer.genius:kit-handler:2.0.0
+|    \--- com.android.support:appcompat-v7:27.1.0 (*)
+\--- project :language
+
+debugAnnotationProcessor - Classpath for the annotation processor for 'debug'. (n)
+No dependencies
+
+debugAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debug
+\--- com.jakewharton:butterknife-compiler:8.8.1
+     +--- com.jakewharton:butterknife-annotations:8.8.1
+     |    \--- com.android.support:support-annotations:25.3.0
+     +--- com.google.auto:auto-common:0.8
+     |    \--- com.google.guava:guava:19.0
+     \--- com.squareup:javapoet:1.9.0
+
+debugApi - API dependencies for 'debug' sources. (n)
+No dependencies
+
+debugApiElements - API elements for debug (n)
+No dependencies
+
+debugApk - Apk dependencies for 'debug' sources (deprecated: use 'debugRuntimeOnly' instead). (n)
+No dependencies
+
+debugCompile - Compile dependencies for 'debug' sources (deprecated: use 'debugImplementation' instead). (n)
+No dependencies
+
+debugCompileClasspath - Resolved configuration for compilation for variant: debug
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    \--- com.squareup.okhttp3:okhttp:3.9.1
+|         \--- com.squareup.okio:okio:1.13.0
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    \--- net.qiujuer.genius:kit-handler:2.0.0
+\--- project :language
+
+debugCompileOnly - Compile only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugImplementation - Implementation only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugMetadataElements - Metadata elements for debug (n)
+No dependencies
+
+debugProvided - Provided dependencies for 'debug' sources (deprecated: use 'debugCompileOnly' instead). (n)
+No dependencies
+
+debugRuntimeClasspath - Resolved configuration for runtime for variant: debug
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    +--- com.squareup.okhttp3:okhttp:3.9.1
+|    |    \--- com.squareup.okio:okio:1.13.0
+|    +--- com.parkingwang:okhttp3-loginterceptor:latest.integration -> 0.5
+|    |    \--- com.squareup.okhttp3:okhttp:3.4.0 -> 3.9.1 (*)
+|    +--- com.google.guava:guava:18.0
+|    +--- org.java-websocket:Java-WebSocket:1.3.0
+|    \--- org.bouncycastle:bcpkix-jdk15on:1.59
+|         \--- org.bouncycastle:bcprov-jdk15on:1.59
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    +--- net.qiujuer.genius:kit-handler:2.0.0
+|    \--- com.android.support:appcompat-v7:27.1.0 (*)
+\--- project :language
+
+debugRuntimeElements - Runtime elements for debug (n)
+No dependencies
+
+debugRuntimeOnly - Runtime only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugUnitTestAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debugUnitTest
+No dependencies
+
+debugUnitTestCompileClasspath - Resolved configuration for compilation for variant: debugUnitTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    \--- com.squareup.okhttp3:okhttp:3.9.1
+|         \--- com.squareup.okio:okio:1.13.0
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    \--- net.qiujuer.genius:kit-handler:2.0.0
+\--- project :language
+
+debugUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: debugUnitTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    +--- com.squareup.okhttp3:okhttp:3.9.1
+|    |    \--- com.squareup.okio:okio:1.13.0
+|    +--- com.parkingwang:okhttp3-loginterceptor:latest.integration -> 0.5
+|    |    \--- com.squareup.okhttp3:okhttp:3.4.0 -> 3.9.1 (*)
+|    +--- com.google.guava:guava:18.0
+|    +--- org.java-websocket:Java-WebSocket:1.3.0
+|    \--- org.bouncycastle:bcpkix-jdk15on:1.59
+|         \--- org.bouncycastle:bcprov-jdk15on:1.59
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    +--- net.qiujuer.genius:kit-handler:2.0.0
+|    \--- com.android.support:appcompat-v7:27.1.0 (*)
+\--- project :language
+
+debugWearApp - Link to a wear app to embed for object 'debug'. (n)
+No dependencies
+
+debugWearBundling - Resolved Configuration for wear app bundling for variant: debug
+No dependencies
+
+default - Configuration for default artifacts.
+No dependencies
+
+implementation - Implementation only dependencies for 'main' sources. (n)
++--- com.android.support:appcompat-v7:27.1.0 (n)
++--- com.orhanobut:logger:2.1.1 (n)
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4 (n)
++--- io.apisense:rhino-android:1.0 (n)
++--- commons-io:commons-io:2.6 (n)
++--- com.caverock:androidsvg:1.2.1 (n)
++--- com.github.jwkj:LibZXing:v1.1.2 (n)
++--- org.greenrobot:greendao:3.2.2 (n)
++--- com.just.agentweb:agentweb:4.0.2 (n)
++--- com.just.agentweb:download:4.0.2 (n)
++--- com.just.agentweb:filechooser:4.0.2 (n)
++--- com.github.PhilJay:MPAndroidChart:v3.0.3 (n)
++--- pub.devrel:easypermissions:1.1.1 (n)
++--- com.tencent.bugly:crashreport:2.6.5 (n)
++--- project SDK (n)
++--- project common (n)
+\--- project language (n)
+
+lintChecks - Configuration to apply external lint check jar
+No dependencies
+
+provided - Provided dependencies for 'main' sources (deprecated: use 'compileOnly' instead). (n)
+\--- unspecified (n)
+
+releaseAnnotationProcessor - Classpath for the annotation processor for 'release'. (n)
+No dependencies
+
+releaseAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: release
+\--- com.jakewharton:butterknife-compiler:8.8.1
+     +--- com.jakewharton:butterknife-annotations:8.8.1
+     |    \--- com.android.support:support-annotations:25.3.0
+     +--- com.google.auto:auto-common:0.8
+     |    \--- com.google.guava:guava:19.0
+     \--- com.squareup:javapoet:1.9.0
+
+releaseApi - API dependencies for 'release' sources. (n)
+No dependencies
+
+releaseApiElements - API elements for release (n)
+No dependencies
+
+releaseApk - Apk dependencies for 'release' sources (deprecated: use 'releaseRuntimeOnly' instead). (n)
+No dependencies
+
+releaseCompile - Compile dependencies for 'release' sources (deprecated: use 'releaseImplementation' instead). (n)
+No dependencies
+
+releaseCompileClasspath - Resolved configuration for compilation for variant: release
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    \--- com.squareup.okhttp3:okhttp:3.9.1
+|         \--- com.squareup.okio:okio:1.13.0
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    \--- net.qiujuer.genius:kit-handler:2.0.0
+\--- project :language
+
+releaseCompileOnly - Compile only dependencies for 'release' sources. (n)
+No dependencies
+
+releaseImplementation - Implementation only dependencies for 'release' sources. (n)
+No dependencies
+
+releaseMetadataElements - Metadata elements for release (n)
+No dependencies
+
+releaseProvided - Provided dependencies for 'release' sources (deprecated: use 'releaseCompileOnly' instead). (n)
+No dependencies
+
+releaseRuntimeClasspath - Resolved configuration for runtime for variant: release
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    +--- com.squareup.okhttp3:okhttp:3.9.1
+|    |    \--- com.squareup.okio:okio:1.13.0
+|    +--- com.parkingwang:okhttp3-loginterceptor:latest.integration -> 0.5
+|    |    \--- com.squareup.okhttp3:okhttp:3.4.0 -> 3.9.1 (*)
+|    +--- com.google.guava:guava:18.0
+|    +--- org.java-websocket:Java-WebSocket:1.3.0
+|    \--- org.bouncycastle:bcpkix-jdk15on:1.59
+|         \--- org.bouncycastle:bcprov-jdk15on:1.59
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    +--- net.qiujuer.genius:kit-handler:2.0.0
+|    \--- com.android.support:appcompat-v7:27.1.0 (*)
+\--- project :language
+
+releaseRuntimeElements - Runtime elements for release (n)
+No dependencies
+
+releaseRuntimeOnly - Runtime only dependencies for 'release' sources. (n)
+No dependencies
+
+releaseUnitTestAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: releaseUnitTest
+No dependencies
+
+releaseUnitTestCompileClasspath - Resolved configuration for compilation for variant: releaseUnitTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    \--- com.squareup.okhttp3:okhttp:3.9.1
+|         \--- com.squareup.okio:okio:1.13.0
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    \--- net.qiujuer.genius:kit-handler:2.0.0
+\--- project :language
+
+releaseUnitTestRuntimeClasspath - Resolved configuration for runtime for variant: releaseUnitTest
++--- com.android.support:appcompat-v7:27.1.0
+|    +--- com.android.support:support-annotations:27.1.0
+|    +--- com.android.support:support-core-utils:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0
+|    |         +--- com.android.support:support-annotations:27.1.0
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.0
+|    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.0
+|    |    |    +--- com.android.support:support-annotations:27.1.0
+|    |    |    +--- com.android.support:support-compat:27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.0 (*)
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.0
+|    |    +--- com.android.support:support-annotations:27.1.0
+|    |    \--- com.android.support:support-compat:27.1.0 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.0
+|         +--- com.android.support:support-vector-drawable:27.1.0 (*)
+|         \--- com.android.support:support-core-ui:27.1.0 (*)
++--- com.orhanobut:logger:2.1.1
++--- com.github.ittianyu:BottomNavigationViewEx:1.2.4
++--- io.apisense:rhino-android:1.0
+|    +--- com.sun.phobos:jsr223-api:1.0
+|    \--- org.mozilla:rhino:1.7.7.1
++--- commons-io:commons-io:2.6
++--- com.caverock:androidsvg:1.2.1
++--- com.github.jwkj:LibZXing:v1.1.2
+|    +--- com.android.support:appcompat-v7:22.+ -> 27.1.0 (*)
+|    \--- com.google.zxing:core:3.3.0
++--- org.greenrobot:greendao:3.2.2
+|    \--- org.greenrobot:greendao-api:3.2.2
++--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:download:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.just.agentweb:filechooser:4.0.2
+|    \--- com.just.agentweb:agentweb:4.0.2
++--- com.github.PhilJay:MPAndroidChart:v3.0.3
++--- pub.devrel:easypermissions:1.1.1
+|    +--- com.android.support:appcompat-v7:27.0.1 -> 27.1.0 (*)
+|    +--- com.android.support:support-compat:27.0.1 -> 27.1.0 (*)
+|    \--- com.android.support:support-fragment:27.0.1 -> 27.1.0 (*)
++--- com.tencent.bugly:crashreport:2.6.5
++--- project :SDK
+|    +--- com.google.code.gson:gson:2.8.1
+|    +--- com.squareup.okhttp3:okhttp:3.9.1
+|    |    \--- com.squareup.okio:okio:1.13.0
+|    +--- com.parkingwang:okhttp3-loginterceptor:latest.integration -> 0.5
+|    |    \--- com.squareup.okhttp3:okhttp:3.4.0 -> 3.9.1 (*)
+|    +--- com.google.guava:guava:18.0
+|    +--- org.java-websocket:Java-WebSocket:1.3.0
+|    \--- org.bouncycastle:bcpkix-jdk15on:1.59
+|         \--- org.bouncycastle:bcprov-jdk15on:1.59
++--- project :common
+|    +--- com.android.support:design:27.0.2
+|    |    +--- com.android.support:support-v4:27.0.2
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-media-compat:27.0.2
+|    |    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    |    \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-utils:27.0.2 -> 27.1.0 (*)
+|    |    |    +--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-fragment:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:appcompat-v7:27.0.2 -> 27.1.0 (*)
+|    |    +--- com.android.support:recyclerview-v7:27.0.2
+|    |    |    +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |    |    +--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    |    |    \--- com.android.support:support-core-ui:27.0.2 -> 27.1.0 (*)
+|    |    \--- com.android.support:transition:27.0.2
+|    |         +--- com.android.support:support-annotations:27.0.2 -> 27.1.0
+|    |         \--- com.android.support:support-compat:27.0.2 -> 27.1.0 (*)
+|    +--- com.jakewharton:butterknife:8.8.1
+|    |    +--- com.jakewharton:butterknife-annotations:8.8.1
+|    |    |    \--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    +--- com.android.support:support-annotations:25.3.0 -> 27.1.0
+|    |    \--- com.android.support:support-compat:25.3.0 -> 27.1.0 (*)
+|    +--- com.android.support:recyclerview-v7:27.0.2 (*)
+|    +--- com.qmuiteam:qmui:1.0.4
+|    |    +--- com.android.support:recyclerview-v7:25.3.1 -> 27.0.2 (*)
+|    |    +--- com.android.support:appcompat-v7:25.3.1 -> 27.1.0 (*)
+|    |    \--- com.android.support:support-vector-drawable:25.3.1 -> 27.1.0 (*)
+|    +--- net.qiujuer.genius:ui:2.0.0
+|    +--- net.qiujuer.genius:res:2.0.0
+|    +--- net.qiujuer.genius:kit-handler:2.0.0
+|    \--- com.android.support:appcompat-v7:27.1.0 (*)
+\--- project :language
+
+releaseWearApp - Link to a wear app to embed for object 'release'. (n)
+No dependencies
+
+releaseWearBundling - Resolved Configuration for wear app bundling for variant: release
+No dependencies
+
+runtimeOnly - Runtime only dependencies for 'main' sources. (n)
+No dependencies
+
+testAnnotationProcessor - Classpath for the annotation processor for 'test'. (n)
+No dependencies
+
+testApi - API dependencies for 'test' sources. (n)
+No dependencies
+
+testApk - Apk dependencies for 'test' sources (deprecated: use 'testRuntimeOnly' instead). (n)
+No dependencies
+
+testCompile - Compile dependencies for 'test' sources (deprecated: use 'testImplementation' instead).
+No dependencies
+
+testCompileOnly - Compile only dependencies for 'test' sources. (n)
+No dependencies
+
+testDebugAnnotationProcessor - Classpath for the annotation processor for 'testDebug'. (n)
+No dependencies
+
+testDebugApi - API dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugApk - Apk dependencies for 'testDebug' sources (deprecated: use 'testDebugRuntimeOnly' instead). (n)
+No dependencies
+
+testDebugCompile - Compile dependencies for 'testDebug' sources (deprecated: use 'testDebugImplementation' instead). (n)
+No dependencies
+
+testDebugCompileOnly - Compile only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugImplementation - Implementation only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugProvided - Provided dependencies for 'testDebug' sources (deprecated: use 'testDebugCompileOnly' instead). (n)
+No dependencies
+
+testDebugRuntimeOnly - Runtime only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugWearApp - Link to a wear app to embed for object 'testDebug'. (n)
+No dependencies
+
+testImplementation - Implementation only dependencies for 'test' sources. (n)
+No dependencies
+
+testProvided - Provided dependencies for 'test' sources (deprecated: use 'testCompileOnly' instead). (n)
+No dependencies
+
+testReleaseAnnotationProcessor - Classpath for the annotation processor for 'testRelease'. (n)
+No dependencies
+
+testReleaseApi - API dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseApk - Apk dependencies for 'testRelease' sources (deprecated: use 'testReleaseRuntimeOnly' instead). (n)
+No dependencies
+
+testReleaseCompile - Compile dependencies for 'testRelease' sources (deprecated: use 'testReleaseImplementation' instead). (n)
+No dependencies
+
+testReleaseCompileOnly - Compile only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseImplementation - Implementation only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseProvided - Provided dependencies for 'testRelease' sources (deprecated: use 'testReleaseCompileOnly' instead). (n)
+No dependencies
+
+testReleaseRuntimeOnly - Runtime only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseWearApp - Link to a wear app to embed for object 'testRelease'. (n)
+No dependencies
+
+testRuntimeOnly - Runtime only dependencies for 'test' sources. (n)
+No dependencies
+
+testWearApp - Link to a wear app to embed for object 'test'. (n)
+No dependencies
+
+wearApp - Link to a wear app to embed for object 'main'. (n)
+No dependencies
+
+(*) - dependencies omitted (listed previously)
+
+(n) - Not resolved (configuration is not meant to be resolved)
+
+BUILD SUCCESSFUL in 3s
+1 actionable task: 1 executed

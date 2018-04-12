@@ -1,8 +1,13 @@
 package com.gxb.sdk.http;
 
-import com.parkingwang.okhttp3.LogInterceptor.LogInterceptor;
+import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 
-import org.json.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.gxb.sdk.Config;
+import com.parkingwang.okhttp3.LogInterceptor.LogInterceptor;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -32,13 +37,7 @@ import okhttp3.Response;
 public class HttpRequest {
     private static final String TAG = "HttpRequest";
     private OkHttpClient mClient;
-    /**
-     * 接口地址
-     */
-    private static final String RPC_URL_PROC = "https://node1.gxb.io/";
-    private static final String FAUCET_URL = "https://opengateway.gxb.io";
 
-    private static final String RPC_URL_DEV = "106.14.180.117:28090";
 
     public HttpRequest() {
         // 忽略ssl证书
@@ -47,44 +46,80 @@ public class HttpRequest {
                 .hostnameVerifier(getHostnameVerifier())
                 .addInterceptor(new LogInterceptor())
                 .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
-
     }
 
     /**
      * 对接口进行请求
      *
-     * @param jsonObject 参数
-     * @param callBack   回调
+     * @param json     参数
+     * @param callBack 回调
      */
-    public void doCallRpc(JSONObject jsonObject, final GxbCallBack callBack) {
-        final Request request = createRequest(RPC_URL_PROC, jsonObject);
+    public void doCallRpc(String json, final GxbCallBack callBack) {
+        this.doCallRpc(json, Config.getRpcUrl(), callBack);
+    }
+
+    public void doCallRpc(String json, String url, final GxbCallBack callBack) {
+        final Request request = createRequest(url, json);
+
         mClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callBack.onFailure();
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                callBack.onFailure(new Error(e.getMessage()));
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    callBack.onSuccess(result);
+                    String res = response.body().string();
+                    JsonObject object = new JsonParser()
+                            .parse(res)
+                            .getAsJsonObject();
+                    JsonElement result = object.get("result");
+                    if (result == null) {
+                        callBack.onFailure(new Error(object.get("error").toString()));
+                    } else {
+                        callBack.onSuccess(result.toString());
+                    }
                 }
             }
         });
     }
 
+    public void doGet(String url, final GxbCallBack callBack) {
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+        mClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    callBack.onSuccess(response.body().string());
+                } else {
+                    callBack.onFailure(new Error("network error"));
+                }
+            }
+        });
+
+    }
+
     /**
      * 各个接口自定义创建Request
      *
-     * @param url        接口地址
-     * @param jsonObject 参数
+     * @param url  接口地址
+     * @param json 参数
      * @return Request
      */
-    protected Request createRequest(String url, JSONObject jsonObject) {
+    protected Request createRequest(String url, String json) {
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, jsonObject.toString());
+        RequestBody body = RequestBody.create(mediaType, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -93,8 +128,9 @@ public class HttpRequest {
         return request;
     }
 
-    public static HostnameVerifier getHostnameVerifier() {
+    private static HostnameVerifier getHostnameVerifier() {
         HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @SuppressLint("BadHostnameVerifier")
             @Override
             public boolean verify(String s, SSLSession sslSession) {
                 return true;

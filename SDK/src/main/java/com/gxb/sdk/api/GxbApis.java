@@ -3,7 +3,10 @@ package com.gxb.sdk.api;
 import com.gxb.sdk.api.baas.BaasApi;
 import com.gxb.sdk.api.baas.BaasApiImpl;
 import com.gxb.sdk.api.block.BlockApi;
-import com.gxb.sdk.api.block.BlockApiImpl;
+import com.gxb.sdk.api.register.global.GlobalApi;
+import com.gxb.sdk.api.register.global.GlobalApiImpl;
+import com.gxb.sdk.api.transaction.TransactionApi;
+import com.gxb.sdk.api.transaction.TransactionApiImpl;
 import com.gxb.sdk.api.wallet.WalletApi;
 import com.gxb.sdk.api.wallet.WalletApiImpl;
 
@@ -17,6 +20,8 @@ public class GxbApis {
     private BaasApi mBaasApi;
     private WalletApi mWalletApi;
     private BlockApi mBlockApi;
+    private GlobalApi mGlobalApi;
+    private TransactionApi mTransactionApi;
 
     private GxbApis() {
 
@@ -60,19 +65,41 @@ public class GxbApis {
         return mWalletApi;
     }
 
+    public GlobalApi globalApi() {
+        if (mGlobalApi == null) {
+            synchronized (GxbApis.class) {
+                if (mGlobalApi == null) {
+                    mGlobalApi = new GlobalApiImpl();
+                }
+            }
+        }
+        return mGlobalApi;
+    }
+
+    public TransactionApi transactionApi() {
+        if (mTransactionApi == null) {
+            synchronized (GxbApis.class) {
+                if (mTransactionApi == null) {
+                    mTransactionApi = new TransactionApiImpl();
+                }
+            }
+        }
+        return mTransactionApi;
+    }
+
     /**
      * 区块Api
      *
      * @return BlockApi
      */
-    public BlockApi blockApi() {
-        if (mBlockApi == null) {
-            synchronized (GxbApis.class) {
-                if (mBlockApi == null) {
-                    mBlockApi = new BlockApiImpl();
-                }
-            }
-        }
-        return mBlockApi;
-    }
+//    public BlockApi blockApi() {
+//        if (mBlockApi == null) {
+//            synchronized (GxbApis.class) {
+//                if (mBlockApi == null) {
+//                    mBlockApi = new BlockApiImpl();
+//                }
+//            }
+//        }
+//        return mBlockApi;
+//    }
 }

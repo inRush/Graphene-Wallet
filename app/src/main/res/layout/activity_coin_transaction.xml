@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_transaction_history"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        app:qmui_topbar_need_separator="false"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_transaction_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="?attr/qmui_topbar_height"
+        android:background="@color/white"/>
+
+    <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:id="@+id/empty_view_transaction_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="?attr/qmui_topbar_height"
+        android:background="@color/qmui_config_color_white"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:elevation="@dimen/len_6">
+
+        <TextView
+            android:id="@+id/send_transaction_history"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="@string/send"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/receive_transaction_history"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="@string/receive"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,6 +1,6 @@
 package com.gxb.sdk.api.register.global;
 
-public class SetDataTransactionSubscribeCallback extends GlobalAPI {
+public class SetDataTransactionSubscribeCallback extends BaseGlobalAPI {
 
 	@Override
 	public void doParameter(String paraStr) {

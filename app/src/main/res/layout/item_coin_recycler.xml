@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/len_88"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout
+            android:layout_width="@dimen/len_40"
+            android:layout_height="@dimen/len_40"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/len_16"
+            android:padding="@dimen/len_10"
+            app:qmui_borderColor="@color/black_alpha_16"
+            app:qmui_borderWidth="1dp"
+            app:qmui_radius="@dimen/len_36">
+
+            <ImageView
+                android:id="@+id/coin_image_coin_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logo"/>
+        </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout>
+
+        <TextView
+            android:id="@+id/name_coin_item"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/len_20"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/font_20"
+            tools:ignore="NestedWeights"
+            tools:text="GXS"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/len_10"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/num_coin_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="@dimen/font_20"
+                tools:text="0"/>
+
+            <TextView
+                android:id="@+id/price_coin_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#efefef"
+        />
+</LinearLayout>
