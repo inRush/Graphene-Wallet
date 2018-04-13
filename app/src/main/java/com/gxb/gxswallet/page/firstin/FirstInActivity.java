@@ -38,7 +38,6 @@ public class FirstInActivity extends BaseActivity {
     @OnClick(R.id.import_account)
     void onImportAccountBtnClick(View view) {
         ImportWalletActivity.start(this);
-        finish();
     }
 
     @OnClick(R.id.create_account)

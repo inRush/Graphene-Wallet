@@ -15,9 +15,8 @@ import android.view.ViewGroup;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.sxds.common.widget.AnimationBottomSheetDialog;
-
-import net.qiujuer.genius.ui.widget.Button;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class PermissionsFragment extends BottomSheetDialogFragment
      */
     private static final int RC = 0x8888;
 
-    private Button mSubmit;
+    private QMUIRoundButton mSubmit;
 
     private onPermissionGrantedListener mListener;
 
@@ -65,13 +64,10 @@ public class PermissionsFragment extends BottomSheetDialogFragment
         mSubmit = root.findViewById(R.id.btn_submit);
 
         mSubmit.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // 点击按钮时申请权限
-                        requestPerm();
-                        mSubmit.setText(getString(R.string.label_permission_process));
-                    }
+                v -> {
+                    // 点击按钮时申请权限
+                    requestPerm();
+                    mSubmit.setText(getString(R.string.label_permission_process));
                 }
         );
         return root;
