@@ -353,7 +353,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                     amount = "0";
                                 }
                                 Double.parseDouble(amount);
-                                SendActivity.start(getActivity(), new Sender(mCurrentWallet, account, amount, coin));
+                                SendActivity.start(getActivity(), new Sender(mCurrentWallet, account, amount, coin, ""));
                                 App.showToast(R.string.scan_success);
                             } catch (Exception e) {
                                 App.showToast(R.string.scan_error);
