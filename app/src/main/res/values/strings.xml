@@ -27,7 +27,7 @@
     <string name="memo">备注(MEMO)</string>
     <string name="available_coin">可用: %1$s %2$s</string>
     <string name="receive_account_name">填写对方账号</string>
-    <string name="amount_to_send">填写GXS数量</string>
+    <string name="amount_to_send">填写%1$s数量</string>
     <string name="optional">选填</string>
     <string name="scan_error">扫描出错</string>
     <string name="scan_success">扫描成功</string>
@@ -151,4 +151,13 @@
     <string name="query_fee">正在查询手续费</string>
     <string name="sending">正在发送</string>
     <string name="send_success">发送成功</string>
+    <string name="address_not_exists">该地址账户不存在</string>
+    <string name="fill_whole">请填写完整</string>
+    <string name="to_account_not_allow_empty">对方账户不能为空</string>
+    <string name="amount_not_allow_empty">发送数量不能为空</string>
+    <string name="amount_format_error">发送数量不符合要求</string>
+    <string name="get_quotation">正在获取行情信息</string>
+    <string name="language">语言</string>
+    <string name="chinese">中文</string>
+    <string name="english">英语</string>
 </resources>

@@ -118,7 +118,7 @@
         </LinearLayout>
 
         <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-            android:id="@+id/add_btn_add_contact"
+            android:id="@+id/send_btn_contact_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/len_52"
