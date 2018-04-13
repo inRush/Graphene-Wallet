@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.webview.RefreshAgentWebActivity;
+import com.gxb.gxswallet.page.setting.SettingActivity;
 import com.gxb.gxswallet.page.walletmanager.WalletManagerActivity;
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
@@ -107,6 +108,11 @@ public class MyFragment extends PresenterFragment<MyContract.Presenter>
             String text = ((QMUICommonListItemView) view).getText().toString();
             if (partTwoSettings[0].equals(text)) {
                 RefreshAgentWebActivity.start(getActivity(), "https://forum.gxb.io/");
+                return;
+            }
+            if (partOneSettings[1].equals(text)) {
+                SettingActivity.start(getActivity());
+                return;
             }
         }
 
