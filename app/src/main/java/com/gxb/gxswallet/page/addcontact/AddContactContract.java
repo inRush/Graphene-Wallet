@@ -10,6 +10,8 @@ import com.sxds.common.presenter.BaseContract;
 
 class AddContactContract {
     interface View extends BaseContract.View<Presenter> {
+        void onCheckWalletExistSuccess(boolean isExist,String walletName);
+        void onCheckWalletExistError(Error error);
 
     }
 
@@ -20,5 +22,7 @@ class AddContactContract {
          * @param contact
          */
         boolean saveContact(ContactData contact);
+
+        void checkWalletExist(String name);
     }
 }

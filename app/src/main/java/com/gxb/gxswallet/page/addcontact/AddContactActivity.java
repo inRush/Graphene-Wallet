@@ -97,8 +97,29 @@ public class AddContactActivity extends PresenterActivity<AddContactContract.Pre
         String name = nameEt.getText().toString().trim();
         String address = addressEt.getText().toString().trim();
         String phone = phoneEt.getText().toString().trim();
+        if ("".equals(name) || "".equals(address) || "".equals(phone)) {
+            showError(getString(R.string.fill_whole));
+            return;
+        }
+        mPresenter.checkWalletExist(address);
+    }
+
+    @Override
+    protected AddContactContract.Presenter initPresenter() {
+        return new AddContactPresenter(this);
+    }
+
+    @Override
+    public void onCheckWalletExistSuccess(boolean isExist, String walletName) {
+        if (!isExist) {
+            showError(getString(R.string.address_not_exists));
+            return;
+        }
+        String name = nameEt.getText().toString().trim();
+        String address = addressEt.getText().toString().trim();
+        String phone = phoneEt.getText().toString().trim();
         String memo = memoEt.getText().toString().trim();
-        ContactData contactData = new ContactData(null,name, address, phone, memo);
+        ContactData contactData = new ContactData(null, name, address, phone, memo);
         if (mPresenter.saveContact(contactData)) {
             App.showToast(R.string.save_success);
             this.setResult(ADD_CONTACT_RESULT_CODE);
@@ -109,8 +130,7 @@ public class AddContactActivity extends PresenterActivity<AddContactContract.Pre
     }
 
     @Override
-    protected AddContactContract.Presenter initPresenter() {
-        return new AddContactPresenter(this);
+    public void onCheckWalletExistError(Error error) {
+        showError(error.getMessage());
     }
-
 }
