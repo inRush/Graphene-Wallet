@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.main.MainActivity;
+import com.gxb.gxswallet.services.WalletService;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.sxds.common.app.PresenterActivity;
 
@@ -50,9 +51,6 @@ public class ImportWalletActivity extends PresenterActivity<ImportWalletContract
         super.initWidget();
         mTopBar.setTitle(getString(R.string.import_wallet));
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> finish());
-        MemorizingWordsEt.setText("5KQiXpeTfxvBe5AB4Q2ZdkhwPxTdyj4Y2abdk5W1qerRGoptMer");
-        passwordEt.setText("128911hwj");
-        againPasswordEt.setText("128911hwj");
     }
 
 
@@ -89,11 +87,11 @@ public class ImportWalletActivity extends PresenterActivity<ImportWalletContract
         String pwd = passwordEt.getText().toString();
         String againPwd = againPasswordEt.getText().toString();
         boolean isPass = checkParams(memorizingWord, pwd, againPwd);
-//        if (isPass) {
-//            String wifKey = WalletService.getInstance().getWifKey(new BrainKey(memorizingWord, BrainKey.DEFAULT_SEQUENCE_NUMBER));
-            mPresenter.importAccount(memorizingWord, pwd);
+        if (isPass) {
+            String wifKey = WalletService.getInstance().getWifKey(new BrainKey(memorizingWord, BrainKey.DEFAULT_SEQUENCE_NUMBER));
+            mPresenter.importAccount(wifKey, pwd);
             showLoading(mloadingId, R.string.geting_account);
-//        }
+        }
     }
 
     @Override
