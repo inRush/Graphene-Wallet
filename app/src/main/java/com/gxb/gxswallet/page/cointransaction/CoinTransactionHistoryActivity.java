@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.config.AssetSymbol;
@@ -86,11 +87,17 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
     private void initTopBar() {
         mTopBar.setTitle(R.string.transaction_history);
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> finish());
+        mTopBar.addRightImageButton(R.drawable.ic_refresh_white_24dp, View.generateViewId())
+                .setOnClickListener(v -> loadHistory());
     }
 
     @Override
     protected void initData() {
         super.initData();
+        loadHistory();
+    }
+
+    private void loadHistory(){
         mPresenter.getTransactionHistory(mWalletData);
         showLoading(loadingId, R.string.loading_transaction_list);
     }
@@ -122,7 +129,7 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
 
     @OnClick(R.id.send_transaction_history)
     void onSendBtnClick() {
-        SendActivity.start(this, new Sender(mWalletData, null, null, mCoin.getName()));
+        SendActivity.start(this, new Sender(mWalletData, null, null, mCoin.getName(), ""));
     }
 
     @OnClick(R.id.receive_transaction_history)
