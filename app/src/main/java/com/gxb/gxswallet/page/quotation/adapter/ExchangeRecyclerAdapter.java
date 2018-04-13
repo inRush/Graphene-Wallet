@@ -1,11 +1,14 @@
 package com.gxb.gxswallet.page.quotation.adapter;
 
-import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.TextView;
 
 import com.gxb.gxswallet.R;
 import com.gxb.sdk.models.GXSExchange;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButtonDrawable;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
 
 import java.util.List;
@@ -44,29 +47,29 @@ public class ExchangeRecyclerAdapter extends RecyclerAdapter<GXSExchange> {
         @BindView(R.id.price_rmb_exchange)
         TextView rmbPriceTv;
         @BindView(R.id.quote_exchange)
-        TextView quoteTv;
+        QMUIRoundButton quoteBtn;
 
         ViewHolder(View itemView) {
             super(itemView);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         protected void onBind(GXSExchange data) {
             symbolTv.setText(data.getSymbol());
             nameTv.setText(data.getName());
             priceTv.setText(data.getPrice());
             rmbPriceTv.setText(String.format("￥%s", data.getPrice_rmb()));
-            String quote = "";
+            String quote;
             if (data.getQuote() < 0) {
-                quoteTv.setBackgroundColor(Color.parseColor("#c52225"));
+                quoteBtn.setEnabled(true);
                 quote = String.valueOf(data.getQuote()) + "%";
             } else {
-                quoteTv.setBackgroundColor(Color.parseColor("#165d78"));
+                quoteBtn.setEnabled(false);
                 quote = "+" + String.valueOf(data.getQuote()) + "%";
 
             }
-
-            quoteTv.setText(quote);
+            quoteBtn.setText(quote);
         }
 
     }

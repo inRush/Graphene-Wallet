@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.page.quotation.adapter.ExchangeRecyclerAdapter;
 import com.gxb.gxswallet.page.main.ExchangeServiceProvider;
+import com.gxb.gxswallet.page.quotation.adapter.ExchangeRecyclerAdapter;
 import com.gxb.gxswallet.page.quotationdetail.QuotationDetailActivity;
 import com.gxb.gxswallet.receiver.EventActionCode;
 import com.gxb.gxswallet.receiver.EventReceiver;
@@ -19,7 +19,6 @@ import com.sxds.common.app.PresenterFragment;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
 
 import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,7 @@ public class QuotationFragment extends PresenterFragment<QuotationContract.Prese
     private EventReceiver mExchangeChangeReceiver;
     private ExchangeServiceProvider mExchangeServiceProvider;
     private ExchangeRecyclerAdapter mExchangeRecyclerAdapter;
-
+    private int loadingCode = generateLoadingId();
 
     @Override
     protected QuotationContract.Presenter initPresenter() {
@@ -56,16 +55,17 @@ public class QuotationFragment extends PresenterFragment<QuotationContract.Prese
     protected void initWidget(View root) {
         super.initWidget(root);
         mTopBar.setTitle(getString(R.string.quotation));
-        mExchangeRecyclerAdapter = new ExchangeRecyclerAdapter(new ArrayList<GXSExchange>());
+        mExchangeRecyclerAdapter = new ExchangeRecyclerAdapter(new ArrayList<>());
         mExchangeList.setAdapter(mExchangeRecyclerAdapter);
         mExchangeList.setLayoutManager(new LinearLayoutManager(getContext()));
         mExchangeRecyclerAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<GXSExchange>() {
             @Override
             public void onItemClick(RecyclerAdapter.ViewHolder holder, GXSExchange data) {
                 super.onItemClick(holder, data);
-                QuotationDetailActivity.start(getActivity(),data);
+                QuotationDetailActivity.start(getActivity(), data);
             }
         });
+        showLoading(loadingCode, getString(R.string.get_quotation));
     }
 
     @Override
@@ -85,13 +85,9 @@ public class QuotationFragment extends PresenterFragment<QuotationContract.Prese
                 if (mExchangeServiceProvider.getService() == null) {
                     return;
                 }
+                dismissLoading(loadingCode);
                 mExchangeRecyclerAdapter.replace(mExchangeServiceProvider.getService().getGxsExchanges());
-                Run.onUiSync(new Action() {
-                    @Override
-                    public void call() {
-                        mExchangeRecyclerAdapter.notifyDataSetChanged();
-                    }
-                });
+                Run.onUiSync(() -> mExchangeRecyclerAdapter.notifyDataSetChanged());
             }
         });
         IntentFilter intentFilter = new IntentFilter();
