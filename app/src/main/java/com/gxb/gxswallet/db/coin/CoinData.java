@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.gxb.gxswallet.App;
-import com.gxb.gxswallet.config.AssetSymbol;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -81,11 +80,7 @@ public class CoinData implements Parcelable {
             manager.deleteAll();
             List<CoinData> coinDatas = new ArrayList<>();
             for (int i = 0; i < coinNames.length; i++) {
-                boolean isEnable = false;
-                if (coinNames[i].equals(AssetSymbol.GXS)) {
-                    isEnable = true;
-                }
-                coinDatas.add(new CoinData(null, coinNames[i] + ".png", coinNames[i], assetIds[i], isEnable));
+                coinDatas.add(new CoinData(null, coinNames[i] + ".png", coinNames[i], assetIds[i], true));
             }
             manager.insertMult(coinDatas);
         }
