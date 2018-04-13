@@ -52,6 +52,6 @@ public class LaunchActivity extends BaseActivity {
             public void run() {
                 checkPermissions();
             }
-        }, 100);
+        }, 2000);
     }
 }
