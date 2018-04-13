@@ -43,6 +43,8 @@ class CreateWalletContract {
          */
         String checkWalletName(String name);
 
+
+
         void createWallet(String walletName,String password);
     }
 }

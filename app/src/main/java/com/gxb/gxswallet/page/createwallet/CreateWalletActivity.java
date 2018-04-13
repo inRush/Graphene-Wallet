@@ -53,12 +53,8 @@ public class CreateWalletActivity extends PresenterActivity<CreateWalletContract
     @Override
     protected void initWidget() {
         super.initWidget();
-
         initTopBar();
         initWalletNameEt();
-        mWalletNameEt.setText("test-inrush4");
-        mPasswordEt.setText("128911hwj");
-        mAgainPasswordEt.setText("128911hwj");
     }
 
     private void initTopBar() {
@@ -152,7 +148,7 @@ public class CreateWalletActivity extends PresenterActivity<CreateWalletContract
     @Override
     public void onWalletCreateSuccess(WalletData wallet) {
         finish();
-        BackUpTipActivity.start(this, wallet);
+        BackUpTipActivity.start(this, wallet,true);
         App.showToast(R.string.create_wallet_success);
     }
 }
