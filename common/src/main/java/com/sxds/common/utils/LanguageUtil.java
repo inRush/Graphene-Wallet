@@ -137,7 +137,7 @@ public class LanguageUtil {
         }
     }
 
-    private String getAppLanguage(Context context) {
+    public String getAppLanguage(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(TAG,
                 Context.MODE_PRIVATE);
         return preferences.getString(LANGUAGE,

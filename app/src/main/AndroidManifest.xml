@@ -33,11 +33,11 @@
         <activity android:name=".page.send.SendActivity"/>
         <activity android:name=".page.receive.ReceiveActivity"/>
         <activity android:name=".page.launch.LaunchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".page.addcontact.AddContactActivity"/>
         <activity android:name=".page.editcontact.EditContactActivity"/>
@@ -50,6 +50,14 @@
         <activity android:name=".page.cointransaction.CoinTransactionHistoryActivity"/>
         <activity android:name=".page.transaction_history_detail.TransactionHistoryDetailActivity"/>
         <activity android:name=".page.choose_coin.ChooseCoinActivity"/>
+        <activity android:name=".page.setting.SettingActivity"/>
+        <activity android:name=".page.test.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <service android:name=".services.exchange.ExchangeService"/>
     </application>
