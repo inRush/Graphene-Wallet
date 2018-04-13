@@ -17,11 +17,14 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.config.AssetSymbol;
 import com.gxb.gxswallet.db.contact.ContactData;
 import com.gxb.gxswallet.db.contact.ContactManager;
 import com.gxb.gxswallet.page.contacts.ContactsFragment;
 import com.gxb.gxswallet.page.contacts.OnContactChangeListener;
 import com.gxb.gxswallet.page.editcontact.EditContactActivity;
+import com.gxb.gxswallet.page.send.SendActivity;
+import com.gxb.gxswallet.page.send.model.Sender;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
@@ -31,6 +34,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 用户信息Fragment
@@ -137,27 +141,26 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
         new QMUIDialog.MessageDialogBuilder(getActivity())
                 .setTitle(getString(R.string.hint))
                 .setMessage(getString(R.string.are_you_sure_delete))
-                .addAction(getString(R.string.cancel), new QMUIDialogAction.ActionListener() {
-                    @Override
-                    public void onClick(QMUIDialog dialog, int index) {
-                        dialog.dismiss();
-                    }
-                })
-                .addAction(0, getString(R.string.delete), QMUIDialogAction.ACTION_PROP_NEGATIVE, new QMUIDialogAction.ActionListener() {
-                    @Override
-                    public void onClick(QMUIDialog dialog, int index) {
-                        dialog.dismiss();
-                        if (mContactManager.delete(mContact)) {
-                            App.showToast(R.string.delete_success);
-                            mListener.onChange();
-                            dismiss();
-                        } else {
-                            App.showToast(R.string.delete_failure);
+                .addAction(getString(R.string.cancel), (dialog, index) -> dialog.dismiss())
+                .addAction(0, getString(R.string.delete), QMUIDialogAction.ACTION_PROP_NEGATIVE, (dialog, index) -> {
+                    dialog.dismiss();
+                    if (mContactManager.delete(mContact)) {
+                        App.showToast(R.string.delete_success);
+                        mListener.onChange();
+                        dismiss();
+                    } else {
+                        App.showToast(R.string.delete_failure);
 
-                        }
                     }
                 })
                 .show();
     }
+
+    @OnClick(R.id.send_btn_contact_dialog)
+    void onSendBtnClick() {
+        SendActivity.start(getActivity(), new Sender(null, addressTv.getText().toString(),
+                "0", AssetSymbol.GXS, memoTv.getText().toString()));
+    }
+
 
 }
