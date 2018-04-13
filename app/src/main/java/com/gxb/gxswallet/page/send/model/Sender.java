@@ -15,13 +15,16 @@ public class Sender implements Parcelable {
     private String to;
     private String amount;
     private String coin;
+    private String memo;
 
-    public Sender(WalletData from, String to, String amount, String coin) {
+    public Sender(WalletData from, String to, String amount, String coin, String memo) {
         this.from = from;
         this.to = to;
         this.amount = amount;
         this.coin = coin;
+        this.memo = memo;
     }
+
 
     public WalletData getFrom() {
         return from;
@@ -56,6 +59,14 @@ public class Sender implements Parcelable {
         this.coin = coin;
     }
 
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -67,6 +78,7 @@ public class Sender implements Parcelable {
         dest.writeString(this.to);
         dest.writeString(this.amount);
         dest.writeString(this.coin);
+        dest.writeString(this.memo);
     }
 
     protected Sender(Parcel in) {
@@ -74,6 +86,7 @@ public class Sender implements Parcelable {
         this.to = in.readString();
         this.amount = in.readString();
         this.coin = in.readString();
+        this.memo = in.readString();
     }
 
     public static final Creator<Sender> CREATOR = new Creator<Sender>() {

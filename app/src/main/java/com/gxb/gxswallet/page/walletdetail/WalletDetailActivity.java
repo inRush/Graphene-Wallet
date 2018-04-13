@@ -149,7 +149,7 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
 
     @OnClick(R.id.backup_words_wallet_detail)
     void onBackUpWordsBtnClick() {
-        BackUpTipActivity.start(this, mWalletData);
+        BackUpTipActivity.start(this, mWalletData, false);
         finish();
     }
 

@@ -3,12 +3,10 @@ package com.gxb.gxswallet.page.quotationdetail;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.view.View;
 import android.widget.TextView;
 
 import com.gxb.gxswallet.R;
@@ -24,6 +22,7 @@ import com.gxb.gxswallet.services.exchange.ExchangeService;
 import com.gxb.sdk.models.GXSExchange;
 import com.qmuiteam.qmui.widget.QMUITabSegment;
 import com.qmuiteam.qmui.widget.QMUITopBar;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import butterknife.BindView;
 
@@ -55,7 +54,7 @@ public class QuotationDetailActivity extends ExchangeServicePresenterActivity<Qu
     @BindView(R.id.price_rmb_exchange)
     TextView mRmbPriceTv;
     @BindView(R.id.quote_exchange)
-    TextView mQuoteTv;
+    QMUIRoundButton mQuoteBtn;
 
     private PagerAdapter mPagerAdapter;
 
@@ -109,14 +108,14 @@ public class QuotationDetailActivity extends ExchangeServicePresenterActivity<Qu
         mRmbPriceTv.setText(String.format("￥%s", mExchange.getPrice_rmb()));
         String quote;
         if (mExchange.getQuote() < 0) {
-            mQuoteTv.setBackgroundColor(Color.parseColor("#c52225"));
+            mQuoteBtn.setEnabled(true);
             quote = String.valueOf(mExchange.getQuote()) + "%";
         } else {
-            mQuoteTv.setBackgroundColor(Color.parseColor("#165d78"));
+            mQuoteBtn.setEnabled(false);
             quote = "+" + String.valueOf(mExchange.getQuote()) + "%";
 
         }
-        mQuoteTv.setText(quote);
+        mQuoteBtn.setText(quote);
         mHighestPriceTv.setText(mExchange.getHigh());
         mMinimumPriceTv.setText(mExchange.getLow());
         mVolumeTv.setText(mExchange.getVolume());
@@ -124,12 +123,7 @@ public class QuotationDetailActivity extends ExchangeServicePresenterActivity<Qu
 
     private void initTopBar() {
         mTopBar.setTitle(getString(R.string.real_time_quotes));
-        mTopBar.addLeftBackImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        mTopBar.addLeftBackImageButton().setOnClickListener(view -> finish());
     }
 
     private void initTabAndViewPage() {
@@ -152,7 +146,7 @@ public class QuotationDetailActivity extends ExchangeServicePresenterActivity<Qu
         mContentViewPage.setAdapter(mPagerAdapter);
         mContentViewPage.setCurrentItem(mDestPage.getPosition(), false);
         mTabSegment.addTab(new QMUITabSegment.Tab(getString(R.string.minute_by_minute)));
-        mTabSegment.addTab(new QMUITabSegment.Tab(getString(R.string.day_k_line)));
+//        mTabSegment.addTab(new QMUITabSegment.Tab(getString(R.string.day_k_line)));
         mTabSegment.setupWithViewPager(mContentViewPage, false, true);
         mTabSegment.setMode(QMUITabSegment.MODE_FIXED);
         mTabSegment.addOnTabSelectedListener(new QMUITabSegment.OnTabSelectedListener() {

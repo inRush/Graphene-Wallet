@@ -89,7 +89,9 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         super.initWidget();
         mTopBar.setTitle(getString(R.string.send));
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> finish());
+        amountEt.setHint(getString(R.string.amount_to_send, mSender.getCoin()));
         initToAccountWidget();
+        memoEt.setText(mSender.getMemo());
         QMUIAlphaImageButton imageButton = mTopBar.addRightImageButton(R.drawable.ic_scan, View.generateViewId());
         imageButton.setOnClickListener(v -> onScanQR());
     }
@@ -101,6 +103,9 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         mWalletNames = new String[mWalletDataList.size()];
         for (int i = 0; i < mWalletDataList.size(); i++) {
             mWalletNames[i] = mWalletDataList.get(i).getName();
+        }
+        if (mCurrentWallet == null) {
+            mCurrentWallet = mWalletDataList.get(0);
         }
         mPresenter.fetchWalletBalance(mCurrentWallet);
     }
@@ -213,6 +218,14 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @OnClick(R.id.send_btn_send)
     void onSendBtnClick() {
+        if ("".equals(toEt.getText().toString())) {
+            showError(getString(R.string.to_account_not_allow_empty));
+            return;
+        }
+        if ("".equals(amountEt.getText().toString()) || "0".equals(amountEt.getText().toString())) {
+            showError(getString(R.string.amount_format_error));
+            return;
+        }
         new PasswordDialog().setPasswordConfirmListener(this).show(getSupportFragmentManager(), "password");
     }
 

@@ -113,7 +113,7 @@ public class ReceiveActivity extends PresenterActivity<ReceiveContract.Presenter
     }
 
     private String generateQrcodeString(double amount) {
-        return String.format(Locale.CHINA, "%sto=%s&amount=%f&coin=%s", Configure.QR_CODE_PRE_FIX, mCurrentWallet.getName(), amount
+        return String.format(Locale.CHINA, "%sto=%s&amount=%.5f&coin=%s", Configure.QR_CODE_PRE_FIX, mCurrentWallet.getName(), amount
                 , mCurrentCoin.getName());
     }
 
