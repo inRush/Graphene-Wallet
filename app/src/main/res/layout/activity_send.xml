@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -12,9 +12,9 @@
     <com.qmuiteam.qmui.widget.QMUITopBar
         android:id="@+id/topbar_send"
         android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
         android:elevation="@dimen/len_6"
-        app:qmui_topbar_need_separator="false"
-        android:layout_height="?attr/qmui_topbar_height"/>
+        app:qmui_topbar_need_separator="false"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,6 +49,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:paddingStart="@dimen/len_6"
                     android:textSize="@dimen/font_18"
                     tools:text="in-rush"/>
 
@@ -87,10 +88,45 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="@string/receive_account_name"
+                    android:paddingStart="@dimen/len_6"
                     android:textSize="@dimen/font_16"/>
 
                 <ImageView
                     android:id="@+id/avatar_to_from_send"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:src="@mipmap/ic_launcher"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/switch_asset_send"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/send_asset_type"
+                    android:textColor="@color/black_alpha_192"/>
+
+                <TextView
+                    android:id="@+id/asset_send"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/len_6"
+                    android:textSize="@dimen/font_18"
+                    tools:text="@string/gxs"/>
+
+                <ImageView
+                    android:id="@+id/image_asset_send"
+                    android:padding="@dimen/len_6"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
@@ -123,8 +159,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/amount_to_send"
+                    tools:hint="填写GXS数量"
                     android:inputType="numberDecimal"
+                    android:paddingStart="@dimen/len_6"
                     android:textSize="@dimen/font_16"/>
             </LinearLayout>
 
@@ -171,9 +208,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:layout_marginTop="50dp"
             android:layout_marginEnd="@dimen/len_28"
             android:layout_marginStart="@dimen/len_28"
+            android:layout_marginTop="50dp"
             android:background="@drawable/bg_round_btn"
             android:text="@string/send"
             android:textColor="@color/white"

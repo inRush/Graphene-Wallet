@@ -1,37 +1,51 @@
 package com.gxb.gxswallet.page.transaction_history_detail;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.caverock.androidsvg.SVGParseException;
+import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.base.dialog.PasswordDialog;
+import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.page.cointransaction.model.TransactionHistory;
+import com.gxb.gxswallet.services.WalletService;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
+import com.gxb.sdk.bitlib.util.StringUtils;
 import com.qmuiteam.qmui.widget.QMUITopBar;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 import com.sxds.common.app.BaseActivity;
 
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import cy.agorise.graphenej.PublicKey;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cy.agorise.graphenej.objects.Memo;
 
 /**
  * @author inrush
  * @date 2018/4/5.
  */
 
-public class TransactionHistoryDetailActivity extends BaseActivity implements View.OnClickListener {
+public class TransactionHistoryDetailActivity extends BaseActivity
+        implements View.OnClickListener, PasswordDialog.OnPasswordConfirmListener {
 
     @BindView(R.id.topbar_transaction_history_detail)
     QMUITopBar mTopBar;
@@ -127,7 +141,6 @@ public class TransactionHistoryDetailActivity extends BaseActivity implements Vi
 
     private void initTransactionMessage() {
         try {
-
             if (mTransactionHistory.getType() == TransactionHistory.TransactionType.send) {
                 mTopBar.setTitle(R.string.send_to_this_account);
                 mAvatarIv.setImageDrawable(Jdenticon.from(mTransactionHistory.getTo()).drawable());
@@ -140,15 +153,6 @@ public class TransactionHistoryDetailActivity extends BaseActivity implements Vi
                 mAccountTv.setText(mTransactionHistory.getFrom());
             }
             mAssetIv.setText(mTransactionHistory.getAsset());
-            if (mTransactionHistory.getMemo() != null) {
-                ECKey privateKey = DumpedPrivateKey.fromBase58(NetworkParameters.prodNet(), "5KQiXpeTfxvBe5AB4Q2ZdkhwPxTdyj4Y2abdk5W1qerRGoptMer").getKey();
-                PublicKey publicKey = new PublicKey(ECKey.fromPublicOnly(privateKey.getPubKey()));
-//                try {
-//                    String message = Memo.decryptMessage(privateKey,publicKey,mTransactionHistory.getMemo().getNonce(),mTransactionHistory.getMemo().getByteMessage());
-//                } catch (ChecksumException e) {
-//                    e.printStackTrace();
-//                }
-            }
         } catch (IOException | SVGParseException e) {
             e.printStackTrace();
         }
@@ -163,13 +167,91 @@ public class TransactionHistoryDetailActivity extends BaseActivity implements Vi
         if (v instanceof QMUICommonListItemView) {
             String title = ((QMUICommonListItemView) v).getText().toString();
             if (partTwoSettings[0].equals(title)) {
-
+                if (mTransactionHistory.getMemo() != null) {
+                    showPasswordDialog();
+                } else {
+                    showInfo(R.string.this_transaction_not_have_memo);
+                }
             } else if (partTwoSettings[1].equals(title)) {
-
+                if(mTransactionHistory.getTransactionIds() == null){
+                    showInfo(R.string.this_transaction_not_have_txid);
+                }else {
+                    showTxIdsDialog(mTransactionHistory.getTransactionIds());
+                }
             }
         }
     }
 
+    private void showPasswordDialog() {
+        new PasswordDialog().setPasswordConfirmListener(this).show(getSupportFragmentManager(), "password");
+    }
+
+    private void showMemoDialog(ECKey privateKey, Memo memo) {
+        try {
+            String memoText = WalletService.getInstance().decryptMemo(privateKey, memo,
+                    mTransactionHistory.getType() == TransactionHistory.TransactionType.send);
+            CopyTextDialogBuilder dialog = new CopyTextDialogBuilder(this, getString(R.string.memo), memoText);
+            dialog.show();
+        } catch (Exception e) {
+            showError(getString(R.string.parse_error));
+        }
+
+    }
+
+    private void showTxIdsDialog(List<String> txids) {
+        String[] ids = new String[txids.size()];
+        txids.toArray(ids);
+        CopyTextDialogBuilder dialog = new CopyTextDialogBuilder(this, "TXID", StringUtils.join(ids, ","));
+        dialog.show();
+    }
+
+    @Override
+    public void onConfirm(String password) {
+        String[] datas = WalletService.getInstance().unlockWallet(WalletManager.getInstance().getCurrentWallet(), password);
+        if (datas[0] == null) {
+            showError(R.string.password_error);
+        } else {
+            showMemoDialog(DumpedPrivateKey.fromBase58(null, datas[0]).getKey(), mTransactionHistory.getMemo());
+        }
+    }
+
+    class CopyTextDialogBuilder extends QMUIDialog.AutoResizeDialogBuilder {
+
+        @BindView(R.id.text_dialog_show_copy_text)
+        TextView mContentTv;
+        @BindView(R.id.title_dialog_show_copy_text)
+        TextView mTitleTv;
+        private Context mContext;
+        private String mText;
+        private String mTitle;
+        private ClipboardManager mClipboard;
+
+
+        public CopyTextDialogBuilder(Context context, String title, String text) {
+            super(context);
+            mContext = context;
+            this.mText = text;
+            this.mTitle = title;
+            mClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        }
+
+
+        @Override
+        public View onBuildContent(QMUIDialog dialog, ScrollView parent) {
+            View rootView = LayoutInflater.from(TransactionHistoryDetailActivity.this).inflate(R.layout.dialog_show_copy_text, parent, false);
+            ButterKnife.bind(this, rootView);
+            mContentTv.setText(mText);
+            mTitleTv.setText(mTitle);
+            return rootView;
+        }
+
+        @OnClick(R.id.btn_dialog_show_copy_text)
+        void onBtnClick(View v) {
+            ClipData clipData = ClipData.newPlainText("PrivateKey", mContentTv.getText().toString());
+            mClipboard.setPrimaryClip(clipData);
+            App.showToast(R.string.copy_success);
+        }
+    }
 
 
 }

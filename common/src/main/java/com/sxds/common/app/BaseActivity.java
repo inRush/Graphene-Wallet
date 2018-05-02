@@ -2,6 +2,7 @@ package com.sxds.common.app;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -131,17 +132,38 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showError(String message) {
         final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_FAIL, message);
         dialog.show();
-        Run.onBackground(new Action() {
+        delayDismissDialog(dialog, 2000);
+    }
+
+    public void showError(int strRes) {
+        showError(getString(strRes));
+    }
+
+    public void showInfo(final String str) {
+        runOnUiThread(new Runnable() {
             @Override
-            public void call() {
-                try {
-                    Thread.sleep(2000);
-                    dialog.dismiss();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            public void run() {
+                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
+                        .setTipWord(str)
+                        .create();
+                dialog.show();
+                delayDismissDialog(dialog, 2000);
             }
         });
+    }
+
+    public void showInfo(int strRes) {
+        showInfo(getString(strRes));
+    }
+
+    private void delayDismissDialog(final QMUITipDialog dialog, int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, delay);
     }
 
     private QMUITipDialog getDialog(int iconType, String message) {

@@ -55,6 +55,8 @@ public class SendContract {
          */
         List<WalletData> fetchWallet();
 
+        List<AssetData> fetchAssets();
+
         /**
          * 获取钱包的余额
          *

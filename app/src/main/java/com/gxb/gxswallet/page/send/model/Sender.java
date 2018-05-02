@@ -46,7 +46,7 @@ public class Sender implements Parcelable {
         return coin;
     }
 
-    public void setCoin(AssetData coin) {
+    public void setAsset(AssetData coin) {
         this.coin = coin;
     }
 

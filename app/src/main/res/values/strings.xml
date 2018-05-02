@@ -170,4 +170,8 @@
     <string name="enable_failure">启用失败</string>
     <string name="disable_success">关闭成功</string>
     <string name="disable_failure">关闭失败</string>
+    <string name="this_transaction_not_have_memo">该交易没有备注</string>
+    <string name="this_transaction_not_have_txid">该交易没有TXID</string>
+    <string name="send_asset_type">发送币种</string>
+    <string name="parse_error">解析出错</string>
 </resources>

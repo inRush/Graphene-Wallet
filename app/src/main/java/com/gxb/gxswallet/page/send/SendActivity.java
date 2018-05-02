@@ -17,12 +17,14 @@ import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.dialog.PasswordDialog;
 import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.send.dialog.TransactionConfirmDialog;
 import com.gxb.gxswallet.page.send.model.Sender;
 import com.gxb.gxswallet.page.send.model.Transaction;
 import com.gxb.gxswallet.services.WalletService;
+import com.gxb.gxswallet.utils.AssetsUtil;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.jwsd.libzxing.OnQRCodeScanCallback;
 import com.jwsd.libzxing.QRCodeManager;
@@ -64,11 +66,15 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     ImageView fromAvatarIv;
     @BindView(R.id.avatar_to_from_send)
     ImageView toAvatarIv;
+    @BindView(R.id.asset_send)
+    TextView assetTv;
+    @BindView(R.id.image_asset_send)
+    ImageView assetImageIv;
 
     private Sender mSender;
     private WalletData mCurrentWallet;
-    private List<WalletData> mWalletDataList;
     private String[] mWalletNames;
+    private String[] mAssetNames;
     private static final String SENDER_KEY = "sender";
 
     public static void start(Activity activity, Sender sender) {
@@ -92,25 +98,31 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         super.initWidget();
         mTopBar.setTitle(getString(R.string.send));
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> finish());
-        amountEt.setHint(getString(R.string.amount_to_send, mSender.getAsset().getName()));
+        if (mCurrentWallet == null) {
+            mCurrentWallet = WalletManager.getInstance().getCurrentWallet();
+        }
+        initFromAccountWidget();
+        initAssetWidget();
         initToAccountWidget();
         memoEt.setText(mSender.getMemo());
         QMUIAlphaImageButton imageButton = mTopBar.addRightImageButton(R.drawable.ic_scan, View.generateViewId());
         imageButton.setOnClickListener(v -> onScanQR());
     }
 
+
     @Override
     protected void initData() {
         super.initData();
-        mWalletDataList = mPresenter.fetchWallet();
-        mWalletNames = new String[mWalletDataList.size()];
-        for (int i = 0; i < mWalletDataList.size(); i++) {
-            mWalletNames[i] = mWalletDataList.get(i).getName();
+        List<WalletData> walletDataList = mPresenter.fetchWallet();
+        mWalletNames = new String[walletDataList.size()];
+        for (int i = 0; i < walletDataList.size(); i++) {
+            mWalletNames[i] = walletDataList.get(i).getName();
         }
-        if (mCurrentWallet == null) {
-            mCurrentWallet = mWalletDataList.get(0);
+        List<AssetData> assetDataList = mPresenter.fetchAssets();
+        mAssetNames = new String[assetDataList.size()];
+        for (int i = 0; i < assetDataList.size(); i++) {
+            mAssetNames[i] = assetDataList.get(i).getName();
         }
-        mPresenter.fetchWalletBalance(mCurrentWallet, mSender.getAsset());
     }
 
     public void onScanQR() {
@@ -130,10 +142,11 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                     amount = "0";
                                 }
                                 Double.parseDouble(amount);
-                                toEt.setText(account);
-                                amountEt.setText(amount);
-                                double avaAmount = mCurrentWallet.getBalances(coin);
-                                gxsTv.setText(getString(R.string.available_coin, String.valueOf(avaAmount), coin.toUpperCase()));
+                                mSender.setTo(account);
+                                mSender.setAmount(amount);
+                                mSender.setAsset(AssetDataManager.get(coin));
+                                initToAccountWidget();
+                                initAssetWidget();
                                 App.showToast(R.string.scan_success);
                             } catch (Exception e) {
                                 App.showToast(R.string.scan_error);
@@ -159,12 +172,17 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         try {
             fromAvatarIv.setImageDrawable(Jdenticon.from(mCurrentWallet.getName()).drawable());
             fromTv.setText(mCurrentWallet.getName());
-            amountEt.setText(mSender.getAmount());
-            double amount = mCurrentWallet.getBalances(mSender.getAsset().getName());
-            gxsTv.setText(getString(R.string.available_coin, String.valueOf(amount), mSender.getAsset().getName()));
         } catch (IOException | SVGParseException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initAssetWidget() {
+        amountEt.setHint(getString(R.string.amount_to_send, mSender.getAsset().getName()));
+        assetTv.setText(mSender.getAsset().getName());
+        assetImageIv.setImageBitmap(AssetsUtil.getImage(mSender.getAsset().getIcon()));
+        amountEt.setText(mSender.getAmount());
+        mPresenter.fetchWalletBalance(mCurrentWallet, mSender.getAsset());
     }
 
     /**
@@ -173,13 +191,25 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
      * @param items
      * @param checkedIndex
      */
-    private void showMenuDialog(String[] items, int checkedIndex) {
+    private void showChooseAccountDialog(String[] items, int checkedIndex) {
         new QMUIDialog.CheckableDialogBuilder(this)
                 .setCheckedIndex(checkedIndex)
                 .addItems(items, (dialog, which) -> {
                     dialog.dismiss();
-                    mCurrentWallet = mWalletDataList.get(which);
-                    mPresenter.fetchWalletBalance(mCurrentWallet, mSender.getAsset());
+                    mCurrentWallet = mPresenter.fetchWallet().get(which);
+                    initFromAccountWidget();
+                    initAssetWidget();
+                })
+                .show();
+    }
+
+    private void showChooseAssetDialog(String[] items, int checkedIndex) {
+        new QMUIDialog.CheckableDialogBuilder(this)
+                .setCheckedIndex(checkedIndex)
+                .addItems(items, (dialog, which) -> {
+                    dialog.dismiss();
+                    mSender.setAsset(AssetDataManager.get(mAssetNames[which]));
+                    initAssetWidget();
                 })
                 .show();
     }
@@ -234,7 +264,13 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @OnClick(R.id.switch_account_send)
     void onSwitchAccountBtnClick() {
-        showMenuDialog(mWalletNames, getCurrentWalletIndex());
+        showChooseAccountDialog(mWalletNames, getCurrentWalletIndex());
+    }
+
+
+    @OnClick(R.id.switch_asset_send)
+    void onSwitchAssetBtnClick() {
+        showChooseAssetDialog(mAssetNames, getCurrentAssetIndex());
     }
 
     /**
@@ -243,8 +279,17 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
      * @return 当前钱包的索引
      */
     private int getCurrentWalletIndex() {
-        for (int i = 0; i < mWalletDataList.size(); i++) {
-            if (mCurrentWallet.getName().equals(mWalletDataList.get(i).getName())) {
+        for (int i = 0; i < mWalletNames.length; i++) {
+            if (mCurrentWallet.getName().equals(mWalletNames[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private int getCurrentAssetIndex() {
+        for (int i = 0; i < mAssetNames.length; i++) {
+            if (mSender.getAsset().getName().equals(mAssetNames[i])) {
                 return i;
             }
         }
@@ -282,7 +327,8 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     @Override
     public void onFetchWalletBalanceSuccess(WalletData wallet, double balance) {
         wallet.setBalances(mSender.getAsset().getName(), balance);
-        initFromAccountWidget();
+        double amount = mCurrentWallet.getBalances(mSender.getAsset().getName());
+        gxsTv.setText(getString(R.string.available_coin, String.valueOf(amount), mSender.getAsset().getName()));
     }
 
     @Override

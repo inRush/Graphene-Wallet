@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_dialog_show_copy_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/len_20"
+        android:layout_marginTop="@dimen/len_20"
+        tools:text="@string/memo"
+        android:textColor="@color/black_alpha_160"
+        android:textSize="@dimen/font_14"
+        android:textStyle="bold"/>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/len_100"
+        android:layout_margin="@dimen/len_20"
+        app:qmui_backgroundColor="@color/black_alpha_16"
+        app:qmui_radius="@dimen/len_4"
+        >
+
+        <TextView
+            android:id="@+id/text_dialog_show_copy_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/len_8"
+            android:textColor="@color/black_alpha_96"
+            android:textSize="@dimen/font_16"
+            tools:text="测试"/>
+    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundFrameLayout>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/btn_dialog_show_copy_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/len_20"
+        android:layout_marginEnd="@dimen/len_20"
+        android:layout_marginStart="@dimen/len_20"
+        android:layout_marginTop="@dimen/len_20"
+        android:padding="@dimen/len_10"
+        android:text="@string/copy"
+        android:textColor="@color/white"
+        app:qmui_backgroundColor="@color/colorPrimary"
+        app:qmui_borderColor="@color/colorPrimary"
+        app:qmui_radius="@dimen/len_6"/>
+</LinearLayout>

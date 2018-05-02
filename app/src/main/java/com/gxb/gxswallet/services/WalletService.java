@@ -488,9 +488,9 @@ public class WalletService {
         return new Memo(from, to, nonce, encryptedMessage);
     }
 
-    public String decryptMemo(ECKey privateKey, Memo memo) {
+    public String decryptMemo(ECKey privateKey, Memo memo, boolean isSend) throws Exception {
         try {
-            return Memo.decryptMessage(privateKey, memo.getSource(), memo.getNonce(), memo.getByteMessage());
+            return Memo.decryptMessage(privateKey, isSend ? memo.getDestination() : memo.getSource(), memo.getNonce(), memo.getByteMessage());
         } catch (ChecksumException e) {
             e.printStackTrace();
         }
@@ -523,8 +523,5 @@ public class WalletService {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(rpcTask -> e.onNext(true), e::onError, e::onComplete);
         });
-
-
     }
-
 }

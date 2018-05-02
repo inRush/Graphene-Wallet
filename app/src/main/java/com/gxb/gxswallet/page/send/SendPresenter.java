@@ -84,6 +84,11 @@ public class SendPresenter extends BasePresenter<SendContract.View>
         return WalletManager.getInstance().getAllWallet();
     }
 
+    @Override
+    public List<AssetData> fetchAssets() {
+        return AssetDataManager.getEnableList();
+    }
+
 
     @Override
     public void fetchWalletBalance(WalletData wallet, AssetData asset) {
