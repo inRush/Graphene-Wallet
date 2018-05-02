@@ -8,8 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.config.AssetSymbol;
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.cointransaction.adapter.TransactionHistoryAdapter;
 import com.gxb.gxswallet.page.cointransaction.model.TransactionHistory;
@@ -21,8 +20,6 @@ import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.sxds.common.app.PresenterActivity;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
-
-import net.qiujuer.genius.kit.handler.Run;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +43,16 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
     QMUIEmptyView mEmptyView;
 
     private static final String DATA_KEY = "wallet";
-    private static final String COIN_DATA_KEY = "coin";
+    private static final String ASSET_DATA_KEY = "asset";
     private WalletData mWalletData;
-    private CoinData mCoin;
+    private AssetData mAsset;
     private int loadingId = generateLoadingId();
     private TransactionHistoryAdapter mHistoryAdapter;
 
-    public static void start(Activity activity, WalletData wallet, CoinData coinItem) {
+    public static void start(Activity activity, WalletData wallet, AssetData assetItem) {
         Intent intent = new Intent(activity, CoinTransactionHistoryActivity.class);
         intent.putExtra(DATA_KEY, wallet);
-        intent.putExtra(COIN_DATA_KEY, coinItem);
+        intent.putExtra(ASSET_DATA_KEY, assetItem);
         activity.startActivity(intent);
     }
 
@@ -63,7 +60,7 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
     protected boolean initArgs(Bundle bundle) {
         if (bundle != null) {
             mWalletData = bundle.getParcelable(DATA_KEY);
-            mCoin = bundle.getParcelable(COIN_DATA_KEY);
+            mAsset = bundle.getParcelable(ASSET_DATA_KEY);
         }
         return super.initArgs(bundle);
     }
@@ -72,7 +69,7 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
     protected void initWidget() {
         super.initWidget();
         initTopBar();
-        mHistoryAdapter = new TransactionHistoryAdapter(new ArrayList<>(), mCoin);
+        mHistoryAdapter = new TransactionHistoryAdapter(new ArrayList<>(), mAsset);
         mTransactionHistoryList.setLayoutManager(new LinearLayoutManager(this));
         mTransactionHistoryList.setAdapter(mHistoryAdapter);
         mHistoryAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<TransactionHistory>() {
@@ -97,8 +94,8 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
         loadHistory();
     }
 
-    private void loadHistory(){
-        mPresenter.getTransactionHistory(mWalletData);
+    private void loadHistory() {
+        mPresenter.getTransactionHistory(mWalletData, mAsset);
         showLoading(loadingId, R.string.loading_transaction_list);
     }
 
@@ -115,26 +112,24 @@ public class CoinTransactionHistoryActivity extends PresenterActivity<CoinTransa
     @Override
     public void onGetTransactionHistorySuccess(List<TransactionHistory> histories) {
         dismissLoading(loadingId);
-        Run.onUiAsync(() -> {
-            if (histories.size() == 0 || mCoin.getName().equals(AssetSymbol.BTS)) {
-                mEmptyView.show(getString(R.string.no_transaction_history), null);
-            } else {
-                mEmptyView.hide();
-                mHistoryAdapter.replace(histories);
-                mHistoryAdapter.notifyDataSetChanged();
-                dismissLoading(loadingId);
-            }
-        });
+        if (histories.size() == 0) {
+            mEmptyView.show(getString(R.string.no_transaction_history), null);
+        } else {
+            mEmptyView.hide();
+            mHistoryAdapter.replace(histories);
+            mHistoryAdapter.notifyDataSetChanged();
+            dismissLoading(loadingId);
+        }
     }
 
     @OnClick(R.id.send_transaction_history)
     void onSendBtnClick() {
-        SendActivity.start(this, new Sender(mWalletData, null, null, mCoin.getName(), ""));
+        SendActivity.start(this, new Sender(null, null, mAsset, ""));
     }
 
     @OnClick(R.id.receive_transaction_history)
     void onReceiveBtnClick() {
-        ReceiveActivity.start(this, mWalletData, mCoin);
+        ReceiveActivity.start(this, mWalletData, mAsset);
     }
 
 }

@@ -39,9 +39,10 @@ public class GetObjects extends BaseRpcHandler {
     /**
      * Default Constructor
      *
-     * @param ids      list of IDs of the objects to retrieve
+     * @param ids list of IDs of the objects to retrieve
      */
-    public GetObjects(List<String> ids) {
+    public GetObjects(WebSocketService service, List<String> ids) {
+        super(service);
         this.ids = ids;
     }
 
@@ -126,7 +127,7 @@ public class GetObjects extends BaseRpcHandler {
 
     @Override
     protected int getApiId() {
-        return WebSocketService.getInstance().apiCode.getDataseId();
+        return mService.apiCode.getDataseId();
     }
 
     @Override

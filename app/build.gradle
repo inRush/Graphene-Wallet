@@ -61,7 +61,7 @@ android {
 
 }
 greendao {
-    schemaVersion 9
+    schemaVersion 11
     daoPackage 'com.ping.greendao.gen'
     targetGenDir 'src/main/java'
 }
@@ -97,7 +97,10 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:2.6.5'
     implementation 'android.arch.lifecycle:extensions:1.0.0'
     debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
-
+    // rxjava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
     // libs
     implementation project(':SDK')
     implementation project(':common')

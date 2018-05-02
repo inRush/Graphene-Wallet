@@ -1,10 +1,14 @@
 package com.gxb.gxswallet.page.send;
 
+import com.google.common.base.Function;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
-import com.gxb.sdk.models.wallet.AccountBalance;
 import com.sxds.common.presenter.BaseContract;
 
+import org.bitcoinj.core.ECKey;
+
 import java.util.List;
+
 
 /**
  * @author inrush
@@ -18,7 +22,12 @@ public class SendContract {
          */
         void onSendSuccess();
 
-        void onQueryFeeSuccess(double fee);
+        /**
+         * 查询手续费成功
+         *
+         * @param fee 手续费
+         */
+        void onQueryFeeSuccess(double fee, Function<Boolean, Void> callback);
 
         /**
          * 获取账户余额成功回调
@@ -26,7 +35,7 @@ public class SendContract {
          * @param balance 余额
          * @param wallet  钱包
          */
-        void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balance);
+        void onFetchWalletBalanceSuccess(WalletData wallet, double balance);
     }
 
     interface Presenter extends BaseContract.Presenter {
@@ -36,12 +45,21 @@ public class SendContract {
          * @param from   账户名称(地址)
          * @param amount 数量
          */
-        void send(String from, String to, String amount, String coin, String memo);
+        void send(ECKey privateKey, String from, String to, String amount, AssetData assetData, String memo);
 
-        void queryFee(String from, String to, String amount, String coin, String memo);
 
+        /**
+         * 获取所有钱包
+         *
+         * @return 钱包列表
+         */
         List<WalletData> fetchWallet();
 
-        void fetchWalletBalance(final WalletData wallet);
+        /**
+         * 获取钱包的余额
+         *
+         * @param wallet 钱包
+         */
+        void fetchWalletBalance(WalletData wallet, AssetData asset);
     }
 }

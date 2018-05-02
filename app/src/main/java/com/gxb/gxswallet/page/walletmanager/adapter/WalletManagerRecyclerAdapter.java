@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.config.AssetSymbol;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
@@ -64,8 +64,8 @@ public class WalletManagerRecyclerAdapter extends RecyclerAdapter<WalletData> {
                 } else {
                     isBackupIv.setVisibility(View.VISIBLE);
                 }
-                if (data.getBalances(AssetSymbol.GXS) != null) {
-                    gxsCountTv.setText(String.valueOf(data.getBalances(AssetSymbol.GXS).getAmount() / 100000.0));
+                if (data.getBalances(AssetSymbol.GXS.getName()) != null) {
+                    gxsCountTv.setText(String.valueOf(data.getBalances(AssetSymbol.GXS.getName())));
                 }
 
             } catch (IOException | SVGParseException e) {

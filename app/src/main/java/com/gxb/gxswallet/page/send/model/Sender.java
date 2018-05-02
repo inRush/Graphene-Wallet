@@ -3,7 +3,7 @@ package com.gxb.gxswallet.page.send.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.db.asset.AssetData;
 
 /**
  * @author inrush
@@ -11,14 +11,12 @@ import com.gxb.gxswallet.db.wallet.WalletData;
  */
 
 public class Sender implements Parcelable {
-    private WalletData from;
     private String to;
     private String amount;
-    private String coin;
+    private AssetData coin;
     private String memo;
 
-    public Sender(WalletData from, String to, String amount, String coin, String memo) {
-        this.from = from;
+    public Sender(String to, String amount, AssetData coin, String memo) {
         this.to = to;
         this.amount = amount;
         this.coin = coin;
@@ -26,13 +24,6 @@ public class Sender implements Parcelable {
     }
 
 
-    public WalletData getFrom() {
-        return from;
-    }
-
-    public void setFrom(WalletData from) {
-        this.from = from;
-    }
 
     public String getTo() {
         return to;
@@ -51,11 +42,11 @@ public class Sender implements Parcelable {
     }
 
 
-    public String getCoin() {
+    public AssetData getAsset() {
         return coin;
     }
 
-    public void setCoin(String coin) {
+    public void setCoin(AssetData coin) {
         this.coin = coin;
     }
 
@@ -67,6 +58,7 @@ public class Sender implements Parcelable {
         this.memo = memo;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -74,18 +66,16 @@ public class Sender implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.from, flags);
         dest.writeString(this.to);
         dest.writeString(this.amount);
-        dest.writeString(this.coin);
+        dest.writeParcelable(this.coin, flags);
         dest.writeString(this.memo);
     }
 
     protected Sender(Parcel in) {
-        this.from = in.readParcelable(WalletData.class.getClassLoader());
         this.to = in.readString();
         this.amount = in.readString();
-        this.coin = in.readString();
+        this.coin = in.readParcelable(AssetData.class.getClassLoader());
         this.memo = in.readString();
     }
 

@@ -1,6 +1,6 @@
 package com.gxb.gxswallet.page.receive;
 
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.sxds.common.presenter.BaseContract;
 
@@ -18,6 +18,6 @@ public class ReceiveContract {
 
     interface Presenter extends BaseContract.Presenter {
         List<WalletData> fetchWallet();
-        List<CoinData> fetchSupportCoin();
+        List<AssetData> fetchSupportCoin();
     }
 }

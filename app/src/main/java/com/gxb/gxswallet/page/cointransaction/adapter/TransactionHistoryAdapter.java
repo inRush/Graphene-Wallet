@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.page.cointransaction.model.TransactionHistory;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
@@ -25,9 +25,9 @@ import butterknife.BindView;
 
 public class TransactionHistoryAdapter extends RecyclerAdapter<TransactionHistory> {
 
-    private CoinData mCoin;
+    private AssetData mCoin;
 
-    public TransactionHistoryAdapter(List<TransactionHistory> dataList, CoinData coinItem) {
+    public TransactionHistoryAdapter(List<TransactionHistory> dataList, AssetData coinItem) {
         super(dataList);
         this.mCoin = coinItem;
     }

@@ -163,7 +163,7 @@ public class TransactionTest {
                 .setSource(bilthon_7)
                 .setDestination(bilthon_5) // bilthon-5
                 .setFee(new AssetAmount(UnsignedLong.valueOf(FEE_AMOUNT), CORE_ASSET))
-                .setMemo(memo)
+                .setMemo(null)
                 .build();
 
         // Creating operation 2
@@ -172,7 +172,7 @@ public class TransactionTest {
                 .setSource(bilthon_7) // bilthon-15
                 .setDestination(bilthon_16) // bilthon-16
                 .setFee(new AssetAmount(UnsignedLong.valueOf(FEE_AMOUNT), CORE_ASSET))
-                .setMemo(memo)
+                .setMemo(null)
                 .build();
 
 

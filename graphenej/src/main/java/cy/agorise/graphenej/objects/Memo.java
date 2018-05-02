@@ -153,7 +153,7 @@ public class Memo implements ByteSerializable, JsonSerializable, Parcelable {
             // Applying encryption
             encrypted = Util.encryptAES(msgFinal, seed);
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("NoSuchAlgotithmException. Msg:" + ex.getMessage());
+            System.out.println("NoSuchAlgorithmException. Msg:" + ex.getMessage());
         }
         return encrypted;
     }
@@ -380,8 +380,8 @@ public class Memo implements ByteSerializable, JsonSerializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.from.getPublicKey().getAddress());
-        dest.writeString(this.to.getPublicKey().getAddress());
+        dest.writeString(this.from.getPublicKey().getAddress().toString());
+        dest.writeString(this.to.getPublicKey().getAddress().toString());
         dest.writeSerializable(this.nonce);
         dest.writeByteArray(this.message);
         dest.writeString(this.plaintextMessage);

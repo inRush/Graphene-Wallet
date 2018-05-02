@@ -16,6 +16,9 @@ import cy.agorise.graphenej.models.WitnessResponse;
  */
 
 public abstract class BaseRpcHandler {
+
+
+    protected WebSocketService mService;
     /**
      * 通过WebSocketService的apiCode获取对应类型的ID
      *
@@ -44,13 +47,17 @@ public abstract class BaseRpcHandler {
      * @return 响应
      */
     protected abstract WitnessResponse onResponse(String result);
-
+    public WebSocketService getService() {
+        return mService;
+    }
+    public BaseRpcHandler(WebSocketService service){
+        mService = service;
+    }
     public void call(final WitnessResponseListener listener) {
         try {
-            ApiCall getAccountByName = new ApiCall(getApiId(),
-                    getApiName(), getParams(), RPC.VERSION, WebSocketService.getInstance().generateId());
-            WebSocketService.getInstance()
-                    .call(getAccountByName, new WebSocketService.OnResponseListener() {
+            ApiCall call = new ApiCall(getApiId(),
+                    getApiName(), getParams(), RPC.VERSION, mService.generateId());
+            mService.call(call, new WebSocketService.OnResponseListener() {
                         @Override
                         public void onSuccess(String result) {
                             WitnessResponse witnessResponse = onResponse(result);

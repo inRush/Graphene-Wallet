@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.config.AssetSymbol;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
 import com.gxb.gxswallet.page.backuptip.BackUpTipActivity;
@@ -114,9 +114,9 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
         walletNameItem.setDetailText(mWalletData.getName());
 
         QMUICommonListItemView walletAssetsItem = mGroupListView.createItemView(partOneSettings[1]);
-        if (mWalletData.getBalances(AssetSymbol.GXS) != null) {
+        if (mWalletData.getBalances(AssetSymbol.GXS.getName()) != null) {
             walletAssetsItem.setDetailText(String.valueOf(
-                    mWalletData.getBalances(AssetSymbol.GXS).getAmount() / 100000.0)
+                    mWalletData.getBalances(AssetSymbol.GXS.getName()))
             );
         }
 

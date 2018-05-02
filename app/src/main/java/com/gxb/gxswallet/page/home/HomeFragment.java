@@ -1,6 +1,5 @@
 package com.gxb.gxswallet.page.home;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,9 +18,11 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.config.AssetSymbol;
+import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.choose_coin.ChooseCoinActivity;
 import com.gxb.gxswallet.page.cointransaction.CoinTransactionHistoryActivity;
@@ -31,7 +32,6 @@ import com.gxb.gxswallet.page.home.adapter.DrawerWalletRecyclerAdapter;
 import com.gxb.gxswallet.page.home.model.CoinItem;
 import com.gxb.gxswallet.page.importaccount.ImportWalletActivity;
 import com.gxb.gxswallet.page.main.ExchangeServiceProvider;
-import com.gxb.gxswallet.page.quotation.adapter.ExchangeRecyclerAdapter;
 import com.gxb.gxswallet.page.receive.ReceiveActivity;
 import com.gxb.gxswallet.page.send.SendActivity;
 import com.gxb.gxswallet.page.send.model.Sender;
@@ -40,10 +40,8 @@ import com.gxb.gxswallet.receiver.EventReceiver;
 import com.gxb.gxswallet.receiver.OnEventReceiverListenerImpl;
 import com.gxb.gxswallet.utils.CodeUtil;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
-import com.gxb.sdk.models.wallet.AccountBalance;
 import com.jwsd.libzxing.OnQRCodeScanCallback;
 import com.jwsd.libzxing.QRCodeManager;
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.sxds.common.app.PresenterFragment;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
 
@@ -51,6 +49,7 @@ import net.qiujuer.genius.kit.handler.Run;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,21 +78,16 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     @BindView(R.id.refresh_layout_home)
     SwipeRefreshLayout mRefreshLayout;
 
-    private static final String ZERO_STR = "0.00";
-    private ExchangeRecyclerAdapter mAdapter;
     private DrawerWalletRecyclerAdapter mDrawerWalletRecyclerAdapter;
     private CoinRecyclerAdapter mCoinRecyclerAdapter;
-    private QMUITipDialog mLoadingDialog;
 
-    private WalletData mCurrentWallet;
     private List<CoinItem> mCoinItems;
-    private List<CoinData> mCoinDatas;
+    private List<AssetData> mCoinDatas;
     private EventReceiver mExchangeChangeReceiver;
     private ExchangeServiceProvider mExchangeServiceProvider;
     private static final int REQUEST_CODE = CodeUtil.getCode();
-
+    private boolean mFetchBalanceSuccess = false;
     private DecimalFormat df = new DecimalFormat("0.00");
-
 
     @Override
     protected HomeContract.Presenter initPresenter() {
@@ -109,19 +103,21 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        List<WalletData> wallets = mPresenter.fetchWallet();
-        loadWallet(wallets.get(0));
+        loadWallet(WalletManager.getInstance().getDefaultWallet());
         initCoinList();
         initRefreshLayout();
         navMenuNv.setNavigationItemSelectedListener(this);
     }
 
     private void initRefreshLayout() {
-        mRefreshLayout.setOnRefreshListener(() -> loadWallet(mCurrentWallet));
+        mRefreshLayout.setOnRefreshListener(() -> {
+            loadWallet(WalletManager.getInstance().getCurrentWallet());
+
+        });
     }
 
     private void initCoinList() {
-        mCoinDatas = mPresenter.fetchSupportCoin();
+        mCoinDatas = AssetDataManager.getEnableList();
         mCoinItems = mPresenter.convertToCoinItem(mCoinDatas);
         mCoinRecyclerAdapter = new CoinRecyclerAdapter(mCoinItems);
         coinRecycler.setAdapter(mCoinRecyclerAdapter);
@@ -130,24 +126,25 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
             @Override
             public void onItemClick(RecyclerAdapter.ViewHolder holder, CoinItem data) {
                 super.onItemClick(holder, data);
-                CoinTransactionHistoryActivity.start(getActivity(), mCurrentWallet, mCoinDatas.get(holder.getAdapterPosition()));
+                CoinTransactionHistoryActivity.start(getActivity(),
+                        WalletManager.getInstance().getCurrentWallet(), mCoinDatas.get(holder.getAdapterPosition()));
             }
         });
     }
 
     private void loadWallet(WalletData wallet) {
         try {
-            mCurrentWallet = wallet;
-            nameTv.setText(mCurrentWallet.getName());
-            avatarIv.setImageDrawable(Jdenticon.from(mCurrentWallet.getName()).drawable());
-            mPresenter.fetchWalletBalance(mCurrentWallet);
+            nameTv.setText(wallet.getName());
+            avatarIv.setImageDrawable(Jdenticon.from(wallet.getName()).drawable());
+            mFetchBalanceSuccess = false;
+            mPresenter.fetchWalletBalance(wallet);
             mRefreshLayout.setRefreshing(true);
         } catch (IOException | SVGParseException e) {
             e.printStackTrace();
         }
     }
 
-    private void initDrawerWallet(List<WalletData> wallets) {
+    private void loadDrawerWallet(List<WalletData> wallets) {
         if (mDrawerWalletRecyclerAdapter == null) {
             accountRecycler = navMenuNv
                     .inflateHeaderView(R.layout.fragment_home_drawer_header)
@@ -160,23 +157,23 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                 public void onItemClick(RecyclerAdapter.ViewHolder holder, WalletData data) {
                     super.onItemClick(holder, data);
                     loadWallet(data);
+                    WalletManager.getInstance().setCurrentWallet(data);
                     drawerDl.closeDrawer(Gravity.START);
                 }
             });
         } else {
-            mDrawerWalletRecyclerAdapter.replace(wallets);
+            mDrawerWalletRecyclerAdapter.notifyDataSetChanged();
         }
     }
 
     @OnClick(R.id.qrcode_home)
     void onQrCodeBtnClick() {
-        ReceiveActivity.start(getActivity(), mCurrentWallet, mCoinDatas.get(0));
+        ReceiveActivity.start(getActivity(), WalletManager.getInstance().getCurrentWallet(), mCoinDatas.get(0));
     }
 
-    @SuppressLint("RtlHardcoded")
     @OnClick(R.id.nav_menu_btn_home)
     void onNavBtnClick() {
-        drawerDl.openDrawer(Gravity.LEFT);
+        drawerDl.openDrawer(Gravity.START);
     }
 
     @OnClick(R.id.choose_coin_home)
@@ -184,47 +181,23 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
         ChooseCoinActivity.start(this, REQUEST_CODE);
     }
 
-
-    private void setCoinItemsData(List<AccountBalance> balances) {
+    private void setCoinItemsData(HashMap<String, Double> balances) {
         for (int i = 0; i < mCoinItems.size(); i++) {
-            AccountBalance balance = filterBalance(mCoinItems.get(i).getAssetId(), balances);
-            if (balance != null) {
-                mCoinItems.get(i).setAmount(balance.getAmount() / 100000.0);
-                mCoinItems.get(i).setPrice(0);
-            }
+            CoinItem coinItem = mCoinItems.get(i);
+            coinItem.setAmount(balances.get(coinItem.getName()));
+            coinItem.setPrice(0);
         }
         totalAssets.setText(getString(R.string.total_assets, "0.0"));
     }
 
-    private AccountBalance filterBalance(String assetId, List<AccountBalance> balances) {
-        for (AccountBalance balance : balances) {
-            if (balance.getAssetId().equals(assetId)) {
-                return balance;
-            }
-        }
-        return null;
-    }
-
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balances) {
-        wallet.setBalances(AssetSymbol.GXS, balances.get(1));
-        AccountBalance balance = new AccountBalance();
-        balance.setAmount(0);
-        balance.setAssetId("1.3.1");
-        wallet.setBalances(AssetSymbol.BTS, balance);
+    public void onFetchWalletBalanceSuccess(WalletData wallet, HashMap<String, Double> balances) {
+        wallet.setBalances(balances);
         setCoinItemsData(balances);
         mCoinRecyclerAdapter.notifyDataSetChanged();
+        mFetchBalanceSuccess = true;
     }
 
-
-    @Override
-    public void showError(String str) {
-        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
-        }
-        super.showError(str);
-    }
 
     /**
      * 计算币种的价值
@@ -238,13 +211,23 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
             CoinItem coinItem = mCoinItems.get(i);
             String name = coinItem.getName();
             double price = 0;
-            if (AssetSymbol.GXS.equals(name)) {
+            if (AssetSymbol.GXS.getName().equals(name)) {
                 price = coinItem.getAmount() * bestPrice;
             }
             totalPrice += price;
             coinItem.setPrice(price);
         }
         return totalPrice;
+    }
+
+    private boolean checkBalanceIsEmpty() {
+        for (int i = 0; i < mCoinItems.size(); i++) {
+            CoinItem coinItem = mCoinItems.get(i);
+            if (coinItem.getAmount() != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -262,7 +245,8 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                 Run.onUiSync(() -> {
                     mCoinRecyclerAdapter.notifyDataSetChanged();
                     totalAssets.setText(getString(R.string.total_assets, df.format(totalPrice)));
-                    if (mRefreshLayout.isRefreshing() && mExchangeServiceProvider.getService().getBestPriceRmb() != 0) {
+                    if (mRefreshLayout.isRefreshing() && mFetchBalanceSuccess &&
+                            (checkBalanceIsEmpty() || totalPrice != 0 && !checkBalanceIsEmpty())) {
                         mRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -291,7 +275,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     public void onResume() {
         super.onResume();
         initExchangeChangeReceiver();
-        initDrawerWallet(mPresenter.fetchWallet());
+        loadDrawerWallet(WalletManager.getInstance().getAllWallet());
     }
 
     @Override
@@ -353,7 +337,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                     amount = "0";
                                 }
                                 Double.parseDouble(amount);
-                                SendActivity.start(getActivity(), new Sender(mCurrentWallet, account, amount, coin, ""));
+                                SendActivity.start(getActivity(), new Sender(account, amount, AssetDataManager.get(coin), ""));
                                 App.showToast(R.string.scan_success);
                             } catch (Exception e) {
                                 App.showToast(R.string.scan_error);
@@ -381,7 +365,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == ChooseCoinActivity.RESULT_CODE) {
             initCoinList();
-            loadWallet(mCurrentWallet);
+            loadWallet(WalletManager.getInstance().getCurrentWallet());
         }
     }
 }

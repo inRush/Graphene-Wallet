@@ -29,7 +29,8 @@ public class GetAccountHistory extends BaseRpcHandler {
     private static final String STOP = "1.11.0";
 
 
-    public GetAccountHistory(String accountId, int limit) {
+    public GetAccountHistory(WebSocketService service,String accountId, int limit) {
+        super(service);
         mAccountId = accountId;
         mLimit = limit;
 
@@ -37,7 +38,7 @@ public class GetAccountHistory extends BaseRpcHandler {
 
     @Override
     protected int getApiId() {
-        return WebSocketService.getInstance().apiCode.getHistoryId();
+        return mService.apiCode.getHistoryId();
     }
 
     @Override

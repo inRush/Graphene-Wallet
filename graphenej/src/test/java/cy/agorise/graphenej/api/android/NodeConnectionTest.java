@@ -26,17 +26,13 @@ import cy.agorise.graphenej.BaseOperation;
 import cy.agorise.graphenej.BrainKey;
 import cy.agorise.graphenej.Transaction;
 import cy.agorise.graphenej.UserAccount;
-import cy.agorise.graphenej.api.GetAccountBalances;
-import cy.agorise.graphenej.api.GetAccountByName;
 import cy.agorise.graphenej.api.GetAccounts;
 import cy.agorise.graphenej.api.GetAllAssetHolders;
 import cy.agorise.graphenej.api.GetBlockHeader;
-import cy.agorise.graphenej.api.GetKeyReferences;
 import cy.agorise.graphenej.api.GetLimitOrders;
 import cy.agorise.graphenej.api.GetMarketHistory;
-import cy.agorise.graphenej.api.GetObjects;
 import cy.agorise.graphenej.api.GetRelativeAccountHistory;
-import cy.agorise.graphenej.api.GetRequiredFees;
+import cy.agorise.graphenej.api.GetRequiredFeesOld;
 import cy.agorise.graphenej.api.GetTradeHistory;
 import cy.agorise.graphenej.api.ListAssets;
 import cy.agorise.graphenej.api.LookupAccounts;
@@ -206,46 +202,46 @@ public class NodeConnectionTest {
 
         System.out.println("Adding GetAccountBalances here");
         // Trying to get the balances of ACCOUNT_ID_1 for BTS, bitUSD & bitEUR
-        try{
-            UserAccount userAccount = new UserAccount(ACCOUNT_ID_1);
-            ArrayList<Asset> assetList = new ArrayList<>();
-            assetList.add(BTS);
-            assetList.add(BITUSD);
-            assetList.add(BITEUR);
-            System.out.println("Test: Request to discrete asset list");
-            nodeConnection.addRequestHandler(new GetAccountBalances(userAccount, assetList, false, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("getAccountBalances.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("getAccountBalances.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            UserAccount userAccount = new UserAccount(ACCOUNT_ID_1);
+//            ArrayList<Asset> assetList = new ArrayList<>();
+//            assetList.add(BTS);
+//            assetList.add(BITUSD);
+//            assetList.add(BITEUR);
+//            System.out.println("Test: Request to discrete asset list");
+////            nodeConnection.addRequestHandler(new GetAccountBalances(userAccount, assetList, false, new WitnessResponseListener(){
+////                @Override
+////                public void onSuccess(WitnessResponse response) {
+////                    System.out.println("getAccountBalances.onSuccess");
+////                }
+////
+////                @Override
+////                public void onError(BaseResponse.Error error) {
+////                    System.out.println("getAccountBalances.onError. Msg: "+ error.message);
+////                }
+////            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         // Trying to get the balances of ACCOUNT_ID_1 for all assets
-        try{
-            UserAccount userAccount = new UserAccount(ACCOUNT_ID_1);
-            System.out.println("Test: Request to all account' assets balance");
-            nodeConnection.addRequestHandler(new GetAccountBalances(userAccount, null, false, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("getAccountBalances.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("getAccountBalances.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            UserAccount userAccount = new UserAccount(ACCOUNT_ID_1);
+//            System.out.println("Test: Request to all account' assets balance");
+//            nodeConnection.addRequestHandler(new GetAccountBalances(userAccount, null, false, new WitnessResponseListener(){
+//                @Override
+//                public void onSuccess(WitnessResponse response) {
+//                    System.out.println("getAccountBalances.onSuccess");
+//                }
+//
+//                @Override
+//                public void onError(BaseResponse.Error error) {
+//                    System.out.println("getAccountBalances.onError. Msg: "+ error.message);
+//                }
+//            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         Timer timer = new Timer();
         timer.schedule(releaseTask, 10000);
@@ -273,21 +269,21 @@ public class NodeConnectionTest {
         nodeConnection.connect("", "", false, mErrorListener);
 
         System.out.println("Adding GetAccountByName here");
-        try{
-            nodeConnection.addRequestHandler(new GetAccountByName(ACCOUNT_NAME, false, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("GetAccountByName.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("GetAccountByName.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            nodeConnection.addRequestHandler(new GetAccountByName(ACCOUNT_NAME, false, new WitnessResponseListener(){
+//                @Override
+//                public void onSuccess(WitnessResponse response) {
+//                    System.out.println("GetAccountByName.onSuccess");
+//                }
+//
+//                @Override
+//                public void onError(BaseResponse.Error error) {
+//                    System.out.println("GetAccountByName.onError. Msg: "+ error.message);
+//                }
+//            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         try{
             // Holding this thread while we get update notifications
@@ -468,39 +464,39 @@ public class NodeConnectionTest {
 
         // Test with the one address constructor
         System.out.println("Adding GetKeyReferences one address request (One address)");
-        try{
-            nodeConnection.addRequestHandler(new GetKeyReferences(address1, false, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("GetKeyReferences.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("GetKeyReferences.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            nodeConnection.addRequestHandler(new GetKeyReferences(address1, false, new WitnessResponseListener(){
+//                @Override
+//                public void onSuccess(WitnessResponse response) {
+//                    System.out.println("GetKeyReferences.onSuccess");
+//                }
+//
+//                @Override
+//                public void onError(BaseResponse.Error error) {
+//                    System.out.println("GetKeyReferences.onError. Msg: "+ error.message);
+//                }
+//            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         // Test with the list of addresses constructor
         System.out.println("Adding GetKeyReferences address request (List of Addresses)");
-        try{
-            nodeConnection.addRequestHandler(new GetKeyReferences(addresses, false, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("GetKeyReferences.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("GetKeyReferences.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            nodeConnection.addRequestHandler(new GetKeyReferences(addresses, false, new WitnessResponseListener(){
+//                @Override
+//                public void onSuccess(WitnessResponse response) {
+//                    System.out.println("GetKeyReferences.onSuccess");
+//                }
+//
+//                @Override
+//                public void onError(BaseResponse.Error error) {
+//                    System.out.println("GetKeyReferences.onError. Msg: "+ error.message);
+//                }
+//            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         try{
             // Holding this thread while we get update notifications
@@ -628,21 +624,21 @@ public class NodeConnectionTest {
         }};
 
         System.out.println("Adding GetObjects request");
-        try{
-            nodeConnection.addRequestHandler(new GetObjects(objectList, true, new WitnessResponseListener(){
-                @Override
-                public void onSuccess(WitnessResponse response) {
-                    System.out.println("GetObjects.onSuccess");
-                }
-
-                @Override
-                public void onError(BaseResponse.Error error) {
-                    System.out.println("GetObjects.onError. Msg: "+ error.message);
-                }
-            }));
-        }catch(RepeatedRequestIdException e){
-            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
-        }
+//        try{
+//            nodeConnection.addRequestHandler(new GetObjects(objectList, true, new WitnessResponseListener(){
+//                @Override
+//                public void onSuccess(WitnessResponse response) {
+//                    System.out.println("GetObjects.onSuccess");
+//                }
+//
+//                @Override
+//                public void onError(BaseResponse.Error error) {
+//                    System.out.println("GetObjects.onError. Msg: "+ error.message);
+//                }
+//            }));
+//        }catch(RepeatedRequestIdException e){
+//            System.out.println("RepeatedRequestIdException. Msg: "+e.getMessage());
+//        }
 
         Timer timer = new Timer();
         timer.schedule(releaseTask, 30000);
@@ -705,7 +701,7 @@ public class NodeConnectionTest {
     }
 
     /**
-     * Test for GetRequiredFees Handler.
+     * Test for GetRequiredFeesOld Handler.
      *
      */
     @Test
@@ -729,15 +725,15 @@ public class NodeConnectionTest {
 
         System.out.println("Adding GetBlockHeader request");
         try{
-            nodeConnection.addRequestHandler(new GetRequiredFees(operations, testAsset, true, new WitnessResponseListener(){
+            nodeConnection.addRequestHandler(new GetRequiredFeesOld(operations, testAsset, true, new WitnessResponseListener(){
                 @Override
                 public void onSuccess(WitnessResponse response) {
-                    System.out.println("GetRequiredFees.onSuccess");
+                    System.out.println("GetRequiredFeesOld.onSuccess");
                 }
 
                 @Override
                 public void onError(BaseResponse.Error error) {
-                    System.out.println("GetRequiredFees.onError. Msg: "+ error.message);
+                    System.out.println("GetRequiredFeesOld.onError. Msg: "+ error.message);
                 }
             }));
         }catch(RepeatedRequestIdException e){

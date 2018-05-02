@@ -1,13 +1,11 @@
 package com.sxds.common.app;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.sxds.common.presenter.BaseContract;
-
-import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
 
 /**
  * @author inrush
@@ -19,7 +17,6 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
         implements BaseContract.View<Presenter> {
 
     protected Presenter mPresenter;
-    private int mCurrentLoadingId = 0;
 
     /**
      * 初始化一个Presenter
@@ -36,41 +33,35 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
 
     @Override
     public void showError(final String str) {
-        Run.onUiSync(new Action() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void call() {
+            public void run() {
                 dismissAllLoading();
-                final QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
+                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
                         .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
                         .setTipWord(str)
                         .create();
                 dialog.show();
-                Run.onBackground(new Action() {
-                    @Override
-                    public void call() {
-                        try {
-                            Thread.sleep(1500);
-                            dialog.dismiss();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                delayDismissDialog(dialog, 1500);
             }
         });
-
     }
 
-    @Override
-    public int generateLoadingId() {
-        return mCurrentLoadingId++;
+    private void delayDismissDialog(final QMUITipDialog dialog, int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, delay);
     }
+
 
     @Override
     public void showLoading(final int code, final String str) {
-        Run.onUiSync(new Action() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void call() {
+            public void run() {
                 QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
                         .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                         .setTipWord(str)
@@ -82,9 +73,55 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
     }
 
     @Override
+    public void showOk(final String str) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+                        .setTipWord(str)
+                        .create();
+                dialog.show();
+                delayDismissDialog(dialog, 1500);
+            }
+        });
+    }
+
+    @Override
+    public void showInfo(final String str) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
+                        .setTipWord(str)
+                        .create();
+                dialog.show();
+                delayDismissDialog(dialog, 1500);
+            }
+        });
+    }
+
+    @Override
+    public void showError(int strRes) {
+        showError(getString(strRes));
+    }
+
+    @Override
+    public void showOk(int strRes) {
+        showOk(getString(strRes));
+    }
+
+    @Override
+    public void showInfo(int strRes) {
+        showInfo(getString(strRes));
+    }
+
+    @Override
     public void showLoading(int code, int strRes) {
         showLoading(code, getString(strRes));
     }
+
 
     @Override
     public void dismissAllLoading() {

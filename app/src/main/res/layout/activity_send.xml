@@ -137,7 +137,6 @@
                 android:paddingBottom="@dimen/len_6"
                 android:paddingStart="20dp"
                 android:paddingTop="@dimen/len_6"
-                android:text="@string/available_coin"
                 android:textSize="@dimen/font_10"
                 tools:ignore="RtlSymmetry"/>
 

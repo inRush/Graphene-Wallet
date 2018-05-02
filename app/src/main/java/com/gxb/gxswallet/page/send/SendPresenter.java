@@ -1,28 +1,31 @@
 package com.gxb.gxswallet.page.send;
 
-import com.google.gson.GsonBuilder;
-import com.gxb.gxswallet.App;
+import com.google.common.primitives.UnsignedLong;
+import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.asset.AssetData;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
-import com.gxb.gxswallet.db.wallet.WalletDataManager;
 import com.gxb.gxswallet.services.WalletService;
-import com.gxb.sdk.api.GxbApis;
-import com.gxb.sdk.http.GxbCallBack;
-import com.gxb.sdk.models.chain.CurrentChainParam;
-import com.gxb.sdk.models.wallet.AccountBalance;
+import com.gxb.gxswallet.services.rpc.RpcTask;
+import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
+import com.gxb.gxswallet.utils.CodeUtil;
 import com.sxds.common.presenter.BasePresenter;
 
-import net.qiujuer.genius.kit.handler.Run;
+import org.bitcoinj.core.ECKey;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
+import cy.agorise.graphenej.Asset;
 import cy.agorise.graphenej.AssetAmount;
-import cy.agorise.graphenej.models.TransactionObject;
-import cy.agorise.graphenej.objects.Memo;
-import cy.agorise.graphenej.operations.TransferOperation;
+import cy.agorise.graphenej.BaseOperation;
+import cy.agorise.graphenej.api.GetRequiredFees;
+import cy.agorise.graphenej.api.android.WebSocketService;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -33,187 +36,63 @@ import cy.agorise.graphenej.operations.TransferOperation;
 public class SendPresenter extends BasePresenter<SendContract.View>
         implements SendContract.Presenter {
 
-    private WalletDataManager mWalletDataManager;
-
     public SendPresenter(SendActivity view) {
         super(view);
-        mWalletDataManager = new WalletDataManager(App.getInstance());
     }
 
     @Override
-    public void send(String from, String to, String amount, String coin, String memo) {
-
-        GxbApis.getInstance()
-                .walletApi().transfer(new Object[]{from, to, amount, coin, memo, true}, new GxbCallBack() {
-            @Override
-            public void onFailure(Error error) {
-                error.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                getView().onSendSuccess();
-            }
-        });
-
-//        try {
-////             Creating a transfer operation
-//            TransferOperation transferOperation = new TransferOperationBuilder()
-//                    .setTransferAmount(new AssetAmount(UnsignedLong.valueOf(10000), new Asset("1.3.1")))
-//                    .setSource(new UserAccount("1.2.33"))
-//                    .setDestination(new UserAccount("1.2.28"))
-//                    .setFee(new AssetAmount(UnsignedLong.valueOf(2000), new Asset("1.3.1")))
-//                    .setMemo(new Memo())
-//                    .build();
-//
-//            // Adding operations to the operation list
-//            final ArrayList<BaseOperation> operationList = new ArrayList<>();
-//            operationList.add(transferOperation);
-//
-////            DumpedPrivateKey key = DumpedPrivateKey.fromBase58(null,"5KQiXpeTfxvBe5AB4Q2ZdkhwPxTdyj4Y2abdk5W1qerRGoptMer");
-////            key.getKey().getPubKey();
-//
-//            String wif = "5J1rd3naNYCYeuxJVoFRjQuwZuDdyNZP3NZXZqiLD1cavZZTnym";
-//            ECKey sourcePrivate = DumpedPrivateKey.fromBase58(null, wif).getKey();
-//            Address address = new Address(ECKey.fromPublicOnly(sourcePrivate.getPubKey()), "GXC");
-//
-//            Transaction transaction = new Transaction(sourcePrivate,null, operationList);
-//            SSLContext context = null;
-//            try {
-//                context = NaiveSSLContext.getInstance("TLS");
-//            } catch (NoSuchAlgorithmException e) {
-//                e.printStackTrace();
-//            }
-//            WebSocketFactory factory = new WebSocketFactory();
-//            factory.setSSLContext(context);
-//
-//            try {
-//                WebSocket mWebSocket;
-//                mWebSocket = factory.createSocket("ws://106.14.180.117:28090");
-//                mWebSocket.addListener(new TransactionBroadcastSequence(transaction, new Asset("1.3.1"),
-//                        new WitnessResponseListener() {
-//                            @Override
-//                            public void onSuccess(WitnessResponse response) {
-//                                Logger.e((String) response.result);
-//                            }
-//
-//                            @Override
-//                            public void onError(BaseResponse.Error error) {
-//                                Logger.e(error.message);
-//                            }
-//                        }));
-////                List<Asset> assets = new ArrayList<>();
-////                assets.add(new Asset("1.3.1"));
-////                mWebSocket.addListener(new GetAccountBalances(new UserAccount("1.2.28"), assets,
-////                        new WitnessResponseListener() {
-////                            @Override
-////                            public void onSuccess(WitnessResponse response) {
-////                                List<AssetAmount> assetAmounts = (List<AssetAmount>) response.result;
-////                                for (AssetAmount assetAmount : assetAmounts) {
-////                                    Logger.e(assetAmount.toJsonString());
-////                                }
-////                            }
-////
-////                            @Override
-////                            public void onError(BaseResponse.Error error) {
-////                                Logger.e(error.message);
-////                            }
-////                        }));
-//                final WebSocket finalMWebSocket = mWebSocket;
-//                Run.onBackground(new Action() {
-//                    @Override
-//                    public void call() {
-////                        try {
-////                            finalMWebSocket.connect();
-////                        } catch (WebSocketException e) {
-////                            e.printStackTrace();
-////                        }
-//                    }
-//                });
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-//        try {
-////            BitsharesWalletWraper.getInstance().import_key("test-inrush1","128911hwj",
-////                    "5J1rd3naNYCYeuxJVoFRjQuwZuDdyNZP3NZXZqiLD1cavZZTnym");
-////            BitsharesWalletWraper.getInstance().unlock("128911hwj");
-//            BitsharesWalletWraper.getInstance().transfer("1.2.33","1.2.28","0.1","1.3.1",null);
-//        } catch (NetworkStatusException e) {
-//            e.printStackTrace();
-//        }
-
+    public void send(ECKey privateKey, String from, String to, String amount, AssetData assetData, String memo) {
+        WebSocketService service = WebSocketServicePool.getInstance().getService(assetData.getName());
+        ArrayList<BaseOperation> operations = new ArrayList<>();
+        getView().showLoading(CodeUtil.getCode(), R.string.query_fee);
+        WalletService.getInstance().generateTransferOperation(service, privateKey, from, to,
+                new AssetAmount(UnsignedLong.valueOf(amount), new Asset(assetData.getAssetId())), memo)
+                .flatMap(transferOperation -> {
+                    operations.add(transferOperation);
+                    return Observable.create((ObservableOnSubscribe<Boolean>) e -> new RpcTask(new GetRequiredFees(service, assetData.getAssetId(), operations), "")
+                            .run()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(rpcTask -> {
+                                List<AssetAmount> assetAmounts = (List<AssetAmount>) rpcTask.getData().result;
+                                getView().onQueryFeeSuccess(assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE,
+                                        aBoolean -> {
+                                            e.onNext(aBoolean);
+                                            if (aBoolean) {
+                                                getView().showLoading(CodeUtil.getCode(), R.string.sending);
+                                            } else {
+                                                getView().showInfo(R.string.transfer_cancel);
+                                            }
+                                            return null;
+                                        });
+                            }, e::onError));
+                })
+                .flatMap(aBoolean -> {
+                    if (aBoolean) {
+                        return WalletService.getInstance().transfer(service, privateKey, operations, assetData);
+                    } else {
+                        return Observable.empty();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> getView().onSendSuccess(), error -> getView().showError(error.getMessage()));
     }
 
-    @Override
-    public void queryFee(String from, String to, String amount, String coin, String memo) {
-        GxbApis.getInstance()
-                .walletApi().transfer(new Object[]{from, to, amount, coin, memo, false}, new GxbCallBack() {
-            @Override
-            public void onFailure(Error error) {
-                error.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(TransferOperation.class, new TransferOperation.TransferDeserializer());
-                gsonBuilder.registerTypeAdapter(AssetAmount.class, new AssetAmount.AssetAmountDeserializer());
-                gsonBuilder.registerTypeAdapter(Memo.class, new Memo.MemoDeserializer());
-                TransactionObject transactionObject = gsonBuilder.create().fromJson(result, TransactionObject.class);
-                getView().onQueryFeeSuccess(transactionObject.getOperations().get(0).getFee().getAmount().doubleValue() / 100000);
-            }
-        });
-    }
 
     @Override
     public List<WalletData> fetchWallet() {
-        return mWalletDataManager.queryAll();
+        return WalletManager.getInstance().getAllWallet();
     }
 
-
-    private long baseExpirationSec(String headBlockSecStr) {
-        headBlockSecStr = headBlockSecStr.replace('T', ' ');
-        //2018-03-28T07:19:24
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-        // 设置格林威治时区
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        try {
-            long headBlockSec = sdf.parse(headBlockSecStr).getTime() / 1000;
-            long nowSec = System.currentTimeMillis() / 1000;
-            if (nowSec - headBlockSec > 30) {
-                return headBlockSec;
-            }
-            return Math.max(nowSec, headBlockSec);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0L;
-    }
-
-    private void sendTo(List<CurrentChainParam> params) {
-
-    }
 
     @Override
-    public void fetchWalletBalance(final WalletData wallet) {
-        WalletService.getInstance()
-                .fetchAccountBalance(wallet.getName(),
-                        new WalletService.ServerListener<List<AccountBalance>>() {
-                            @Override
-                            public void onFailure(Error error) {
-
-                            }
-
-                            @Override
-                            public void onSuccess(final List<AccountBalance> data) {
-                                Run.onUiAsync(() -> getView().onFetchWalletBalanceSuccess(wallet, data));
-                            }
-                        });
+    public void fetchWalletBalance(WalletData wallet, AssetData asset) {
+        WebSocketService service = WebSocketServicePool.getInstance().getService(asset.getName());
+        WalletService.getInstance().fetchAccountBalance(service, wallet.getName(), asset)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        result -> getView().onFetchWalletBalanceSuccess(wallet, result),
+                        error -> getView().showError(error.getMessage()));
     }
 
 }

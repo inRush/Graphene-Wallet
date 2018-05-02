@@ -160,4 +160,14 @@
     <string name="language">语言</string>
     <string name="chinese">中文</string>
     <string name="english">英语</string>
+    <string name="network_unavailable">网络不可用,请检查网络</string>
+    <string name="connect_error">连接异常</string>
+    <string name="transfer_cancel">交易取消</string>
+    <string name="connecting_data">正在连接数据</string>
+    <string name="disconnecting_data">正在断开数据</string>
+    <string name="connect_error_please_retry">连接失败,请重试</string>
+    <string name="enable_success">启用成功</string>
+    <string name="enable_failure">启用失败</string>
+    <string name="disable_success">关闭成功</string>
+    <string name="disable_failure">关闭失败</string>
 </resources>

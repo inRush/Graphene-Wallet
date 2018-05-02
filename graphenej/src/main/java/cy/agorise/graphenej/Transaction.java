@@ -88,7 +88,7 @@ public class Transaction implements ByteSerializable, JsonSerializable {
      * @param operationList List of operations to include in the transaction.
      */
     public Transaction(ECKey privateKey, BlockData blockData, List<BaseOperation> operationList) {
-        this(Util.hexToBytes(Chains.BITSHARES.CHAIN_ID), privateKey, blockData, operationList);
+        this(Util.hexToBytes(Chains.GXS.CHAIN_ID), privateKey, blockData, operationList);
     }
 
     /**

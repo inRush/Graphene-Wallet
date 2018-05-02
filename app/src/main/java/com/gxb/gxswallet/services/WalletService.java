@@ -1,39 +1,68 @@
 package com.gxb.gxswallet.services;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.coin.CoinData;
-import com.gxb.gxswallet.db.coin.CoinDataManager;
+import com.gxb.gxswallet.common.Task;
+import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.asset.AssetData;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
+import com.gxb.gxswallet.services.rpc.RpcTask;
+import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.gxb.gxswallet.utils.AssetsUtil;
-import com.gxb.gxswallet.utils.ListUtil;
 import com.gxb.sdk.api.GxbApis;
 import com.gxb.sdk.bitlib.util.HexUtils;
 import com.gxb.sdk.crypto.ecc.PrivateKey;
 import com.gxb.sdk.crypto.utils.AesKeyCipher;
 import com.gxb.sdk.crypto.utils.Base58;
+import com.gxb.sdk.crypto.utils.BitUtils;
 import com.gxb.sdk.crypto.utils.HashUtils;
 import com.gxb.sdk.crypto.utils.KeyCipher;
 import com.gxb.sdk.crypto.utils.KeyUtil;
 import com.gxb.sdk.http.GxbCallBack;
-import com.gxb.sdk.models.global.Account;
-import com.gxb.sdk.models.wallet.AccountBalance;
 
+import org.bitcoinj.core.DumpedPrivateKey;
+import org.bitcoinj.core.ECKey;
+
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import cy.agorise.graphenej.Address;
+import cy.agorise.graphenej.AssetAmount;
+import cy.agorise.graphenej.BaseOperation;
+import cy.agorise.graphenej.BlockData;
 import cy.agorise.graphenej.BrainKey;
+import cy.agorise.graphenej.PublicKey;
+import cy.agorise.graphenej.Transaction;
+import cy.agorise.graphenej.UserAccount;
+import cy.agorise.graphenej.Util;
+import cy.agorise.graphenej.api.GetAccountBalances;
 import cy.agorise.graphenej.api.GetAccountByName;
+import cy.agorise.graphenej.api.GetKeyReferences;
+import cy.agorise.graphenej.api.GetNetworkDynamicParameters;
+import cy.agorise.graphenej.api.GetObjects;
+import cy.agorise.graphenej.api.GetRequiredFees;
+import cy.agorise.graphenej.api.TransactionBroadcastSequence;
+import cy.agorise.graphenej.api.android.WebSocketService;
+import cy.agorise.graphenej.errors.ChecksumException;
 import cy.agorise.graphenej.interfaces.WitnessResponseListener;
 import cy.agorise.graphenej.models.AccountProperties;
 import cy.agorise.graphenej.models.BaseResponse;
+import cy.agorise.graphenej.models.DynamicGlobalProperties;
 import cy.agorise.graphenej.models.WitnessResponse;
+import cy.agorise.graphenej.objects.Memo;
+import cy.agorise.graphenej.operations.TransferOperation;
+import cy.agorise.graphenej.operations.TransferOperationBuilder;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 //import com.gxb.sdk.ecc.PrivateKey;
 //import com.gxb.sdk.crypto.utils.AesKeyCipher;
@@ -50,6 +79,8 @@ public class WalletService {
     private Gson sGson;
     private static WalletService sWalletService;
     private WalletDataManager mWalletDataManager;
+    private static final byte DEFAULT_VERSION = (byte) 0x80;
+
 
     private WalletService() {
         sGson = new Gson();
@@ -69,25 +100,10 @@ public class WalletService {
     }
 
 
-    private List<String> getAccountIds(String json) {
-        JsonArray array = new JsonParser().parse(json).getAsJsonArray().get(0).getAsJsonArray();
-        List<String> strings = new ArrayList<>();
-        for (JsonElement je : array) {
-            strings.add(new Gson().fromJson(je, String.class));
-        }
-        ListUtil.uniqList(strings);
-        return strings;
-    }
-
-    private boolean checkKeyAvailable(String pubKey, Account account) {
-        int weightThreshold = account.getActive().getWeight_threshold();
-        List<List<String>> keyAuths = account.getActive().getKey_auths();
-        for (List<String> key : keyAuths) {
-            if (key.get(0).equals(pubKey) && Integer.parseInt(key.get(1)) == weightThreshold) {
-                return true;
-            }
-        }
-        return false;
+    private boolean checkKeyAvailable(PublicKey pubKey, UserAccount account) {
+        long weightThreshold = account.getActive().getWeightThreshold();
+        HashMap<PublicKey, Long> keyAuths = account.getActive().getKeyAuths();
+        return keyAuths.containsKey(pubKey) && keyAuths.get(pubKey) == weightThreshold;
     }
 
     private boolean checkIsExist(List<WalletData> wallets, WalletData wallet) {
@@ -121,6 +137,13 @@ public class WalletService {
     }
 
 
+    public void checkAddressIsExist(ECKey privateKey, ServerListener<Boolean> listener) {
+        List<AssetData> assetDataList = AssetDataManager.getEnableList();
+        for (AssetData assetData : assetDataList) {
+
+        }
+    }
+
     /**
      * 导入账户
      *
@@ -132,66 +155,69 @@ public class WalletService {
     public void importAccount(String wifKey, String password, final ServerListener<List<WalletData>> listener)
             throws IllegalArgumentException {
         WalletData walletData = lockWallet("", "", wifKey, password, true, null);
-        PrivateKey privateKey = PrivateKey.fromWif(wifKey);
-        final String publicKey = privateKey.toPublicKey().toPublicKeyString();
-
-        GxbApis.getInstance()
-                .walletApi()
-                .getKeyReferences(new Object[]{publicKey}, new GxbCallBack() {
+        ECKey privateKey = DumpedPrivateKey.fromBase58(null, wifKey).getKey();
+        List<Address> addresses = new ArrayList<>();
+        AssetData asset = AssetDataManager.getDefault();
+        addresses.add(new Address(ECKey.fromPublicOnly(privateKey.getPubKey()), asset.getPrefix()));
+        RpcTask rpcTask = new RpcTask(
+                new GetKeyReferences(WebSocketServicePool.getInstance().getService(asset.getName()), addresses),
+                AssetSymbol.BTS.getName());
+        rpcTask.run()
+                .flatMap(rpcTask1 -> {
+                    if (rpcTask1.getData() != null) {
+                        List<List<UserAccount>> accounts = (List<List<UserAccount>>) rpcTask1.getData().result;
+                        if (accounts.size() == 0 || accounts.get(0).size() == 0) {
+                            return Observable.error(new Throwable(App.getInstance().getString(R.string.account_not_exist)));
+                        }
+                        List<String> ids = new ArrayList<>();
+                        ids.add(accounts.get(0).get(0).getObjectId());
+                        RpcTask task = new RpcTask(
+                                new GetObjects(
+                                        WebSocketServicePool.getInstance().getService(asset.getName()), ids), asset.getName());
+                        return task.run();
+                    } else {
+                        return Observable.error(new Throwable("request is not available"));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RpcTask>() {
                     @Override
-                    public void onFailure(Error error) {
-                        listener.onFailure(error);
+                    public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(String result) {
-                        List<String> ids = getAccountIds(result);
-                        Object[] params = new Object[ids.size()];
-                        for (int i = 0; i < ids.size(); i++) {
-                            params[i] = ids.get(i);
+                    public void onNext(RpcTask rpcTask) {
+                        List<WalletData> wallets = WalletManager.getInstance().getAllWallet();
+                        List<WalletData> imported = new ArrayList<>();
+                        String exist = "";
+                        UserAccount account = ((List<UserAccount>) rpcTask.getData().result).get(0);
+                        walletData.setName(account.getName());
+                        walletData.setAccountId(account.getObjectId());
+                        boolean isKeyAvailable = checkKeyAvailable(addresses.get(0).getPublicKey(), account);
+                        if (isKeyAvailable) {
+                            boolean alreadyExist = checkIsExist(wallets, walletData);
+                            if (!alreadyExist) {
+                                WalletManager.getInstance().saveWallet(walletData);
+                                imported.add(walletData);
+                            } else {
+                                exist = walletData.getName();
+                            }
                         }
-                        if (params.length == 0) {
-                            listener.onFailure(new Error(App.getInstance().getString(R.string.account_not_exist)));
+                        if (!"".equals(exist)) {
+                            listener.onFailure(new Error(App.getInstance().getString(R.string.wallet_already_exist, exist)));
                         } else {
-                            GxbApis.getInstance()
-                                    .globalApi()
-                                    .getObjects(params, new GxbCallBack() {
-                                        @Override
-                                        public void onFailure(Error error) {
-                                            listener.onFailure(error);
-                                        }
-
-                                        @Override
-                                        public void onSuccess(String result) {
-                                            JsonArray accounts = new JsonParser().parse(result).getAsJsonArray();
-                                            List<WalletData> wallets = mWalletDataManager.queryAll();
-                                            List<WalletData> imported = new ArrayList<>();
-                                            String exist = "";
-                                            for (JsonElement a : accounts) {
-                                                Account account = sGson.fromJson(a, Account.class);
-                                                walletData.setName(account.getName());
-                                                walletData.setAccountId(account.getId());
-                                                boolean isKeyAvailable = checkKeyAvailable(publicKey, account);
-                                                if (isKeyAvailable) {
-                                                    boolean alreadyExist = checkIsExist(wallets, walletData);
-                                                    if (!alreadyExist) {
-                                                        mWalletDataManager.insert(walletData);
-                                                        wallets.add(walletData);
-                                                        imported.add(walletData);
-                                                    } else {
-                                                        exist = walletData.getName();
-                                                    }
-                                                }
-                                            }
-                                            if (!"".equals(exist)) {
-                                                listener.onFailure(new Error(App.getInstance().getString(R.string.wallet_already_exist, exist)));
-                                            } else {
-                                                listener.onSuccess(imported);
-                                            }
-                                        }
-                                    });
+                            listener.onSuccess(imported);
                         }
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailure(new Error(e.getMessage()));
+                    }
+
+                    @Override
+                    public void onComplete() {
                     }
                 });
     }
@@ -217,7 +243,7 @@ public class WalletService {
 
                 @Override
                 public void onSuccess(String result) {
-                    new GetAccountByName(walletName).call(new WitnessResponseListener() {
+                    new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), walletName).call(new WitnessResponseListener() {
                         @Override
                         public void onSuccess(WitnessResponse response) {
                             AccountProperties account = (AccountProperties) response.result;
@@ -260,6 +286,14 @@ public class WalletService {
         return results;
     }
 
+    /**
+     * 根据brainKey 生成 wifKey
+     * 采用SHA512和SHA256对称加密生成
+     * 具体参考{@link BrainKey}构造函数
+     *
+     * @param brainKey 助记词
+     * @return wifKey
+     */
     public String getWifKey(BrainKey brainKey) {
         byte[] wifKeyBuffer = brainKey.getPrivateKey().getPrivKeyBytes();
         byte[] checkSumWifKeyBuffer = new byte[wifKeyBuffer.length + 5];
@@ -275,6 +309,41 @@ public class WalletService {
         return Base58.encode(checkSumWifKeyBuffer);
     }
 
+    public byte[] getWifKeyBytes(String wifKey) {
+        byte[] privateWif = Base58.decode(wifKey);
+        assert privateWif != null;
+        byte version = privateWif[0];
+        if (version != DEFAULT_VERSION) {
+            throw new IllegalArgumentException("Expected version" + 0x80 + ", instead got " + version);
+        }
+        byte[] privateKey = new byte[33];
+        System.arraycopy(privateWif, 0, privateKey, 0, 33);
+        byte[] checksum = new byte[4];
+        System.arraycopy(privateWif, 33, checksum, 0, 4);
+        byte[] newChecksum = HashUtils.sha256(privateKey).getBytes();
+        newChecksum = HashUtils.sha256(newChecksum).getBytes();
+        byte[] cs = new byte[4];
+        System.arraycopy(newChecksum, 0, cs, 0, 4);
+        boolean isEqual = BitUtils.areEqual(checksum, cs);
+        if (!isEqual) {
+            throw new IllegalArgumentException("Checksum did not match");
+        }
+        byte[] _privateKey = new byte[32];
+        System.arraycopy(privateKey, 1, _privateKey, 0, 32);
+        return _privateKey;
+    }
+
+    /**
+     * 锁定钱包
+     *
+     * @param accountId
+     * @param walletName
+     * @param wifKey
+     * @param password
+     * @param isBackup
+     * @param brainKey
+     * @return
+     */
     public WalletData lockWallet(String accountId, String walletName, String wifKey, String password, boolean isBackup, String brainKey) {
         AesKeyCipher passwordAes = new AesKeyCipher(password);
         // 获取一个随机生成的私钥
@@ -295,55 +364,167 @@ public class WalletService {
         return new WalletData(null, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
     }
 
+    public Observable<HashMap<String, Double>> fetchAllAccountBalance(String accountName) {
+        HashMap<String, Double> result = new HashMap<>(AssetDataManager.getEnableList().size());
+        return Observable.create(e -> fetchAllAccountByName(accountName)
+                .flatMap(data -> {
+                    List<AssetData> coins = AssetDataManager.getEnableList();
+                    List<Object[]> args = new ArrayList<>();
+                    for (AssetData assetData : coins) {
+                        Object[] arg = new Object[2];
+                        arg[0] = data.get(assetData.getName()).id;
+                        arg[1] = assetData.getAssetId();
+                        args.add(arg);
+                    }
+                    RpcTask[] task = WebSocketServicePool.getInstance()
+                            .generateTasks(GetAccountBalances.class, new Class[]{String.class, String.class}, args);
+                    return Observable.fromArray(task).flatMap(Task::run);
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(rpcTask -> {
+                    if (rpcTask.getState() == Task.State.COMPLETE) {
+                        if (rpcTask.getData().result instanceof List) {
+                            @SuppressWarnings("unchecked")
+                            List<AssetAmount> assetAmounts =
+                                    (List<AssetAmount>) rpcTask.getData().result;
+                            result.put(rpcTask.getTag(), assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE);
+                        }
+                    }
+                }, e::onError, () -> {
+                    e.onNext(result);
+                    e.onComplete();
+                }));
+    }
 
-    public void fetchAccountBalance(String accountName, final ServerListener<List<AccountBalance>> listener) {
-        fetchAccountByName(accountName, new ServerListener<Account>() {
-            @Override
-            public void onFailure(Error error) {
-                listener.onFailure(error);
+    public Observable<Double> fetchAccountBalance(WebSocketService service, String accountName, AssetData asset) {
+        return Observable.create(e -> new RpcTask(new GetAccountByName(service, accountName), "")
+                .run().flatMap(rpcTask -> {
+                    AccountProperties account = (AccountProperties) rpcTask.getData().result;
+                    return new RpcTask(new GetAccountBalances(service, account.id, asset.getAssetId()), "").run();
+                }).subscribeOn(Schedulers.io())
+                .subscribe(rpcTask -> {
+                    List<AssetAmount> assetAmounts = (List<AssetAmount>) rpcTask.getData().result;
+                    e.onNext(assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE);
+                }, e::onError, e::onComplete));
+
+    }
+
+    public Observable<HashMap<String, AccountProperties>> fetchAllAccountByName(String accountName) {
+        RpcTask[] rpcTasks = WebSocketServicePool.getInstance().generateTasks(
+                GetAccountByName.class, new Class[]{String.class}, new Object[]{accountName}
+        );
+        HashMap<String, AccountProperties> result = new HashMap<>();
+        return Observable.create(e -> Observable.fromArray(rpcTasks)
+                .flatMap(Task::run)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(rpcTask -> {
+                    if (rpcTask.getState() == Task.State.COMPLETE) {
+                        if (rpcTask.getData().result instanceof AccountProperties) {
+                            AccountProperties account = (AccountProperties) rpcTask.getData().result;
+                            result.put(rpcTask.getTag(), account);
+                        }
+                    }
+                }, e::onError, () -> {
+                    e.onNext(result);
+                    e.onComplete();
+                }));
+    }
+
+    public Observable<HashMap<String, AccountProperties>> fetchListAccountByName(WebSocketService service, List<String> accountNames) {
+        return Observable.create(e -> {
+            RpcTask[] rpcTasks = new RpcTask[accountNames.size()];
+            for (int i = 0; i < accountNames.size(); i++) {
+                rpcTasks[i] = new RpcTask(new GetAccountByName(service, accountNames.get(i)), accountNames.get(i));
             }
-
-            @Override
-            public void onSuccess(Account data) {
-                List<CoinData> coins = new CoinDataManager(App.getInstance()).queryAll();
-                Object[] assestIds = new Object[coins.size()];
-                for (int i = 0; i < assestIds.length; i++) {
-                    assestIds[i] = coins.get(i).getAssetId();
-                }
-                GxbApis.getInstance()
-                        .walletApi()
-                        .getAccountBalances(new Object[]{data.getId(), assestIds},
-                                new GxbCallBack() {
-                                    @Override
-                                    public void onFailure(Error error) {
-                                        listener.onFailure(error);
-                                    }
-
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        List<AccountBalance> accountBalances = sGson.fromJson(result,
-                                                new TypeToken<List<AccountBalance>>() {
-                                                }.getType());
-                                        listener.onSuccess(accountBalances);
-                                    }
-                                });
-            }
+            HashMap<String, AccountProperties> accountMap = new HashMap<>();
+            Observable.fromArray(rpcTasks)
+                    .flatMap(Task::run)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(rpcTask -> {
+                        if (rpcTask.getData().result instanceof AccountProperties) {
+                            AccountProperties account = (AccountProperties) rpcTask.getData().result;
+                            accountMap.put(rpcTask.getTag(), account);
+                        }
+                    }, e::onError, () -> {
+                        e.onNext(accountMap);
+                        e.onComplete();
+                    });
         });
     }
 
-    public void fetchAccountByName(String accountName, final ServerListener<Account> listener) {
-        GxbApis.getInstance()
-                .walletApi().getAccountByName(new Object[]{accountName}, new GxbCallBack() {
-            @Override
-            public void onFailure(Error error) {
-                listener.onFailure(error);
-            }
+    public Observable<TransferOperation>
+    generateTransferOperation(WebSocketService service, ECKey sourcePrivate,
+                              String fromName, String toName, AssetAmount amount, String memo) {
+        return Observable.create(e -> {
+            List<String> accounts = new ArrayList<>();
+            accounts.add(fromName);
+            accounts.add(toName);
 
-            @Override
-            public void onSuccess(String result) {
-                Account account = sGson.fromJson(result, Account.class);
-                listener.onSuccess(account);
-            }
+            fetchListAccountByName(service, accounts)
+                    .subscribe(accounts1 -> {
+                        Memo m = null;
+                        if (memo != null && !"".equals(memo)) {
+                            m = generateMemo(sourcePrivate, AssetDataManager.get(service.getSocketTag()),
+                                    accounts1.get(fromName).options.getMemoKey(), accounts1.get(toName).options.getMemoKey(), memo);
+                        }
+                        TransferOperation transferOperation = new TransferOperationBuilder()
+                                .setTransferAmount(amount)
+                                .setSource(new UserAccount(accounts1.get(fromName).id))
+                                .setDestination(new UserAccount(accounts1.get(toName).id))
+                                .setMemo(m)
+                                .build();
+                        e.onNext(transferOperation);
+                    }, e::onError, e::onComplete);
         });
     }
+
+    public Memo generateMemo(ECKey sourcePrivate, AssetData assetData, PublicKey fromPub, PublicKey toPub, String memo) {
+        Address from = new Address(fromPub.getKey(), assetData.getPrefix());
+        Address to = new Address(toPub.getKey(), assetData.getPrefix());
+        BigInteger nonce = BigInteger.ONE;
+        byte[] encryptedMessage = Memo.encryptMessage(sourcePrivate, to, nonce, memo);
+        return new Memo(from, to, nonce, encryptedMessage);
+    }
+
+    public String decryptMemo(ECKey privateKey, Memo memo) {
+        try {
+            return Memo.decryptMessage(privateKey, memo.getSource(), memo.getNonce(), memo.getByteMessage());
+        } catch (ChecksumException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Observable<Boolean> transfer(WebSocketService service, ECKey sourcePrivate, ArrayList<BaseOperation> transferOperations, AssetData feesAmount) {
+        return Observable.create(e -> {
+            final ArrayList<BaseOperation> operationList = new ArrayList<>();
+            operationList.addAll(transferOperations);
+            Transaction transaction = new Transaction(
+                    Util.hexToBytes(service.getChainId()), sourcePrivate, null, operationList);
+            new RpcTask(new GetRequiredFees(service, feesAmount.getAssetId(), operationList), "")
+                    .run()
+                    .flatMap(rpcTask -> {
+                        List<AssetAmount> assetAmounts = (List<AssetAmount>) rpcTask.getData().result;
+                        transaction.setFees(assetAmounts);
+                        return new RpcTask(new GetNetworkDynamicParameters(service), "").run();
+                    })
+                    .flatMap(rpcTask -> {
+                        DynamicGlobalProperties properties = (DynamicGlobalProperties) rpcTask.getData().result;
+                        long expirationTime = (properties.time.getTime() / 1000) + Transaction.DEFAULT_EXPIRATION_TIME;
+                        String headBlockId = properties.head_block_id;
+                        long headBlockNumber = properties.head_block_number;
+                        transaction.setBlockData(new BlockData(headBlockNumber, headBlockId, expirationTime));
+                        return new RpcTask(new TransactionBroadcastSequence(service, transaction), "")
+                                .run();
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(rpcTask -> e.onNext(true), e::onError, e::onComplete);
+        });
+
+
+    }
+
 }

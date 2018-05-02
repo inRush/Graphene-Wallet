@@ -27,13 +27,14 @@ public class GetBlock extends BaseRpcHandler {
 
     private long blockNumber;
 
-    public GetBlock(long blockNumber) {
+    public GetBlock(WebSocketService service,long blockNumber) {
+        super(service);
         this.blockNumber = blockNumber;
     }
 
     @Override
     protected int getApiId() {
-        return WebSocketService.getInstance().apiCode.getDataseId();
+        return mService.apiCode.getDataseId();
     }
 
     @Override

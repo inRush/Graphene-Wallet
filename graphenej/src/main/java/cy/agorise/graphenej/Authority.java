@@ -34,8 +34,8 @@ public class Authority implements GrapheneSerializable {
 
     public Authority(){
         this.weight_threshold = 1;
-        this.account_auths = new HashMap<UserAccount, Long>();
-        this.key_auths = new HashMap<PublicKey, Long>();
+        this.account_auths = new HashMap<>();
+        this.key_auths = new HashMap<>();
         extensions = new Extensions();
     }
 

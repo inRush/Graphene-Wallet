@@ -31,8 +31,12 @@ public class Address {
     }
 
     public Address(String address) throws MalformedAddressException {
-        this.prefix = address.substring(0, 3);
-        byte[] decoded = Base58.decode(address.substring(3, address.length()));
+        int prefixIndex = 3;
+        if(address.contains("TEST")){
+            prefixIndex = 4;
+        }
+        this.prefix = address.substring(0, prefixIndex);
+        byte[] decoded = Base58.decode(address.substring(prefixIndex, address.length()));
         byte[] pubKey = Arrays.copyOfRange(decoded, 0, decoded.length - 4);
         byte[] checksum = Arrays.copyOfRange(decoded, decoded.length - 4, decoded.length);
         publicKey = new PublicKey(ECKey.fromPublicOnly(pubKey));

@@ -13,6 +13,8 @@
         android:label="Tests for cy.agorise.graphenej.test"
         android:targetPackage="cy.agorise.graphenej.test" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application android:debuggable="true" >
         <uses-library android:name="android.test.runner" />
     </application>

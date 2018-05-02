@@ -17,12 +17,7 @@ public class BaseContract {
     public interface View<T extends Presenter> {
         SparseArray<QMUITipDialog> mLoadings = new SparseArray<>();
 
-        /**
-         * 显示一个字符串错误
-         *
-         * @param str
-         */
-        void showError(String str);
+
 
 
         /**
@@ -43,13 +38,26 @@ public class BaseContract {
          * @param code 代号
          */
         void dismissLoading(int code);
+        /**
+         * 显示一个字符串错误
+         *
+         * @param str
+         */
+        void showError(String str);
 
+        void showOk(String str);
+
+        void showInfo(String str);
 
         /**
-         * 生成一个loading ID
-         * @return loading ID
+         * 显示一个字符串错误
+         *
          */
-        int generateLoadingId();
+        void showError(@StringRes int strRes);
+
+        void showOk(@StringRes int strRes);
+
+        void showInfo(@StringRes int strRes);
 
         /**
          * 设置一个Presenter

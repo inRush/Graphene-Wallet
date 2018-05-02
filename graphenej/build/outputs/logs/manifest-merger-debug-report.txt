@@ -1,12 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
-INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-8:12
+ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
+INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:2:1-9:12
 	package
 		ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:3:11-41
 		INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml
@@ -35,5 +35,9 @@ INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/A
 		ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:6:15-40
 		INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml
 		INJECTED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:7:5-78
+	android:name
+		ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:7:22-76
 application
-ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:7:5-19
+ADDED from /Users/inrush/WorkSpace/Android/GXB/GXSWallet/graphenej/src/main/AndroidManifest.xml:8:5-19

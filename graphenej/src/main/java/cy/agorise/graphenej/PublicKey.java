@@ -34,13 +34,13 @@ public class PublicKey implements ByteSerializable, Serializable {
         }
     }
 
-    public String getAddress(){
+    public Address getAddress(){
         ECKey pk = ECKey.fromPublicOnly(publicKey.getPubKey());
         if(!pk.isCompressed()){
             ECPoint point = ECKey.compressPoint(pk.getPubKeyPoint());
             pk = ECKey.fromPublicOnly(point);
         }
-        return new Address(pk).toString();
+        return new Address(pk);
     }
 
     @Override

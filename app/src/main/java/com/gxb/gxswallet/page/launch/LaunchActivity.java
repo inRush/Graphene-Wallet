@@ -1,13 +1,17 @@
 package com.gxb.gxswallet.page.launch;
 
+import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.wallet.WalletDataManager;
+import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.page.firstin.FirstInActivity;
 import com.gxb.gxswallet.page.firstin.PermissionsFragment;
 import com.gxb.gxswallet.page.main.MainActivity;
+import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.sxds.common.app.BaseActivity;
+import com.sxds.common.utils.NetworkUtil;
 
-import java.util.List;
+import net.qiujuer.genius.kit.handler.Run;
 
 /**
  * @author inrush
@@ -21,25 +25,47 @@ public class LaunchActivity extends BaseActivity {
     }
 
     private void permissionAllPass() {
-        boolean hasAccount = new WalletDataManager(this).queryAll().size() > 0;
-        if (hasAccount) {
-            MainActivity.start(this);
-        } else {
-            FirstInActivity.start(LaunchActivity.this);
-        }
-        finish();
+        init();
     }
 
     private void checkPermissions() {
         if (PermissionsFragment.havAllPermissions(LaunchActivity.this)) {
             permissionAllPass();
         } else {
-            PermissionsFragment.show(getSupportFragmentManager(), new PermissionsFragment.onPermissionGrantedListener() {
-                @Override
-                public void onGranted(List<String> perms) {
-                    permissionAllPass();
-                }
-            });
+            PermissionsFragment.show(getSupportFragmentManager(), perms -> permissionAllPass());
+        }
+    }
+
+    private void init() {
+        if (!NetworkUtil.isNetworkAvailable(this)) {
+            getWindow().getDecorView().postDelayed(this::init, 2000);
+            App.showToast(R.string.network_unavailable);
+            return;
+        }
+        AssetDataManager.initCoin(this);
+        WalletManager.getInstance().init(this);
+        WebSocketServicePool.getInstance().initPool();
+        Run.onBackground(() -> {
+            waitWebSocketPoolComplete();
+            boolean hasAccount = WalletManager.getInstance().getAllWallet().size() > 0;
+            if (hasAccount) {
+                MainActivity.start(LaunchActivity.this);
+            } else {
+                FirstInActivity.start(LaunchActivity.this);
+            }
+            finish();
+        });
+
+    }
+
+    private void waitWebSocketPoolComplete() {
+        try {
+            Thread.sleep(1500);
+            if (!WebSocketServicePool.getInstance().checkAllServiceConnectSuccess()) {
+                waitWebSocketPoolComplete();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
@@ -47,11 +73,6 @@ public class LaunchActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        getWindow().getDecorView().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkPermissions();
-            }
-        }, 2000);
+        getWindow().getDecorView().postDelayed(this::checkPermissions, 1000);
     }
 }

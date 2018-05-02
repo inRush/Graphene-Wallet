@@ -82,9 +82,9 @@ public class ApiCall implements JsonSerializable {
                 ArrayList<Serializable> listArgument = (ArrayList<Serializable>) this.params.get(i);
                 for (int l = 0; l < listArgument.size(); l++) {
                     Serializable element = listArgument.get(l);
-                    if (element instanceof JsonSerializable)
+                    if (element instanceof JsonSerializable) {
                         array.add(((JsonSerializable) element).toJsonObject());
-                    else if (element instanceof String) {
+                    } else if (element instanceof String) {
                         array.add((String) element);
                     }
                 }
@@ -97,7 +97,7 @@ public class ApiCall implements JsonSerializable {
         }
         paramsArray.add(methodParams);
         obj.add(KEY_PARAMS, paramsArray);
-//        obj.addProperty(KEY_JSON_RPC, this.jsonrpc);
+        obj.addProperty(KEY_JSON_RPC, this.jsonrpc);
         return obj;
     }
 

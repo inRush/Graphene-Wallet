@@ -56,17 +56,14 @@ public class ExchangeService extends Service {
      * @param callback 回调
      */
     private void runLoop(final int interval, final Action callback) {
-        Run.onBackground(new Action() {
-            @Override
-            public void call() {
-                while (isExchangeFetchLoop) {
-                    callback.call();
-                    try {
-                        // 每interval毫秒获取一次更新
-                        Thread.sleep(interval);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        Run.onBackground(() -> {
+            while (isExchangeFetchLoop) {
+                callback.call();
+                try {
+                    // 每interval毫秒获取一次更新
+                    Thread.sleep(interval);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });

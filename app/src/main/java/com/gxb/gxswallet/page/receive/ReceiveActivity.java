@@ -18,7 +18,7 @@ import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.config.Configure;
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.jwsd.libzxing.QRCodeManager;
@@ -60,15 +60,15 @@ public class ReceiveActivity extends PresenterActivity<ReceiveContract.Presenter
     private static final String COIN_KEY = "coin_receive";
     private ClipboardManager mClipboard;
     private WalletData mCurrentWallet;
-    private CoinData mCurrentCoin;
+    private AssetData mCurrentCoin;
     private QMUIListPopup mListPopup;
 
     private List<WalletData> mWalletDataList;
-    private List<CoinData> mCoinDataList;
+    private List<AssetData> mCoinDataList;
     private String[] mWalletNames;
     private String[] mCoinNames;
 
-    public static void start(Activity activity, WalletData wallet, CoinData coin) {
+    public static void start(Activity activity, WalletData wallet, AssetData coin) {
         Intent intent = new Intent(activity, ReceiveActivity.class);
         intent.putExtra(WALLET_KEY, wallet);
         intent.putExtra(COIN_KEY, coin);
@@ -172,21 +172,13 @@ public class ReceiveActivity extends PresenterActivity<ReceiveContract.Presenter
 
     private void initTopBar() {
         mTopBar.setTitle(getString(R.string.receive));
-        mTopBar.addLeftBackImageButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        mTopBar.addLeftBackImageButton().setOnClickListener(view -> finish());
         mTopBar.addRightImageButton(R.drawable.ic_more_vert_white_24dp, View.generateViewId())
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        initListPopupIfNeed();
-                        mListPopup.setAnimStyle(QMUIPopup.ANIM_GROW_FROM_RIGHT);
-                        mListPopup.setPreferredDirection(QMUIPopup.DIRECTION_BOTTOM);
-                        mListPopup.show(view);
-                    }
+                .setOnClickListener(view -> {
+                    initListPopupIfNeed();
+                    mListPopup.setAnimStyle(QMUIPopup.ANIM_GROW_FROM_RIGHT);
+                    mListPopup.setPreferredDirection(QMUIPopup.DIRECTION_BOTTOM);
+                    mListPopup.show(view);
                 });
     }
 

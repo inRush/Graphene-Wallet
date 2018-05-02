@@ -87,11 +87,11 @@ public class ImportWalletActivity extends PresenterActivity<ImportWalletContract
         String pwd = passwordEt.getText().toString();
         String againPwd = againPasswordEt.getText().toString();
         boolean isPass = checkParams(memorizingWord, pwd, againPwd);
-        if (isPass) {
+//        if (isPass) {
             String wifKey = WalletService.getInstance().getWifKey(new BrainKey(memorizingWord, BrainKey.DEFAULT_SEQUENCE_NUMBER));
-            mPresenter.importAccount(wifKey, pwd);
+            mPresenter.importAccount(memorizingWord, pwd);
             showLoading(mloadingId, R.string.geting_account);
-        }
+//        }
     }
 
     @Override

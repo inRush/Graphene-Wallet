@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.activity.ExchangeServicePresenterActivity;
-import com.gxb.gxswallet.config.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.createwallet.CreateWalletActivity;
 import com.gxb.gxswallet.page.importaccount.ImportWalletActivity;
@@ -118,14 +117,14 @@ public class WalletManagerActivity extends ExchangeServicePresenterActivity<Wall
 
     @Override
     public void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balances) {
-        wallet.setBalances(AssetSymbol.GXS, balances.get(1));
-        AccountBalance balance = new AccountBalance();
-        balance.setAmount(0);
-        balance.setAssetId("1.3.1");
-        wallet.setBalances(AssetSymbol.BTS, balance);
-        mCompleteCount += 1;
-        if (mCompleteCount == mWallets.size()) {
-            mAdapter.notifyDataSetChanged();
-        }
+//        wallet.setBalances(AssetSymbol.GXS.getName(), balances.get(1));
+//        AccountBalance balance = new AccountBalance();
+//        balance.setAmount(0);
+//        balance.setAssetId("1.3.1");
+//        wallet.setBalances(AssetSymbol.BTS.getName(), balance);
+//        mCompleteCount += 1;
+//        if (mCompleteCount == mWallets.size()) {
+//            mAdapter.notifyDataSetChanged();
+//        }
     }
 }

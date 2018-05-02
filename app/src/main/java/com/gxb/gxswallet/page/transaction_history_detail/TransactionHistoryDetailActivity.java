@@ -21,8 +21,6 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -126,20 +124,8 @@ public class TransactionHistoryDetailActivity extends BaseActivity implements Vi
         };
     }
 
-    private List<QMUICommonListItemView> generatePartTwoMenus(String[] settings) {
-        List<QMUICommonListItemView> itemViews = new ArrayList<>();
-        for (String setting : settings) {
-            QMUICommonListItemView myCardItemView = mGroupListView.createItemView(setting);
-            myCardItemView.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
-            itemViews.add(myCardItemView);
-        }
-        return itemViews;
-    }
-
 
     private void initTransactionMessage() {
-
-
         try {
 
             if (mTransactionHistory.getType() == TransactionHistory.TransactionType.send) {
@@ -174,11 +160,16 @@ public class TransactionHistoryDetailActivity extends BaseActivity implements Vi
 
     @Override
     public void onClick(View v) {
+        if (v instanceof QMUICommonListItemView) {
+            String title = ((QMUICommonListItemView) v).getText().toString();
+            if (partTwoSettings[0].equals(title)) {
 
+            } else if (partTwoSettings[1].equals(title)) {
+
+            }
+        }
     }
 
 
-    private void getMemo(){
 
-    }
 }

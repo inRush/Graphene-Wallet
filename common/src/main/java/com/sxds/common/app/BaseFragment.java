@@ -28,7 +28,11 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected View mRoot;
     protected Unbinder mRootUnbinder;
     private SparseArray<QMUITipDialog> mLoadingMap = new SparseArray<>();
+    private int mCurrentLoadingId = 0;
 
+    protected int generateLoadingId() {
+        return mCurrentLoadingId++;
+    }
     /**
      * 在Fragment添加到Activity中去的时候
      * @param context 上下文

@@ -1,10 +1,9 @@
 package com.gxb.gxswallet.page.receive;
 
-import com.gxb.gxswallet.App;
-import com.gxb.gxswallet.db.coin.CoinData;
-import com.gxb.gxswallet.db.coin.CoinDataManager;
+import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.asset.AssetData;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
-import com.gxb.gxswallet.db.wallet.WalletDataManager;
 import com.sxds.common.presenter.BasePresenter;
 
 import java.util.List;
@@ -18,21 +17,16 @@ public class ReceivePresenter extends BasePresenter<ReceiveContract.View>
         implements ReceiveContract.Presenter {
     ReceivePresenter(ReceiveContract.View view) {
         super(view);
-        mWalletDataManager = new WalletDataManager(App.getInstance());
-        mCoinDataManager = new CoinDataManager(App.getInstance());
     }
-
-    private WalletDataManager mWalletDataManager;
-    private CoinDataManager mCoinDataManager;
 
 
     @Override
-    public List<CoinData> fetchSupportCoin() {
-        return mCoinDataManager.queryAll();
+    public List<AssetData> fetchSupportCoin() {
+        return AssetDataManager.getEnableList();
     }
 
     @Override
     public List<WalletData> fetchWallet() {
-        return mWalletDataManager.queryAll();
+        return WalletManager.getInstance().getAllWallet();
     }
 }

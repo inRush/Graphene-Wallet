@@ -1,5 +1,6 @@
 package com.gxb.gxswallet.page.cointransaction;
 
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.cointransaction.model.TransactionHistory;
 import com.sxds.common.presenter.BaseContract;
@@ -17,6 +18,6 @@ public class CoinTransactionHistoryContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void getTransactionHistory(WalletData wallet);
+        void getTransactionHistory(WalletData wallet, AssetData asset);
     }
 }

@@ -7,7 +7,6 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.gxb.gxswallet.db.coin.CoinData;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -21,8 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import cy.agorise.graphenej.api.android.WebSocketService;
 
 /**
  * @author inrush
@@ -54,12 +51,6 @@ public class App extends Application {
         });
         instance = this;
         initBugly();
-        CoinData.initCoin();
-        try {
-            WebSocketService.getInstance().connect("ws://106.14.180.117:28090");
-        } catch (ExceptionInInitializerError e) {
-            showToast(R.string.connect_exception);
-        }
     }
 
     @Override

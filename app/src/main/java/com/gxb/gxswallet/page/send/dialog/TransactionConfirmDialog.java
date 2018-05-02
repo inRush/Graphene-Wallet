@@ -1,6 +1,7 @@
 package com.gxb.gxswallet.page.send.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,11 +51,26 @@ public class TransactionConfirmDialog extends BottomSheetDialogFragment {
     private Transaction mTransaction;
     private View mRootView;
     private OnTransactionConfirmListener mListener;
+    private boolean isConfirm = false;
 
     public interface OnTransactionConfirmListener {
+        /**
+         * 交易确认
+         */
         void onConfirm();
+
+        /**
+         * 交易取消
+         */
+        void onCancel();
     }
 
+    /**
+     * 设置交易确认监听器
+     *
+     * @param listener Listener
+     * @return {@link TransactionConfirmDialog}
+     */
     public TransactionConfirmDialog setOnTransactionConfirmListener(OnTransactionConfirmListener listener) {
         mListener = listener;
         return this;
@@ -101,7 +117,7 @@ public class TransactionConfirmDialog extends BottomSheetDialogFragment {
         try {
             mAvatarIv.setImageDrawable(Jdenticon.from(mTransaction.getTo()).drawable());
             mToAccountTv.setText(mTransaction.getTo());
-            mCurrencyTv.setText(mTransaction.getCoin());
+            mCurrencyTv.setText(mTransaction.getAsset());
             mAmountTv.setText(String.valueOf(mTransaction.getAmount()));
             mMemoTv.setText(mTransaction.getMemo());
             mFeeTv.setText(String.valueOf(mTransaction.getFee()));
@@ -112,12 +128,21 @@ public class TransactionConfirmDialog extends BottomSheetDialogFragment {
 
     @OnClick(R.id.confirm_dialog_transaction_confirm)
     void onConfirmBtnClick() {
-        dismiss();
+        isConfirm = true;
         mListener.onConfirm();
+        dismiss();
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AnimationBottomSheetDialog(getContext());
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (!isConfirm) {
+            mListener.onCancel();
+        }
     }
 }

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.config.AssetSymbol;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.contact.ContactData;
 import com.gxb.gxswallet.db.contact.ContactManager;
 import com.gxb.gxswallet.page.contacts.ContactsFragment;
@@ -158,8 +158,8 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
 
     @OnClick(R.id.send_btn_contact_dialog)
     void onSendBtnClick() {
-        SendActivity.start(getActivity(), new Sender(null, addressTv.getText().toString(),
-                "0", AssetSymbol.GXS, memoTv.getText().toString()));
+        SendActivity.start(getActivity(), new Sender(addressTv.getText().toString(),
+                "0", AssetDataManager.getDefault(), memoTv.getText().toString()));
     }
 
 

@@ -57,7 +57,7 @@ public class MemoTest {
     }
 
     @Test
-    public void shouldMatchPredefinedCiphertext(){
+    public void shouldMatchPredefinedCipherText(){
         byte[] encrypted = Memo.encryptMessage(sourcePrivate, destinationAddress, shortEncryptedMessageNonce, shortMessage);
         assertArrayEquals("Testing with short message and nonce 1", encrypted, shortEncryptedMessage);
 

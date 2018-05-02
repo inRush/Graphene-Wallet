@@ -11,23 +11,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.caverock.androidsvg.SVGParseException;
+import com.google.common.base.Function;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.dialog.PasswordDialog;
-import com.gxb.gxswallet.config.AssetSymbol;
+import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.send.dialog.TransactionConfirmDialog;
 import com.gxb.gxswallet.page.send.model.Sender;
 import com.gxb.gxswallet.page.send.model.Transaction;
+import com.gxb.gxswallet.services.WalletService;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
-import com.gxb.sdk.models.wallet.AccountBalance;
 import com.jwsd.libzxing.OnQRCodeScanCallback;
 import com.jwsd.libzxing.QRCodeManager;
 import com.qmuiteam.qmui.alpha.QMUIAlphaImageButton;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.sxds.common.app.PresenterActivity;
+
+import org.bitcoinj.core.DumpedPrivateKey;
+import org.bitcoinj.core.ECKey;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +46,7 @@ import butterknife.OnClick;
  */
 
 public class SendActivity extends PresenterActivity<SendContract.Presenter>
-        implements SendContract.View, PasswordDialog.OnPasswordConfirmListener, TransactionConfirmDialog.OnTransactionConfirmListener {
+        implements SendContract.View, PasswordDialog.OnPasswordConfirmListener {
 
     @BindView(R.id.topbar_send)
     QMUITopBar mTopBar;
@@ -65,8 +70,6 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     private List<WalletData> mWalletDataList;
     private String[] mWalletNames;
     private static final String SENDER_KEY = "sender";
-    private int mQueryFeeLoadingCode = generateLoadingId();
-    private int mSendLoadingCode = getContentLayoutId();
 
     public static void start(Activity activity, Sender sender) {
         Intent intent = new Intent(activity, SendActivity.class);
@@ -78,7 +81,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     protected boolean initArgs(Bundle bundle) {
         if (bundle != null) {
             mSender = bundle.getParcelable(SENDER_KEY);
-            mCurrentWallet = mSender.getFrom();
+            mCurrentWallet = WalletManager.getInstance().getCurrentWallet();
             return super.initArgs(bundle);
         }
         return false;
@@ -89,7 +92,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         super.initWidget();
         mTopBar.setTitle(getString(R.string.send));
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> finish());
-        amountEt.setHint(getString(R.string.amount_to_send, mSender.getCoin()));
+        amountEt.setHint(getString(R.string.amount_to_send, mSender.getAsset().getName()));
         initToAccountWidget();
         memoEt.setText(mSender.getMemo());
         QMUIAlphaImageButton imageButton = mTopBar.addRightImageButton(R.drawable.ic_scan, View.generateViewId());
@@ -107,7 +110,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         if (mCurrentWallet == null) {
             mCurrentWallet = mWalletDataList.get(0);
         }
-        mPresenter.fetchWalletBalance(mCurrentWallet);
+        mPresenter.fetchWalletBalance(mCurrentWallet, mSender.getAsset());
     }
 
     public void onScanQR() {
@@ -129,7 +132,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                 Double.parseDouble(amount);
                                 toEt.setText(account);
                                 amountEt.setText(amount);
-                                double avaAmount = mCurrentWallet.getBalances(coin).getAmount() / 100000.0;
+                                double avaAmount = mCurrentWallet.getBalances(coin);
                                 gxsTv.setText(getString(R.string.available_coin, String.valueOf(avaAmount), coin.toUpperCase()));
                                 App.showToast(R.string.scan_success);
                             } catch (Exception e) {
@@ -157,8 +160,8 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
             fromAvatarIv.setImageDrawable(Jdenticon.from(mCurrentWallet.getName()).drawable());
             fromTv.setText(mCurrentWallet.getName());
             amountEt.setText(mSender.getAmount());
-            double amount = mCurrentWallet.getBalances(mSender.getCoin()).getAmount() / 100000.0;
-            gxsTv.setText(getString(R.string.available_coin, String.valueOf(amount), mSender.getCoin()));
+            double amount = mCurrentWallet.getBalances(mSender.getAsset().getName());
+            gxsTv.setText(getString(R.string.available_coin, String.valueOf(amount), mSender.getAsset().getName()));
         } catch (IOException | SVGParseException e) {
             e.printStackTrace();
         }
@@ -176,7 +179,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                 .addItems(items, (dialog, which) -> {
                     dialog.dismiss();
                     mCurrentWallet = mWalletDataList.get(which);
-                    mPresenter.fetchWalletBalance(mCurrentWallet);
+                    mPresenter.fetchWalletBalance(mCurrentWallet, mSender.getAsset());
                 })
                 .show();
     }
@@ -250,29 +253,35 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @Override
     public void onSendSuccess() {
-        dismissLoading(mSendLoadingCode);
+        dismissAllLoading();
         showOk(getString(R.string.send_success));
     }
 
     @Override
-    public void onQueryFeeSuccess(double fee) {
-        dismissLoading(mQueryFeeLoadingCode);
+    public void onQueryFeeSuccess(double fee, Function<Boolean, Void> callback) {
+        dismissAllLoading();
         TransactionConfirmDialog.newInstance(
                 new Transaction(Double.parseDouble(amountEt.getText().toString()),
                         toEt.getText().toString(),
                         memoEt.getText().toString(),
-                        fee, mSender.getCoin()))
-                .setOnTransactionConfirmListener(this)
+                        fee, mSender.getAsset().getName()))
+                .setOnTransactionConfirmListener(new TransactionConfirmDialog.OnTransactionConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        callback.apply(true);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        callback.apply(false);
+                    }
+                })
                 .show(getSupportFragmentManager(), "confirm");
     }
 
     @Override
-    public void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balances) {
-        wallet.setBalances(AssetSymbol.GXS, balances.get(1));
-        AccountBalance balance = new AccountBalance();
-        balance.setAmount(0);
-        balance.setAssetId("1.3.1");
-        wallet.setBalances(AssetSymbol.BTS, balance);
+    public void onFetchWalletBalanceSuccess(WalletData wallet, double balance) {
+        wallet.setBalances(mSender.getAsset().getName(), balance);
         initFromAccountWidget();
     }
 
@@ -295,21 +304,23 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
 
     @Override
     public void onConfirm(String password) {
-        showLoading(mQueryFeeLoadingCode, R.string.query_fee);
+        String wifKey = WalletService.getInstance().unlockWallet(mCurrentWallet, password)[0];
+        if (wifKey == null) {
+            showError(getString(R.string.password_error));
+            return;
+        }
+        ECKey privateKey = DumpedPrivateKey.fromBase58(null, wifKey).getKey();
         String from = fromTv.getText().toString();
         String to = toEt.getText().toString();
         String amount = amountEt.getText().toString();
         String memo = memoEt.getText().toString();
-        mPresenter.queryFee(from, to, amount, mSender.getCoin(), memo);
+        try {
+            int num = (int) (Double.parseDouble(amount) * AssetDataManager.AMOUNT_SIZE);
+            mPresenter.send(privateKey, from, to, String.valueOf(num), mSender.getAsset(), memo);
+        } catch (Exception e) {
+            showError(R.string.amount_format_error);
+        }
+
     }
 
-    @Override
-    public void onConfirm() {
-        showLoading(mSendLoadingCode, R.string.sending);
-        String from = fromTv.getText().toString();
-        String to = toEt.getText().toString();
-        String amount = amountEt.getText().toString();
-        String memo = memoEt.getText().toString();
-        mPresenter.send(from, to, amount, mSender.getCoin(), memo);
-    }
 }

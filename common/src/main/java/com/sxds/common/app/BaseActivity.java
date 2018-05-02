@@ -28,7 +28,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected Unbinder mRootUnbinder;
     private SparseArray<QMUITipDialog> mLoadingMap = new SparseArray<>();
+    private int mCurrentLoadingId = 0;
 
+    protected int generateLoadingId() {
+        return mCurrentLoadingId++;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,8 +126,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 });
             }
         });
-
-
     }
 
     protected void showError(String message) {

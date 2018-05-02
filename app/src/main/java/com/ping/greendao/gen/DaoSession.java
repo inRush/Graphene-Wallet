@@ -8,11 +8,11 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.gxb.gxswallet.db.coin.CoinData;
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.contact.ContactData;
 import com.gxb.gxswallet.db.wallet.WalletData;
 
-import com.ping.greendao.gen.CoinDataDao;
+import com.ping.greendao.gen.AssetDataDao;
 import com.ping.greendao.gen.ContactDataDao;
 import com.ping.greendao.gen.WalletDataDao;
 
@@ -25,11 +25,11 @@ import com.ping.greendao.gen.WalletDataDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig coinDataDaoConfig;
+    private final DaoConfig assetDataDaoConfig;
     private final DaoConfig contactDataDaoConfig;
     private final DaoConfig walletDataDaoConfig;
 
-    private final CoinDataDao coinDataDao;
+    private final AssetDataDao assetDataDao;
     private final ContactDataDao contactDataDao;
     private final WalletDataDao walletDataDao;
 
@@ -37,8 +37,8 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        coinDataDaoConfig = daoConfigMap.get(CoinDataDao.class).clone();
-        coinDataDaoConfig.initIdentityScope(type);
+        assetDataDaoConfig = daoConfigMap.get(AssetDataDao.class).clone();
+        assetDataDaoConfig.initIdentityScope(type);
 
         contactDataDaoConfig = daoConfigMap.get(ContactDataDao.class).clone();
         contactDataDaoConfig.initIdentityScope(type);
@@ -46,23 +46,23 @@ public class DaoSession extends AbstractDaoSession {
         walletDataDaoConfig = daoConfigMap.get(WalletDataDao.class).clone();
         walletDataDaoConfig.initIdentityScope(type);
 
-        coinDataDao = new CoinDataDao(coinDataDaoConfig, this);
+        assetDataDao = new AssetDataDao(assetDataDaoConfig, this);
         contactDataDao = new ContactDataDao(contactDataDaoConfig, this);
         walletDataDao = new WalletDataDao(walletDataDaoConfig, this);
 
-        registerDao(CoinData.class, coinDataDao);
+        registerDao(AssetData.class, assetDataDao);
         registerDao(ContactData.class, contactDataDao);
         registerDao(WalletData.class, walletDataDao);
     }
     
     public void clear() {
-        coinDataDaoConfig.clearIdentityScope();
+        assetDataDaoConfig.clearIdentityScope();
         contactDataDaoConfig.clearIdentityScope();
         walletDataDaoConfig.clearIdentityScope();
     }
 
-    public CoinDataDao getCoinDataDao() {
-        return coinDataDao;
+    public AssetDataDao getAssetDataDao() {
+        return assetDataDao;
     }
 
     public ContactDataDao getContactDataDao() {

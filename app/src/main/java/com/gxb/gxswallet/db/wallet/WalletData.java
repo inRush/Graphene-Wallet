@@ -35,7 +35,7 @@ public class WalletData implements Parcelable {
     private boolean isBackUp;
     private String brainKey;
     @Transient
-    private HashMap<String, AccountBalance> balances = new HashMap<>();
+    private HashMap<String, Double> balances = new HashMap<>();
 
     @Generated(hash = 890049944)
     public WalletData(Long id, @NonNull String accountId, @NonNull String name,
@@ -116,14 +116,18 @@ public class WalletData implements Parcelable {
     }
 
 
-    public AccountBalance getBalances(String name) {
+    public Double getBalances(String name) {
         name = name.toUpperCase();
         return balances.get(name);
     }
 
-    public void setBalances(String name, AccountBalance balance) {
+    public void setBalances(String name, Double balance) {
         name = name.toUpperCase();
         this.balances.put(name, balance);
+    }
+
+    public void setBalances(HashMap<String,Double> balances){
+        this.balances = balances;
     }
 
     public String getBrainKey() {

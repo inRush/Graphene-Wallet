@@ -2,8 +2,10 @@ package com.gxb.gxswallet.page.createwallet;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.services.WalletService;
+import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.sxds.common.presenter.BasePresenter;
 
 import java.util.regex.Pattern;
@@ -53,7 +55,7 @@ class CreateWalletPresenter extends BasePresenter<CreateWalletContract.View>
     @Override
     public void checkWalletExist(String name) {
         getView().showLoading(CHECK_EXIST_LOADING_CODE, App.getInstance().getString(R.string.check_wallet_name));
-        new GetAccountByName(name).call(new WitnessResponseListener() {
+        new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), name).call(new WitnessResponseListener() {
             @Override
             public void onSuccess(WitnessResponse response) {
                 getView().dismissLoading(CHECK_EXIST_LOADING_CODE);

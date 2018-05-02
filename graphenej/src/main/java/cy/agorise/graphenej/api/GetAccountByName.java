@@ -28,13 +28,14 @@ public class GetAccountByName extends BaseRpcHandler {
 
     private String accountName;
 
-    public GetAccountByName(String accountName) {
+    public GetAccountByName(WebSocketService service, String accountName) {
+        super(service);
         this.accountName = accountName;
     }
 
     @Override
     protected int getApiId() {
-        return WebSocketService.getInstance().apiCode.getDataseId();
+        return mService.apiCode.getDataseId();
     }
 
     @Override
