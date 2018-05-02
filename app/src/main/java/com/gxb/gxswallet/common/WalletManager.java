@@ -99,9 +99,20 @@ public class WalletManager {
     }
 
     public boolean saveWallet(WalletData wallet) {
-        mWallets.put(wallet.getName(), wallet);
-        mWalletDataList.add(wallet);
-        return mWalletDataManager.insert(wallet);
+        if (mWallets.containsKey(wallet.getName())) {
+            mWallets.put(wallet.getName(), wallet);
+            mWalletDataList.remove(wallet);
+            mWalletDataList.add(wallet);
+            if (mCurrentWallet != null && mCurrentWallet.getName().equals(wallet.getName())) {
+                mCurrentWallet = wallet;
+            }
+            return mWalletDataManager.update(wallet);
+        } else {
+            mWallets.put(wallet.getName(), wallet);
+            mWalletDataList.add(wallet);
+            return mWalletDataManager.insert(wallet);
+        }
+
     }
 
     /**

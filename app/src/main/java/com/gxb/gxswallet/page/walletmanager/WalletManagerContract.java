@@ -1,7 +1,7 @@
 package com.gxb.gxswallet.page.walletmanager;
 
+import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
-import com.gxb.sdk.models.wallet.AccountBalance;
 import com.sxds.common.presenter.BaseContract;
 
 import java.util.List;
@@ -19,12 +19,12 @@ public class WalletManagerContract {
          * @param balance 余额
          * @param wallet  钱包
          */
-        void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balance);
+        void onFetchWalletBalanceSuccess(WalletData wallet, double balance);
     }
 
     interface Presenter extends BaseContract.Presenter {
         List<WalletData> fetchWallets();
-        void fetchWalletBalance(WalletData wallet);
+        void fetchWalletBalance(WalletData wallet, AssetData asset);
 
     }
 }

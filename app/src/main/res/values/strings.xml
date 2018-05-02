@@ -174,4 +174,7 @@
     <string name="this_transaction_not_have_txid">该交易没有TXID</string>
     <string name="send_asset_type">发送币种</string>
     <string name="parse_error">解析出错</string>
+    <string name="input_origin_password">输入原密码</string>
+    <string name="modify_success">修改成功</string>
+    <string name="modify_failure">修改失败</string>
 </resources>

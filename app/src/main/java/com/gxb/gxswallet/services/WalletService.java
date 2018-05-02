@@ -154,7 +154,7 @@ public class WalletService {
      */
     public void importAccount(String wifKey, String password, final ServerListener<List<WalletData>> listener)
             throws IllegalArgumentException {
-        WalletData walletData = lockWallet("", "", wifKey, password, true, null);
+        WalletData walletData = lockWallet(null, "", "", wifKey, password, true, null);
         ECKey privateKey = DumpedPrivateKey.fromBase58(null, wifKey).getKey();
         List<Address> addresses = new ArrayList<>();
         AssetData asset = AssetDataManager.getDefault();
@@ -228,9 +228,8 @@ public class WalletService {
             String suggestKey = BrainKey.suggest(dict);
             BrainKey brainKey = new BrainKey(suggestKey, BrainKey.DEFAULT_SEQUENCE_NUMBER);
             String wifKey = getWifKey(brainKey);
-            WalletData wallet = lockWallet("", walletName, wifKey, password, false, brainKey.getBrainKey());
+            WalletData wallet = lockWallet(null, "", walletName, wifKey, password, false, brainKey.getBrainKey());
             String pubKey = PrivateKey.fromWif(wifKey).toPublicKey().toPublicKeyString();
-
 
             GxbApis.getInstance()
                     .walletApi().registerAccount2(new Object[]{
@@ -344,7 +343,8 @@ public class WalletService {
      * @param brainKey
      * @return
      */
-    public WalletData lockWallet(String accountId, String walletName, String wifKey, String password, boolean isBackup, String brainKey) {
+    public WalletData lockWallet(Long id,
+                                 String accountId, String walletName, String wifKey, String password, boolean isBackup, String brainKey) {
         AesKeyCipher passwordAes = new AesKeyCipher(password);
         // 获取一个随机生成的私钥
         byte[] encryptionBytes = KeyUtil.getRandomKey().toBytes();
@@ -361,7 +361,7 @@ public class WalletService {
         PrivateKey passwordPrivate = PrivateKey.fromSeed(password);
         final String passwordPub = passwordPrivate.toPublicKey().toPublicKeyString();
 
-        return new WalletData(null, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
+        return new WalletData(id, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
     }
 
     public Observable<HashMap<String, Double>> fetchAllAccountBalance(String accountName) {

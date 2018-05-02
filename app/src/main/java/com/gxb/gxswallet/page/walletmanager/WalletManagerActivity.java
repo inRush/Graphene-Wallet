@@ -7,12 +7,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.activity.ExchangeServicePresenterActivity;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.createwallet.CreateWalletActivity;
 import com.gxb.gxswallet.page.importaccount.ImportWalletActivity;
 import com.gxb.gxswallet.page.walletdetail.WalletDetailActivity;
 import com.gxb.gxswallet.page.walletmanager.adapter.WalletManagerRecyclerAdapter;
-import com.gxb.sdk.models.wallet.AccountBalance;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.sxds.common.widget.recycler.RecyclerAdapter;
 
@@ -99,7 +100,7 @@ public class WalletManagerActivity extends ExchangeServicePresenterActivity<Wall
         super.onResume();
         mWallets = mPresenter.fetchWallets();
         for (WalletData wallet : mWallets) {
-            mPresenter.fetchWalletBalance(wallet);
+            mPresenter.fetchWalletBalance(wallet, AssetDataManager.getDefault());
         }
         mAdapter.replace(mWallets);
         mAdapter.notifyDataSetChanged();
@@ -116,15 +117,11 @@ public class WalletManagerActivity extends ExchangeServicePresenterActivity<Wall
     }
 
     @Override
-    public void onFetchWalletBalanceSuccess(WalletData wallet, List<AccountBalance> balances) {
-//        wallet.setBalances(AssetSymbol.GXS.getName(), balances.get(1));
-//        AccountBalance balance = new AccountBalance();
-//        balance.setAmount(0);
-//        balance.setAssetId("1.3.1");
-//        wallet.setBalances(AssetSymbol.BTS.getName(), balance);
-//        mCompleteCount += 1;
-//        if (mCompleteCount == mWallets.size()) {
-//            mAdapter.notifyDataSetChanged();
-//        }
+    public void onFetchWalletBalanceSuccess(WalletData wallet, double balance) {
+        wallet.setBalances(AssetSymbol.GXS.getName(), balance);
+        mCompleteCount += 1;
+        if (mCompleteCount == mWallets.size()) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

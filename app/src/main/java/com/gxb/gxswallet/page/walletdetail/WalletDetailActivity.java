@@ -1,15 +1,10 @@
 package com.gxb.gxswallet.page.walletdetail;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.caverock.androidsvg.SVGParseException;
@@ -19,7 +14,8 @@ import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
 import com.gxb.gxswallet.page.backuptip.BackUpTipActivity;
-import com.gxb.gxswallet.services.WalletService;
+import com.gxb.gxswallet.page.walletdetail.dialogbuilder.ModifyPasswordDialogBuilder;
+import com.gxb.gxswallet.page.walletdetail.dialogbuilder.PrivateKeyDialogBuilder;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.qmuiteam.qmui.util.QMUIKeyboardHelper;
 import com.qmuiteam.qmui.widget.QMUITopBar;
@@ -30,12 +26,9 @@ import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.sxds.common.app.BaseActivity;
 
-import net.qiujuer.genius.ui.widget.EditText;
-
 import java.io.IOException;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -183,6 +176,8 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
             String text = ((QMUICommonListItemView) view).getText().toString();
             if (partTwoSettings[0].equals(text)) {
                 showExportPrivateKeyDialog();
+            } else if (partOneSettings[2].equals(text)) {
+                showModifyPasswordDialog();
             }
         }
     }
@@ -193,55 +188,9 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
         QMUIKeyboardHelper.showKeyboard(dialog.getEditText(), true);
     }
 
-    class PrivateKeyDialogBuilder extends QMUIDialog.AutoResizeDialogBuilder {
-
-        @BindView(R.id.placeholder_dialog_private_key)
-        TextView mPlacegholder;
-        @BindView(R.id.private_key_dialog_private_key)
-        TextView mPrivateKey;
-        @BindView(R.id.password_dialog_private_key)
-        EditText mPasswordEt;
-
-        private Context mContext;
-        private ClipboardManager mClipboard;
-
-
-        public PrivateKeyDialogBuilder(Context context) {
-            super(context);
-            mContext = context;
-            mClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        }
-
-        public android.widget.EditText getEditText() {
-            return mPasswordEt;
-        }
-
-
-        @Override
-        public View onBuildContent(QMUIDialog dialog, ScrollView parent) {
-            View rootView = LayoutInflater.from(WalletDetailActivity.this).inflate(R.layout.dialog_show_private_key, parent, false);
-            ButterKnife.bind(this, rootView);
-            return rootView;
-        }
-
-        @OnClick(R.id.btn_dialog_private_key)
-        void onBtnClick(View v) {
-            QMUIRoundButton button = (QMUIRoundButton) v;
-            if (button.getText().toString().equals(getString(R.string.unlock_wallet))) {
-                String password = mPasswordEt.getText().toString();
-                String[] keys = WalletService.getInstance().unlockWallet(mWalletData, password);
-                if (keys[0] == null) {
-                    showError(getString(R.string.password_error));
-                } else {
-                    mPlacegholder.setVisibility(View.GONE);
-                    mPrivateKey.setText(keys[0]);
-                    button.setText(getString(R.string.copy));
-                }
-            } else {
-                ClipData clipData = ClipData.newPlainText("PrivateKey", mPrivateKey.getText().toString());
-                mClipboard.setPrimaryClip(clipData);
-                App.showToast(R.string.copy_success);
-            }
-        }
+    private void showModifyPasswordDialog() {
+        ModifyPasswordDialogBuilder dialog = new ModifyPasswordDialogBuilder(this);
+        dialog.show();
+        QMUIKeyboardHelper.showKeyboard(dialog.getEditText(), true);
     }
 }
