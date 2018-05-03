@@ -100,7 +100,11 @@ dependencies {
     // rxjava
     implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    // 数据库调试
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
+
+    // 解析html
+    implementation 'org.jsoup:jsoup:1.11.3'
     // libs
     implementation project(':SDK')
     implementation project(':common')

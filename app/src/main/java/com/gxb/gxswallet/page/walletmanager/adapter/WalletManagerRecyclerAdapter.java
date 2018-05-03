@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.asset.AssetSymbol;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
@@ -48,6 +48,8 @@ public class WalletManagerRecyclerAdapter extends RecyclerAdapter<WalletData> {
         TextView gxsCountTv;
         @BindView(R.id.back_btn_wallet_manager_item)
         QMUIRoundButton isBackupIv;
+        @BindView(R.id.asset_symbol_wallet_manager_item)
+        TextView assetSymbolTv;
 
 
         public ViewHolder(View itemView) {
@@ -64,10 +66,10 @@ public class WalletManagerRecyclerAdapter extends RecyclerAdapter<WalletData> {
                 } else {
                     isBackupIv.setVisibility(View.VISIBLE);
                 }
-                if (data.getBalances(AssetSymbol.GXS.getName()) != null) {
-                    gxsCountTv.setText(String.valueOf(data.getBalances(AssetSymbol.GXS.getName())));
+                if (data.getBalances(AssetDataManager.getDefault().getName()) != null) {
+                    gxsCountTv.setText(String.valueOf(data.getBalances(AssetDataManager.getDefault().getName())));
                 }
-
+                assetSymbolTv.setText(AssetDataManager.getDefault().getName());
             } catch (IOException | SVGParseException e) {
                 e.printStackTrace();
             }

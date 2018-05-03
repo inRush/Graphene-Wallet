@@ -9,6 +9,7 @@ import org.bouncycastle.math.ec.ECPoint;
 
 /**
  * 公钥
+ *
  * @author inrush
  * @date 2018/3/10.
  */
@@ -43,6 +44,10 @@ public class PublicKey {
 
     public String toPublicKeyString() {
         return toPublicKeyString(true);
+    }
+
+    public String toPublicKeyString(String addressPrefix) {
+        return toPublicKeyString(addressPrefix, true);
     }
 
     public static PublicKey fromPoint(ECPoint point) {

@@ -130,18 +130,24 @@ public class WalletApiImpl extends BaseApi implements WalletApi {
     @Override
     public void transfer(Object[] params, GxbCallBack callBack) {
         String json = RpcRequest.createRequest(0, "transfer", params, false);
-        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
+//        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
     }
 
     @Override
     public void transfer2(Object[] params, GxbCallBack callBack) {
         String json = RpcRequest.createRequest(0, "transfer2", params, false);
-        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
+//        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
     }
 
     @Override
     public void registerAccount2(Object[] params, GxbCallBack callBack) {
         String json = RpcRequest.createRequest("register_account2", params);
-        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL, callBack);
+        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL_GXB, callBack);
+    }
+
+    @Override
+    public void registerAccount(Object[] params, GxbCallBack callBack) {
+        String json = RpcRequest.createRequest("register_account", params);
+        mHttpRequest.doCallRpc(json, Config.RPC_URL_DEV_LOCAL_BTS, callBack);
     }
 }

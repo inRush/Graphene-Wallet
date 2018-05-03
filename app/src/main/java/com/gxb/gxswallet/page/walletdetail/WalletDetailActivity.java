@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.asset.AssetSymbol;
+import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
 import com.gxb.gxswallet.page.backuptip.BackUpTipActivity;
@@ -95,7 +96,7 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
     private void initMenus() {
         partOneSettings = new String[]{
                 getString(R.string.wallet_name),
-                getString(R.string.wallet_assets),
+                getString(R.string.wallet_assets, AssetDataManager.getDefault().getName()),
                 getString(R.string.modify_password),
         };
         partTwoSettings = new String[]{
@@ -107,9 +108,9 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
         walletNameItem.setDetailText(mWalletData.getName());
 
         QMUICommonListItemView walletAssetsItem = mGroupListView.createItemView(partOneSettings[1]);
-        if (mWalletData.getBalances(AssetSymbol.GXS.getName()) != null) {
+        if (mWalletData.getBalances(AssetDataManager.getDefault().getName()) != null) {
             walletAssetsItem.setDetailText(String.valueOf(
-                    mWalletData.getBalances(AssetSymbol.GXS.getName()))
+                    mWalletData.getBalances(AssetDataManager.getDefault().getName()))
             );
         }
 
@@ -154,7 +155,7 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
                 .addAction(getString(R.string.cancel), (dialog, index) -> dialog.dismiss())
                 .addAction(0, getString(R.string.delete), QMUIDialogAction.ACTION_PROP_NEGATIVE, (dialog, index) -> {
                     dialog.dismiss();
-                    if (mWalletDataManager.delete(mWalletData)) {
+                    if (WalletManager.getInstance().deleteWallet(mWalletData)) {
                         App.showToast(R.string.delete_success);
                         finish();
                     } else {
@@ -171,7 +172,6 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-
         if (view instanceof QMUICommonListItemView) {
             String text = ((QMUICommonListItemView) view).getText().toString();
             if (partTwoSettings[0].equals(text)) {
@@ -183,13 +183,13 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showExportPrivateKeyDialog() {
-        PrivateKeyDialogBuilder dialog = new PrivateKeyDialogBuilder(this);
+        PrivateKeyDialogBuilder dialog = new PrivateKeyDialogBuilder(this, mWalletData);
         dialog.show();
         QMUIKeyboardHelper.showKeyboard(dialog.getEditText(), true);
     }
 
     private void showModifyPasswordDialog() {
-        ModifyPasswordDialogBuilder dialog = new ModifyPasswordDialogBuilder(this);
+        ModifyPasswordDialogBuilder dialog = new ModifyPasswordDialogBuilder(this, mWalletData);
         dialog.show();
         QMUIKeyboardHelper.showKeyboard(dialog.getEditText(), true);
     }

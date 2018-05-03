@@ -55,6 +55,7 @@ class CreateWalletPresenter extends BasePresenter<CreateWalletContract.View>
     @Override
     public void checkWalletExist(String name) {
         getView().showLoading(CHECK_EXIST_LOADING_CODE, App.getInstance().getString(R.string.check_wallet_name));
+
         new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), name).call(new WitnessResponseListener() {
             @Override
             public void onSuccess(WitnessResponse response) {

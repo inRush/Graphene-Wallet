@@ -27,7 +27,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     // 根布局
     protected View mRoot;
     protected Unbinder mRootUnbinder;
-    private SparseArray<QMUITipDialog> mLoadingMap = new SparseArray<>();
+    protected SparseArray<QMUITipDialog> mLoadings = new SparseArray<>();
     private int mCurrentLoadingId = 0;
 
     protected int generateLoadingId() {
@@ -103,11 +103,11 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected void showLoading(int code, String message) {
         final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_LOADING, message);
         dialog.show();
-        mLoadingMap.put(code, dialog);
+        mLoadings.put(code, dialog);
     }
 
     protected void dismissLoading(int code) {
-        QMUITipDialog dialog = mLoadingMap.get(code);
+        QMUITipDialog dialog = mLoadings.get(code);
         if (dialog != null) {
             dialog.dismiss();
         }

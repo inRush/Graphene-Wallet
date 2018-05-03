@@ -3,8 +3,10 @@ package com.gxb.gxswallet.db.asset;
 import android.content.Context;
 import android.util.ArrayMap;
 
+import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.BuildConfig;
 import com.gxb.gxswallet.db.BaseDaoManager;
+import com.gxb.gxswallet.utils.SharedPreferenceUtils;
 import com.ping.greendao.gen.AssetDataDao;
 
 import org.greenrobot.greendao.AbstractDao;
@@ -28,6 +30,8 @@ public class AssetDataManager extends BaseDaoManager<AssetData, Long> {
     private static List<AssetData> sAssetData_Product;
     private static List<AssetData> sAssetData_Test_Enable;
     private static List<AssetData> sAssetData_Product_Enable;
+    private static final String SP_DEFAULT_KEY_TEST = "default_asset_test";
+    private static final String SP_DEFAULT_KEY_PRODUCT = "default_asset_product";
     private static boolean isUpdate = false;
 
     public AssetDataManager(Context context) {
@@ -110,7 +114,27 @@ public class AssetDataManager extends BaseDaoManager<AssetData, Long> {
 
 
     public static AssetData getDefault() {
-        return getEnableList().get(0);
+        AssetData assetData = getEnableList().get(0);
+        if (BuildConfig.DEBUG) {
+            String asset = SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_TEST, assetData.getName());
+            if (!asset.equals(assetData.getName())) {
+                assetData = get(asset);
+            }
+        } else {
+            String asset = SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, assetData.getName());
+            if (!asset.equals(assetData.getName())) {
+                assetData = get(asset);
+            }
+        }
+        return assetData;
+    }
+
+    public static void setDefault(AssetData asset) {
+        if (BuildConfig.DEBUG) {
+            SharedPreferenceUtils.putString(App.getInstance(), SP_DEFAULT_KEY_TEST, asset.getName());
+        } else {
+            SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, asset.getName());
+        }
     }
 
     public static AssetData get(String assetName) {
@@ -163,14 +187,23 @@ public class AssetDataManager extends BaseDaoManager<AssetData, Long> {
                 "GXC",
                 true,
                 true);
+//        nets.add("wss://node.testnet.bitshares.eu/ws");
         nets = new ArrayList<>();
-        nets.add("wss://node.testnet.bitshares.eu/ws");
+        nets.add("ws://192.168.42.73:11011");
+//        AssetData mBtsTest = new AssetData(
+//                null,
+//                AssetSymbol.BTS.TEST,
+//                "1.3.0",
+//                nets,
+//                "TEST",
+//                false,
+//                true);
         AssetData BtsTest = new AssetData(
                 null,
-                AssetSymbol.BTS.TEST,
+                "BTS",
                 "1.3.0",
                 nets,
-                "TEST",
+                "BTS",
                 false,
                 true);
         assetsTest.put(AssetSymbol.GXS.TEST, GxsTest);

@@ -135,7 +135,7 @@
     <string name="wallet_already_backup">该钱包已备份</string>
     <string name="wallet_detail">钱包详情</string>
     <string name="modify_password">修改密码</string>
-    <string name="wallet_assets">钱包资产(GXS)</string>
+    <string name="wallet_assets">钱包资产(%1$s)</string>
     <string name="export_private_key">导出私钥</string>
     <string name="exporting_private_key">正在导出私钥</string>
     <string name="backup_memorizing_words">备份助记词</string>

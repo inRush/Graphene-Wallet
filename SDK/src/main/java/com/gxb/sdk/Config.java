@@ -13,7 +13,8 @@ public class Config {
     public static final String FAUCET_URL = "https://opengateway.gxb.io";
 
     public static final String RPC_URL_DEV = "http://106.14.180.117:28090";
-    public static final String RPC_URL_DEV_LOCAL = "http://gxb.ngrok.inrush.me";
+    public static final String RPC_URL_DEV_LOCAL_GXB = "http://192.168.42.73:8091";
+    public static final String RPC_URL_DEV_LOCAL_BTS = "http://192.168.42.73:8092";
     /**
      * exchange 地址
      */

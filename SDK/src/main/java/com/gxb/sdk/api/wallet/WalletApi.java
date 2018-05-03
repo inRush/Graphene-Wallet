@@ -162,4 +162,5 @@ public interface WalletApi {
 
 
     void registerAccount2(Object[] params, GxbCallBack callBack);
+    void registerAccount(Object[] params, GxbCallBack callBack);
 }

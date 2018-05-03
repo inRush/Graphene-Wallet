@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.services.WalletService;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
@@ -39,11 +39,13 @@ public class PrivateKeyDialogBuilder extends QMUIDialog.AutoResizeDialogBuilder 
     EditText mPasswordEt;
 
     private ClipboardManager mClipboard;
+    private WalletData mWalletData;
 
 
-    public PrivateKeyDialogBuilder(Context context) {
+    public PrivateKeyDialogBuilder(Context context, WalletData walletData) {
         super(context);
         mClipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        this.mWalletData = walletData;
     }
 
     public android.widget.EditText getEditText() {
@@ -63,8 +65,7 @@ public class PrivateKeyDialogBuilder extends QMUIDialog.AutoResizeDialogBuilder 
         QMUIRoundButton button = (QMUIRoundButton) v;
         if (button.getText().toString().equals(mContext.getString(R.string.unlock_wallet))) {
             String password = mPasswordEt.getText().toString();
-            String[] keys = WalletService.getInstance().unlockWallet(
-                    WalletManager.getInstance().getCurrentWallet(), password);
+            String[] keys = WalletService.getInstance().unlockWallet(mWalletData, password);
             if (keys[0] == null) {
                 App.showToast(mContext.getString(R.string.password_error));
             } else {

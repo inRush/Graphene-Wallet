@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gxb.gxswallet.R;
+import com.gxb.gxswallet.base.webview.RefreshAgentWebActivity;
 import com.gxb.gxswallet.page.main.ExchangeServiceProvider;
 import com.gxb.gxswallet.page.quotation.adapter.ExchangeRecyclerAdapter;
 import com.gxb.gxswallet.page.quotationdetail.QuotationDetailActivity;
@@ -54,7 +55,7 @@ public class QuotationFragment extends PresenterFragment<QuotationContract.Prese
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        mTopBar.setTitle(getString(R.string.quotation));
+        initTopBar();
         mExchangeRecyclerAdapter = new ExchangeRecyclerAdapter(new ArrayList<>());
         mExchangeList.setAdapter(mExchangeRecyclerAdapter);
         mExchangeList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,6 +67,11 @@ public class QuotationFragment extends PresenterFragment<QuotationContract.Prese
             }
         });
         showLoading(loadingCode, getString(R.string.get_quotation));
+    }
+
+    private void initTopBar() {
+        mTopBar.setTitle(getString(R.string.quotation));
+        mTopBar.addRightImageButton(R.drawable.feixiaohao,View.generateViewId()).setOnClickListener(v -> RefreshAgentWebActivity.start(getActivity(), "https://m.feixiaohao.com/"));
     }
 
     @Override

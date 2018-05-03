@@ -33,10 +33,12 @@ public class ModifyPasswordDialogBuilder extends QMUIDialog.AutoResizeDialogBuil
     EditText mOldPassword;
 
     QMUIDialog mDialog;
+    private WalletData mWalletData;
 
 
-    public ModifyPasswordDialogBuilder(Context context) {
+    public ModifyPasswordDialogBuilder(Context context, WalletData walletData) {
         super(context);
+        this.mWalletData = walletData;
     }
 
     @Override
@@ -69,17 +71,14 @@ public class ModifyPasswordDialogBuilder extends QMUIDialog.AutoResizeDialogBuil
             App.showToast(R.string.password_not_match);
             return;
         }
-        WalletData walletData = WalletManager.getInstance().getCurrentWallet();
-        String wifKey = WalletService.getInstance().unlockWallet(walletData, oldPassword)[0];
+        String wifKey = WalletService.getInstance().unlockWallet(mWalletData, oldPassword)[0];
 
         if (wifKey == null) {
             App.showToast(R.string.password_error);
             return;
         }
-        WalletData wallet = WalletService.getInstance().lockWallet(
-                walletData.getId(), walletData.getAccountId(), walletData.getName(),
-                wifKey, password, walletData.getIsBackUp(), walletData.getBrainKey());
-        if (WalletManager.getInstance().saveWallet(wallet)) {
+        WalletService.getInstance().lockWallet(mWalletData, wifKey, password);
+        if (WalletManager.getInstance().updateWallet(mWalletData)) {
             App.showToast(R.string.modify_success);
         } else {
             App.showToast(R.string.modify_failure);

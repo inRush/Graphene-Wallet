@@ -66,8 +66,8 @@ public class WalletManager {
         setCurrentWallet(getDefaultWallet());
     }
 
-    public WalletData getWallet(String address) {
-        return mWallets.get(address);
+    public WalletData getWallet(String name) {
+        return mWallets.get(name);
     }
 
     /**
@@ -99,20 +99,23 @@ public class WalletManager {
     }
 
     public boolean saveWallet(WalletData wallet) {
-        if (mWallets.containsKey(wallet.getName())) {
-            mWallets.put(wallet.getName(), wallet);
-            mWalletDataList.remove(wallet);
-            mWalletDataList.add(wallet);
-            if (mCurrentWallet != null && mCurrentWallet.getName().equals(wallet.getName())) {
-                mCurrentWallet = wallet;
-            }
-            return mWalletDataManager.update(wallet);
-        } else {
-            mWallets.put(wallet.getName(), wallet);
-            mWalletDataList.add(wallet);
-            return mWalletDataManager.insert(wallet);
-        }
+        mWallets.put(wallet.getName(), wallet);
+        mWalletDataList.add(wallet);
+        return mWalletDataManager.insert(wallet);
+    }
 
+    public boolean updateWallet(WalletData wallet) {
+        mWallets.put(wallet.getName(), wallet);
+        for (int i = 0; i < mWalletDataList.size(); i++) {
+            if (mWalletDataList.get(i).getName().equals(wallet.getName())) {
+                mWalletDataList.remove(i);
+                mWalletDataList.add(i, wallet);
+            }
+        }
+        if (mCurrentWallet != null && mCurrentWallet.getName().equals(wallet.getName())) {
+            mCurrentWallet = wallet;
+        }
+        return mWalletDataManager.update(wallet);
     }
 
     /**
@@ -122,6 +125,13 @@ public class WalletManager {
      * @return 是否删除成功
      */
     public boolean deleteWallet(WalletData wallet) {
+        mWallets.remove(wallet.getName());
+        for (int i = 0; i < mWalletDataList.size(); i++) {
+            if (mWalletDataList.get(i).getName().equals(wallet.getName())) {
+                mWalletDataList.remove(i);
+                break;
+            }
+        }
         return mWalletDataManager.delete(wallet);
     }
 

@@ -87,7 +87,6 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
     protected boolean initArgs(Bundle bundle) {
         if (bundle != null) {
             mSender = bundle.getParcelable(SENDER_KEY);
-            mCurrentWallet = WalletManager.getInstance().getCurrentWallet();
             return super.initArgs(bundle);
         }
         return false;
@@ -136,8 +135,31 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                 result = result.replace(Configure.QR_CODE_PRE_FIX, "");
                                 String[] res = result.split("&");
                                 String account = res[0].split("=")[1];
-                                String amount = res[1].split("=")[1];
-                                String coin = res[2].split("=")[1];
+                                String amount;
+                                String coin;
+                                if (res.length == 1) {
+                                    amount = "";
+                                    coin = AssetDataManager.getDefault().getName();
+                                } else if (res.length == 2) {
+                                    if (res[1].split("=").length == 2) {
+                                        amount = res[1].split("=")[1];
+                                    } else {
+                                        amount = "";
+                                    }
+                                    coin = AssetDataManager.getDefault().getName();
+                                } else {
+                                    if (res[1].split("=").length == 2) {
+                                        amount = res[1].split("=")[1];
+                                    } else {
+                                        amount = "";
+                                    }
+                                    if (res[2].split("=").length == 2) {
+                                        coin = res[2].split("=")[1];
+                                    } else {
+                                        coin = AssetDataManager.getDefault().getName();
+                                    }
+                                }
+
                                 if ("".equals(amount)) {
                                     amount = "0";
                                 }

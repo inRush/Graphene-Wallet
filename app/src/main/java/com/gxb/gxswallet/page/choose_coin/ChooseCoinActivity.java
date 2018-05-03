@@ -79,6 +79,11 @@ public class ChooseCoinActivity extends BaseActivity {
                 super.onItemClick(holder, data);
                 int pos = holder.getAdapterPosition();
                 AssetData coinData = coinDatas.get(pos);
+                if (coinData.getName().equals(AssetDataManager.getDefault().getName())) {
+                    showError(getString(R.string.not_allow_close_default_asset));
+                    mAdapter.notifyItemChanged(pos);
+                    return;
+                }
                 if (coinData.isEnable()) {
                     showLoading(mDisableAssetLoadingCode, getString(R.string.disconnecting_data));
                     WebSocketServicePool.getInstance().disconnect(coinData.getName(),

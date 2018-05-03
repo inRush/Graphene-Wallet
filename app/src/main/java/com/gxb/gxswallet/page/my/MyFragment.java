@@ -73,7 +73,7 @@ public class MyFragment extends PresenterFragment<MyContract.Presenter>
                 getString(R.string.system_setting),
         };
         partTwoSettings = new String[]{
-                getString(R.string.gxs_community)
+                getString(R.string.gxs_community),
         };
         partThreeSettings = new String[]{
                 getString(R.string.help_center),

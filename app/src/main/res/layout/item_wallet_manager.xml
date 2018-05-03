@@ -83,6 +83,7 @@
                 tools:text="0"/>
 
             <TextView
+                android:id="@+id/asset_symbol_wallet_manager_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

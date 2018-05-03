@@ -14,8 +14,13 @@ import com.gxb.sdk.models.GXSExchange;
 import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.kit.handler.runable.Action;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,6 +34,11 @@ public class ExchangeService extends Service {
     private GXSExchange mGXSExchange;
     private double mBestPriceRmb = 0;
     private double mBestPriceUsd = 0;
+    private double mBtsPrice = 0;
+
+
+
+    private HashMap<String, Double> mPriceMap = new HashMap<>();
     private ExchangeBinder mBinder = new ExchangeBinder(this);
 
     /**
@@ -96,6 +106,7 @@ public class ExchangeService extends Service {
                             double priceUsd = Double.parseDouble(exchange.getPrice_dollar());
                             if (priceRmb > bestPriceRmb) {
                                 bestPriceRmb = priceRmb;
+                                mPriceMap.put("GXS", bestPriceRmb);
                             }
                             if (priceUsd > bestPriceUsd) {
                                 bestPriceUsd = priceUsd;
@@ -106,16 +117,36 @@ public class ExchangeService extends Service {
                         noticeChange(EventActionCode.ACTION_CODE_EXCHANGE_LIST_CHANGE);
                     }
                 });
+                fetchBtsPrice();
             }
         });
     }
 
+    private void fetchBtsPrice() {
+        //文档对象，用来接收html页面
+        Document document = null;
+        try {
+            //获取指定网址的页面内容
+            document = Jsoup.connect("https://m.feixiaohao.com/currencies/bitshares/").timeout(50000).get();
+            Elements elements = document.select(".main");
+            String price = elements.html();
+            if (price != null) {
+                price = price.split("\n")[0];
+            }
+            if (price != null) {
+                price = price.substring(1);
+                mBtsPrice = Double.parseDouble(price);
+                mPriceMap.put("BTS", mBtsPrice);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void startFetchKLineLoop(final GXSExchange exchange) {
-        runLoop(3000, new Action() {
-            @Override
-            public void call() {
-                GxbApis.getInstance()
-                        .transactionApi().getExchange(exchange, new GxbCallBack() {
+        runLoop(3000, () -> GxbApis.getInstance()
+                .transactionApi().getExchange(exchange, new GxbCallBack() {
                     @Override
                     public void onFailure(Error error) {
                         error.printStackTrace();
@@ -126,9 +157,7 @@ public class ExchangeService extends Service {
                         mGXSExchange = GXSExchange.fromJson(result);
                         noticeChange(EventActionCode.ACTION_CODE_EXCHANGE_CHANGE);
                     }
-                });
-            }
-        });
+                }));
     }
 
 
@@ -164,6 +193,12 @@ public class ExchangeService extends Service {
         stopFetchExchangeListLoop();
     }
 
+    public double getBtsPrice() {
+        return mBtsPrice;
+    }
+    public HashMap<String, Double> getPriceMap() {
+        return mPriceMap;
+    }
     public class ExchangeBinder extends Binder {
         private WeakReference<ExchangeService> mServiceWeakReference;
 

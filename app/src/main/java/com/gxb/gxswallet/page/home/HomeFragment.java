@@ -22,7 +22,6 @@ import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
 import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.asset.AssetDataManager;
-import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.page.choose_coin.ChooseCoinActivity;
 import com.gxb.gxswallet.page.cointransaction.CoinTransactionHistoryActivity;
@@ -149,7 +148,8 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
             accountRecycler = navMenuNv
                     .inflateHeaderView(R.layout.fragment_home_drawer_header)
                     .findViewById(R.id.recycler_drawer_header);
-            mDrawerWalletRecyclerAdapter = new DrawerWalletRecyclerAdapter(wallets);
+            mDrawerWalletRecyclerAdapter = new DrawerWalletRecyclerAdapter(wallets, getWalletIndex(wallets,
+                    WalletManager.getInstance().getDefaultWallet()));
             accountRecycler.setAdapter(mDrawerWalletRecyclerAdapter);
             accountRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
             mDrawerWalletRecyclerAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<WalletData>() {
@@ -164,6 +164,15 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
         } else {
             mDrawerWalletRecyclerAdapter.notifyDataSetChanged();
         }
+    }
+
+    private int getWalletIndex(List<WalletData> wallets, WalletData wallet) {
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getName().equals(wallet.getName())) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     @OnClick(R.id.qrcode_home)
@@ -202,20 +211,22 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     /**
      * 计算币种的价值
      *
-     * @param bestPrice 所有交易所最佳的价格
+     * @param priceMap 所有交易所最佳的价格
      * @return 全部币种的价格
      */
-    public double calculateCoinPrice(double bestPrice) {
+    public double calculateCoinPrice(HashMap<String, Double> priceMap) {
         double totalPrice = 0;
         for (int i = 0; i < mCoinItems.size(); i++) {
             CoinItem coinItem = mCoinItems.get(i);
             String name = coinItem.getName();
-            double price = 0;
-            if (AssetSymbol.GXS.getName().equals(name)) {
-                price = coinItem.getAmount() * bestPrice;
+            Double price = priceMap.get(name);
+            if (price == null) {
+                totalPrice += coinItem.getPrice();
+                continue;
             }
-            totalPrice += price;
+            price = coinItem.getAmount() * price;
             coinItem.setPrice(price);
+            totalPrice += price;
         }
         return totalPrice;
     }
@@ -223,7 +234,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     private boolean checkBalanceIsEmpty() {
         for (int i = 0; i < mCoinItems.size(); i++) {
             CoinItem coinItem = mCoinItems.get(i);
-            if (coinItem.getAmount() != 0) {
+            if (coinItem.getAmount() != 0 && coinItem.getName().equals("GXS")) {
                 return false;
             }
         }
@@ -241,7 +252,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                 if (mExchangeServiceProvider.getService() == null) {
                     return;
                 }
-                final double totalPrice = calculateCoinPrice(mExchangeServiceProvider.getService().getBestPriceRmb());
+                final double totalPrice = calculateCoinPrice(mExchangeServiceProvider.getService().getPriceMap());
                 Run.onUiSync(() -> {
                     mCoinRecyclerAdapter.notifyDataSetChanged();
                     totalAssets.setText(getString(R.string.total_assets, df.format(totalPrice)));
@@ -331,8 +342,31 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                 result = result.replace(Configure.QR_CODE_PRE_FIX, "");
                                 String[] res = result.split("&");
                                 String account = res[0].split("=")[1];
-                                String amount = res[1].split("=")[1];
-                                String coin = res[2].split("=")[1];
+                                String amount;
+                                String coin;
+                                if (res.length == 1) {
+                                    amount = "";
+                                    coin = AssetDataManager.getDefault().getName();
+                                } else if (res.length == 2) {
+                                    if (res[1].split("=").length == 2) {
+                                        amount = res[1].split("=")[1];
+                                    } else {
+                                        amount = "";
+                                    }
+                                    coin = AssetDataManager.getDefault().getName();
+                                } else {
+                                    if (res[1].split("=").length == 2) {
+                                        amount = res[1].split("=")[1];
+                                    } else {
+                                        amount = "";
+                                    }
+                                    if (res[2].split("=").length == 2) {
+                                        coin = res[2].split("=")[1];
+                                    } else {
+                                        coin = AssetDataManager.getDefault().getName();
+                                    }
+                                }
+
                                 if ("".equals(amount)) {
                                     amount = "0";
                                 }

@@ -132,6 +132,7 @@ public class WebSocketServicePool {
 
     public WebSocketService getService(String assetName) {
         if (!mWebSocketServiceCompleteMap.get(assetName).equals(Status.CONNECTION_COMPLETE)) {
+            mWebSocketServiceMap.get(assetName).reconnect();
             return null;
         }
         return mWebSocketServiceMap.get(assetName);

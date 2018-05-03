@@ -231,10 +231,7 @@ public class WalletService {
             WalletData wallet = lockWallet(null, "", walletName, wifKey, password, false, brainKey.getBrainKey());
             String pubKey = PrivateKey.fromWif(wifKey).toPublicKey().toPublicKeyString();
 
-            GxbApis.getInstance()
-                    .walletApi().registerAccount2(new Object[]{
-                    wallet.getName(), pubKey, pubKey, pubKey, "1.2.28", "1.2.28", 10, "GXS", true
-            }, new GxbCallBack() {
+            GxbCallBack callBack = new GxbCallBack() {
                 @Override
                 public void onFailure(Error error) {
                     listener.onFailure(error);
@@ -242,22 +239,41 @@ public class WalletService {
 
                 @Override
                 public void onSuccess(String result) {
-                    new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), walletName).call(new WitnessResponseListener() {
+                    String pubKey = PrivateKey.fromWif(wifKey).toPublicKey().toPublicKeyString("BTS");
+                    GxbApis.getInstance()
+                            .walletApi().registerAccount(new Object[]{
+                            wallet.getName(), pubKey, pubKey, "nathan", "nathan", 0, true
+                    }, new GxbCallBack() {
                         @Override
-                        public void onSuccess(WitnessResponse response) {
-                            AccountProperties account = (AccountProperties) response.result;
-                            wallet.setAccountId(account.id);
-                            mWalletDataManager.insert(wallet);
-                            listener.onSuccess(wallet);
+                        public void onFailure(Error error) {
+                            listener.onFailure(new Error(error.getMessage()));
                         }
 
                         @Override
-                        public void onError(BaseResponse.Error error) {
-                            listener.onFailure(new Error(error.message));
+                        public void onSuccess(String result) {
+                            new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), walletName).call(new WitnessResponseListener() {
+                                @Override
+                                public void onSuccess(WitnessResponse response) {
+                                    AccountProperties account = (AccountProperties) response.result;
+                                    wallet.setAccountId(account.id);
+                                    WalletManager.getInstance().saveWallet(wallet);
+                                    listener.onSuccess(wallet);
+                                }
+
+                                @Override
+                                public void onError(BaseResponse.Error error) {
+                                    listener.onFailure(new Error(error.message));
+                                }
+                            });
                         }
                     });
+
                 }
-            });
+            };
+            GxbApis.getInstance()
+                    .walletApi().registerAccount2(new Object[]{
+                    wallet.getName(), pubKey, pubKey, pubKey, "1.2.28", "1.2.28", 10, "GXS", true
+            }, callBack);
         }
     }
 
@@ -362,6 +378,28 @@ public class WalletService {
         final String passwordPub = passwordPrivate.toPublicKey().toPublicKeyString();
 
         return new WalletData(id, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
+    }
+
+    public void lockWallet(WalletData wallet, String wifKey, String password) {
+        AesKeyCipher passwordAes = new AesKeyCipher(password);
+        // 获取一个随机生成的私钥
+        byte[] encryptionBytes = KeyUtil.getRandomKey().toBytes();
+        // 密码生成的加密密钥
+        final String encryptionKey = HexUtils.toHex(passwordAes.encrypt(encryptionBytes));
+        // 本地Aes加密器
+        AesKeyCipher localAesPrivate = new AesKeyCipher(HexUtils.toHex(encryptionBytes));
+        // 加密wifkey
+        String encryptedWifkey = HexUtils.toHex(localAesPrivate.encrypt(wifKey.getBytes()));
+        String encryptedBrainKey = wallet.getBrainKey();
+        if (!"".equals(wallet.getBrainKey()) && wallet.getBrainKey() != null) {
+            encryptedBrainKey = HexUtils.toHex(localAesPrivate.encrypt(wallet.getBrainKey().getBytes()));
+        }
+        PrivateKey passwordPrivate = PrivateKey.fromSeed(password);
+        final String passwordPub = passwordPrivate.toPublicKey().toPublicKeyString();
+        wallet.setPasswordPubKey(passwordPub);
+        wallet.setEncryptionKey(encryptionKey);
+        wallet.setEncryptedWifkey(encryptedWifkey);
+        wallet.setBrainKey(encryptedBrainKey);
     }
 
     public Observable<HashMap<String, Double>> fetchAllAccountBalance(String accountName) {

@@ -12,9 +12,6 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.sxds.common.utils.LanguageUtil;
 
-import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
-
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -28,7 +25,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Unbinder mRootUnbinder;
-    private SparseArray<QMUITipDialog> mLoadingMap = new SparseArray<>();
+    protected SparseArray<QMUITipDialog> mLoadings = new SparseArray<>();
     private int mCurrentLoadingId = 0;
 
     protected int generateLoadingId() {
@@ -95,44 +92,63 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    protected void showLoading(int code, String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_LOADING, message);
-        dialog.show();
-        mLoadingMap.put(code, dialog);
+    protected void showLoading(final int code, final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                        .setTipWord(message)
+                        .create();
+                dialog.show();
+                mLoadings.put(code, dialog);
+            }
+        });
     }
 
     protected void dismissLoading(int code) {
-        QMUITipDialog dialog = mLoadingMap.get(code);
+        QMUITipDialog dialog = mLoadings.get(code);
         if (dialog != null) {
             dialog.dismiss();
         }
     }
 
     protected void showOk(final String message) {
-        Run.onUiSync(new Action() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void call() {
-                final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
+            public void run() {
+                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+                        .setTipWord(message)
+                        .create();
                 dialog.show();
-                Run.onBackground(new Action() {
-                    @Override
-                    public void call() {
-                        try {
-                            Thread.sleep(2000);
-                            dialog.dismiss();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                delayDismissDialog(dialog, 1500);
             }
         });
     }
 
-    protected void showError(String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_FAIL, message);
-        dialog.show();
-        delayDismissDialog(dialog, 2000);
+    protected void showError(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissAllLoading();
+                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
+                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
+                        .setTipWord(message)
+                        .create();
+                dialog.show();
+                delayDismissDialog(dialog, 1500);
+            }
+        });
+    }
+
+    public void dismissAllLoading() {
+        for (int i = 0; i < mLoadings.size(); i++) {
+            QMUITipDialog dialog = mLoadings.valueAt(i);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
     }
 
     public void showError(int strRes) {

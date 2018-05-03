@@ -1,10 +1,8 @@
 package com.sxds.common.app;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.sxds.common.presenter.BaseContract;
 
 /**
@@ -33,73 +31,22 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
 
     @Override
     public void showError(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dismissAllLoading();
-                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                delayDismissDialog(dialog, 1500);
-            }
-        });
+        super.showError(str);
     }
-
-    private void delayDismissDialog(final QMUITipDialog dialog, int delay) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        }, delay);
-    }
-
 
     @Override
     public void showLoading(final int code, final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                mLoadings.put(code, dialog);
-            }
-        });
+        super.showLoading(code, str);
     }
 
     @Override
     public void showOk(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                delayDismissDialog(dialog, 1500);
-            }
-        });
+        super.showOk(str);
     }
 
     @Override
     public void showInfo(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(PresenterActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                delayDismissDialog(dialog, 1500);
-            }
-        });
+        super.showInfo(str);
     }
 
     @Override
@@ -125,21 +72,12 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
 
     @Override
     public void dismissAllLoading() {
-        for (int i = 0; i < mLoadings.size(); i++) {
-            QMUITipDialog dialog = mLoadings.valueAt(i);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        }
+        super.dismissAllLoading();
     }
 
     @Override
     public void dismissLoading(int code) {
         super.dismissLoading(code);
-        QMUITipDialog dialog = mLoadings.get(code);
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
     }
 
     @Override

@@ -26,9 +26,13 @@ public class DrawerWalletRecyclerAdapter extends RecyclerAdapter<WalletData> {
     private int currentSelect = 0;
 
     public DrawerWalletRecyclerAdapter(List<WalletData> wallets) {
-        super(wallets);
+        this(wallets, 0);
     }
 
+    public DrawerWalletRecyclerAdapter(List<WalletData> wallets, int currentSelect) {
+        super(wallets);
+        this.currentSelect = currentSelect;
+    }
 
     @Override
     protected int getItemViewType(int position, WalletData data) {

@@ -1,9 +1,6 @@
 package com.sxds.common.presenter;
 
 import android.support.annotation.StringRes;
-import android.util.SparseArray;
-
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 /**
  * MVP模式中公共的基本的契约
@@ -15,7 +12,6 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 public class BaseContract {
     public interface View<T extends Presenter> {
-        SparseArray<QMUITipDialog> mLoadings = new SparseArray<>();
 
 
 
