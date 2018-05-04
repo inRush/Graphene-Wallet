@@ -128,7 +128,7 @@
     <string name="import_message_error">导入信息有误,请确认正确填写</string>
     <string name="account_not_exist">账户不存在</string>
     <string name="memorizing_words_count_error">助记词数量错误</string>
-    <string name="dialog_private_key_notice">安全警告： 私钥未经加密，导出存在风险，建议使用助记词进行备份，而且本钱包不支持私钥导入。</string>
+    <string name="dialog_private_key_notice">安全警告： 私钥未经加密，导出存在风险，建议使用助记词进行备份。</string>
     <string name="dialog_private_key_placeholder">请解锁钱包</string>
     <string name="connect_exception">连接异常</string>
     <string name="data_exception">数据异常</string>

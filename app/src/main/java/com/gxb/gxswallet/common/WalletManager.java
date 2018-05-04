@@ -158,6 +158,9 @@ public class WalletManager {
      * @return {@link WalletData} 当前的钱包
      */
     public WalletData getCurrentWallet() {
+        if(mCurrentWallet == null){
+            return mWalletDataList.get(0);
+        }
         return mCurrentWallet;
     }
 

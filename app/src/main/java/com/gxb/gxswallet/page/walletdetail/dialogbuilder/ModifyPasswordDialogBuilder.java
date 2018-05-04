@@ -77,7 +77,7 @@ public class ModifyPasswordDialogBuilder extends QMUIDialog.AutoResizeDialogBuil
             App.showToast(R.string.password_error);
             return;
         }
-        WalletService.getInstance().lockWallet(mWalletData, wifKey, password);
+        WalletService.getInstance().lockWallet(mWalletData, wifKey, password, oldPassword);
         if (WalletManager.getInstance().updateWallet(mWalletData)) {
             App.showToast(R.string.modify_success);
         } else {

@@ -380,7 +380,8 @@ public class WalletService {
         return new WalletData(id, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
     }
 
-    public void lockWallet(WalletData wallet, String wifKey, String password) {
+    public void lockWallet(WalletData wallet, String wifKey, String password, String oldPassword) {
+        String[] datas = unlockWallet(wallet, oldPassword);
         AesKeyCipher passwordAes = new AesKeyCipher(password);
         // 获取一个随机生成的私钥
         byte[] encryptionBytes = KeyUtil.getRandomKey().toBytes();
@@ -390,9 +391,12 @@ public class WalletService {
         AesKeyCipher localAesPrivate = new AesKeyCipher(HexUtils.toHex(encryptionBytes));
         // 加密wifkey
         String encryptedWifkey = HexUtils.toHex(localAesPrivate.encrypt(wifKey.getBytes()));
-        String encryptedBrainKey = wallet.getBrainKey();
-        if (!"".equals(wallet.getBrainKey()) && wallet.getBrainKey() != null) {
-            encryptedBrainKey = HexUtils.toHex(localAesPrivate.encrypt(wallet.getBrainKey().getBytes()));
+        String encryptedBrainKey = "";
+        if (!wallet.getIsBackUp()) {
+            encryptedBrainKey = datas[1];
+        }
+        if (!"".equals(encryptedBrainKey) && encryptedBrainKey != null) {
+            encryptedBrainKey = HexUtils.toHex(localAesPrivate.encrypt(encryptedBrainKey.getBytes()));
         }
         PrivateKey passwordPrivate = PrivateKey.fromSeed(password);
         final String passwordPub = passwordPrivate.toPublicKey().toPublicKeyString();

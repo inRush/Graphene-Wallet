@@ -167,12 +167,12 @@ public class AssetDataManager extends BaseDaoManager<AssetData, Long> {
             sAssetData_Product = dataManager.queryProductAsset();
             sAssetData_Test_Enable = dataManager.queryEnableTestAsset();
             sAssetData_Product_Enable = dataManager.queryEnableProductAsset();
-            for (AssetData assetData : sAssetData_Test) {
-                assetsTest.put(assetData.getName(), assetData);
-            }
-            for (AssetData assetData : sAssetData_Product) {
-                assetsProduct.put(assetData.getName(), assetData);
-            }
+        }
+        for (AssetData assetData : sAssetData_Test) {
+            assetsTest.put(assetData.getName(), assetData);
+        }
+        for (AssetData assetData : sAssetData_Product) {
+            assetsProduct.put(assetData.getName(), assetData);
         }
     }
 
