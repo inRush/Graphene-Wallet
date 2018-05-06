@@ -31,7 +31,7 @@ public class RpcTask extends Task<WitnessResponse, RpcTask> {
     @Override
     protected Observable<RpcTask> runTask() {
         if (mRpc == null) {
-            return getEmptyTask();
+            return Observable.empty();
         }
         if (getRpc().getService() == null || !getRpc().getService().isInitializedComplete()) {
             return Observable.error(new Throwable("数据重连中,请稍后再试"));
@@ -50,15 +50,5 @@ public class RpcTask extends Task<WitnessResponse, RpcTask> {
                 e.onError(new Throwable(error.message));
             }
         }));
-    }
-
-    private Observable<RpcTask> getEmptyTask() {
-        return Observable.create(e -> {
-            WitnessResponse response = new WitnessResponse();
-            response.result = null;
-            taskFinish(response);
-            e.onNext(RpcTask.this);
-            e.onComplete();
-        });
     }
 }
