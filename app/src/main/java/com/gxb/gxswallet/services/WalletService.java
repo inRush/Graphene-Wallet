@@ -3,13 +3,13 @@ package com.gxb.gxswallet.services;
 import com.google.gson.Gson;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.Task;
-import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.base.Task;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.services.rpc.RpcTask;
 import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.gxb.gxswallet.utils.AssetsUtil;
@@ -63,11 +63,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-//import com.gxb.sdk.ecc.PrivateKey;
-//import com.gxb.sdk.crypto.utils.AesKeyCipher;
-//import com.gxb.sdk.crypto.utils.HexUtils;
-//import com.gxb.sdk.crypto.utils.KeyUtil;
 
 /**
  * @author inrush
@@ -150,7 +145,7 @@ public class WalletService {
         WalletData walletData = lockWallet(null, "", "", wifKey, password, true, null);
         ECKey privateKey = DumpedPrivateKey.fromBase58(null, wifKey).getKey();
         List<Address> addresses = new ArrayList<>();
-        AssetData asset = AssetDataManager.getDefault();
+        AssetData asset = AssetManager.getInstance().getDefault();
         addresses.add(new Address(ECKey.fromPublicOnly(privateKey.getPubKey()), asset.getPrefix()));
         RpcTask rpcTask = new RpcTask(
                 new GetKeyReferences(WebSocketServicePool.getInstance().getService(asset.getName()), addresses),
@@ -186,7 +181,6 @@ public class WalletService {
                         String exist = "";
                         UserAccount account = ((List<UserAccount>) rpcTask.getData().result).get(0);
                         walletData.setName(account.getName());
-                        walletData.setAccountId(account.getObjectId());
                         boolean isKeyAvailable = checkKeyAvailable(addresses.get(0).getPublicKey(), account);
                         if (isKeyAvailable) {
                             boolean alreadyExist = checkIsExist(wallets, walletData);
@@ -248,7 +242,6 @@ public class WalletService {
                                 @Override
                                 public void onSuccess(WitnessResponse response) {
                                     AccountProperties account = (AccountProperties) response.result;
-                                    wallet.setAccountId(account.id);
                                     WalletManager.getInstance().saveWallet(wallet);
                                     listener.onSuccess(wallet);
                                 }
@@ -370,7 +363,7 @@ public class WalletService {
         PrivateKey passwordPrivate = PrivateKey.fromSeed(password);
         final String passwordPub = passwordPrivate.toPublicKey().toPublicKeyString();
 
-        return new WalletData(id, accountId, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
+        return new WalletData(id, walletName, passwordPub, encryptionKey, encryptedWifkey, isBackup, encryptedBrainKey);
     }
 
     public void lockWallet(WalletData wallet, String wifKey, String password, String oldPassword) {
@@ -400,20 +393,19 @@ public class WalletService {
     }
 
     public Observable<HashMap<String, Double>> fetchAllAccountBalance(String accountName) {
-        HashMap<String, Double> result = new HashMap<>(AssetDataManager.getEnableList().size());
+        HashMap<String, Double> result = new HashMap<>(AssetManager.getInstance().getEnableList().size());
         return Observable.create(e -> fetchAllAccountByName(accountName)
                 .flatMap(data -> {
-                    List<AssetData> coins = AssetDataManager.getEnableList();
-                    List<Object[]> args = new ArrayList<>();
-                    for (AssetData assetData : coins) {
-                        Object[] arg = new Object[2];
-                        arg[0] = data.get(assetData.getName()).id;
-                        arg[1] = assetData.getAssetId();
-                        args.add(arg);
+                    List<AssetData> coins = AssetManager.getInstance().getEnableList();
+                    RpcTask[] tasks = new RpcTask[coins.size()];
+                    for (int i = 0; i < coins.size(); i++) {
+                        AssetData assetData = coins.get(i);
+                        WebSocketService service = WebSocketServicePool.getInstance().getService(assetData.getName());
+                        tasks[i] = new RpcTask(new GetAccountBalances(
+                                service, data.get(assetData.getName()).id, assetData.getAssetId()
+                        ), assetData.getName());
                     }
-                    RpcTask[] task = WebSocketServicePool.getInstance()
-                            .generateTasks(GetAccountBalances.class, new Class[]{String.class, String.class}, args);
-                    return Observable.fromArray(task).flatMap(Task::run);
+                    return Observable.fromArray(tasks).flatMap(Task::run);
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rpcTask -> {
@@ -422,7 +414,7 @@ public class WalletService {
                             @SuppressWarnings("unchecked")
                             List<AssetAmount> assetAmounts =
                                     (List<AssetAmount>) rpcTask.getData().result;
-                            result.put(rpcTask.getTag(), assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE);
+                            result.put(rpcTask.getTag(), assetAmounts.get(0).getAmount().doubleValue() / AssetManager.AMOUNT_SIZE);
                         }
                     }
                 }, e::onError, () -> {
@@ -439,7 +431,7 @@ public class WalletService {
                 }).subscribeOn(Schedulers.io())
                 .subscribe(rpcTask -> {
                     List<AssetAmount> assetAmounts = (List<AssetAmount>) rpcTask.getData().result;
-                    e.onNext(assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE);
+                    e.onNext(assetAmounts.get(0).getAmount().doubleValue() / AssetManager.AMOUNT_SIZE);
                 }, e::onError, e::onComplete));
 
     }
@@ -501,7 +493,7 @@ public class WalletService {
                     .subscribe(accounts1 -> {
                         Memo m = null;
                         if (memo != null && !"".equals(memo)) {
-                            m = generateMemo(sourcePrivate, AssetDataManager.get(service.getSocketTag()),
+                            m = generateMemo(sourcePrivate, AssetManager.getInstance().get(service.getSocketTag()),
                                     accounts1.get(fromName).options.getMemoKey(), accounts1.get(toName).options.getMemoKey(), memo);
                         }
                         TransferOperation transferOperation = new TransferOperationBuilder()

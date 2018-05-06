@@ -39,10 +39,10 @@ public class GetAccountBalances extends BaseRpcHandler {
         this.mAccountId = accountId;
     }
 
-    public GetAccountBalances(WebSocketService service, String accountId, String asset) {
+    public GetAccountBalances(WebSocketService service, String accountId, String assetId) {
         super(service);
         List<String> assetList = new ArrayList<>();
-        assetList.add(asset);
+        assetList.add(assetId);
         this.mAssetList = assetList;
         this.mAccountId = accountId;
     }
