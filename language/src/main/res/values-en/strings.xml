@@ -155,7 +155,7 @@
     <string name="data_exception">数据异常</string>
     <string name="loading_transaction_list">正在加载交易列表</string>
     <string name="transaction_history">交易历史</string>
-    <string name="no_transaction_history">没有交易纪录</string>
+    <string name="no_transaction_history">没有交易记录</string>
     <string name="transaction_detail">交易详情</string>
     <string name="send_to_this_account">转到以下账户</string>
     <string name="from_this_account">来自以下账户</string>
