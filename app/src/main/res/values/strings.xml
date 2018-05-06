@@ -64,7 +64,7 @@
     <string name="edit_contact">编辑联系人</string>
     <string name="save">保存</string>
     <string name="community">社区</string>
-    <string name="transaction_record">交易纪录</string>
+    <string name="transaction_record">交易记录</string>
     <string name="my_wallet">我的钱包</string>
     <string name="my_card">我的名片</string>
     <string name="system_setting">系统设置</string>
@@ -134,7 +134,7 @@
     <string name="data_exception">数据异常</string>
     <string name="loading_transaction_list">正在加载交易列表</string>
     <string name="transaction_history">交易历史</string>
-    <string name="no_transaction_history">没有交易纪录</string>
+    <string name="no_transaction_history">没有交易记录</string>
     <string name="transaction_detail">交易详情</string>
     <string name="send_to_this_account">转到以下账户</string>
     <string name="from_this_account">来自以下账户</string>
@@ -181,4 +181,5 @@
     <string name="default_asset">默认资产</string>
     <string name="not_allow_close_default_asset">不能关闭默认资产</string>
     <string name="more">更多</string>
+    <string name="send_balance_not_allow_pay">发送账户余额不足</string>
 </resources>
