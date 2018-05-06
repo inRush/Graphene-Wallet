@@ -6,17 +6,17 @@ package cy.agorise.graphenej.models;
  */
 
 public class ApiCode {
-    private int dataseId;
+    private int databaseId;
     private int networkBroadcastId;
     private int historyId;
     private int cryptoId;
 
-    public int getDataseId() {
-        return dataseId;
+    public int getDatabaseId() {
+        return databaseId;
     }
 
-    public void setDataseId(int dataseId) {
-        this.dataseId = dataseId;
+    public void setDatabaseId(int databaseId) {
+        this.databaseId = databaseId;
     }
 
     public int getNetworkBroadcastId() {

@@ -57,7 +57,7 @@ public class InitApiCode extends BaseGrapheneHandler {
         } else if (baseResponse.id == LOGIN_ID) {
             sendCall(websocket, RPC.CALL_DATABASE, DATABASE_ID);
         } else if (baseResponse.id == DATABASE_ID) {
-            mApiCode.setDataseId(getId(response));
+            mApiCode.setDatabaseId(getId(response));
             sendCall(websocket, RPC.CALL_NETWORK_BROADCAST, NETWORK_BROADCAST_ID);
         } else if (baseResponse.id == NETWORK_BROADCAST_ID) {
             mApiCode.setNetworkBroadcastId(getId(response));

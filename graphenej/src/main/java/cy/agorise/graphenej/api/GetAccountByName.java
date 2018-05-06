@@ -35,7 +35,7 @@ public class GetAccountByName extends BaseRpcHandler {
 
     @Override
     protected int getApiId() {
-        return mService.apiCode.getDataseId();
+        return mService.apiCode.getDatabaseId();
     }
 
     @Override
