@@ -1,6 +1,6 @@
 package com.gxb.gxswallet.services.rpc;
 
-import com.gxb.gxswallet.common.Task;
+import com.gxb.gxswallet.base.Task;
 
 import cy.agorise.graphenej.api.BaseRpcHandler;
 import cy.agorise.graphenej.interfaces.WitnessResponseListener;

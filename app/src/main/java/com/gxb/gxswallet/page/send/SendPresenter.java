@@ -2,10 +2,10 @@ package com.gxb.gxswallet.page.send;
 
 import com.google.common.primitives.UnsignedLong;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.services.WalletService;
 import com.gxb.gxswallet.services.rpc.RpcTask;
 import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
@@ -55,7 +55,7 @@ public class SendPresenter extends BasePresenter<SendContract.View>
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(rpcTask -> {
                                 List<AssetAmount> assetAmounts = (List<AssetAmount>) rpcTask.getData().result;
-                                getView().onQueryFeeSuccess(assetAmounts.get(0).getAmount().doubleValue() / AssetDataManager.AMOUNT_SIZE,
+                                getView().onQueryFeeSuccess(assetAmounts.get(0).getAmount().doubleValue() / AssetManager.AMOUNT_SIZE,
                                         aBoolean -> {
                                             e.onNext(aBoolean);
                                             if (aBoolean) {
@@ -86,7 +86,7 @@ public class SendPresenter extends BasePresenter<SendContract.View>
 
     @Override
     public List<AssetData> fetchAssets() {
-        return AssetDataManager.getEnableList();
+        return AssetManager.getInstance().getEnableList();
     }
 
 

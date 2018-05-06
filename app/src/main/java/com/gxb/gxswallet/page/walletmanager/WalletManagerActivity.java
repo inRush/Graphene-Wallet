@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.activity.ExchangeServicePresenterActivity;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
 import com.gxb.gxswallet.page.createwallet.CreateWalletActivity;
 import com.gxb.gxswallet.page.importaccount.ImportWalletActivity;
 import com.gxb.gxswallet.page.walletdetail.WalletDetailActivity;
@@ -99,7 +99,7 @@ public class WalletManagerActivity extends ExchangeServicePresenterActivity<Wall
         super.onResume();
         mWallets = mPresenter.fetchWallets();
         for (WalletData wallet : mWallets) {
-            mPresenter.fetchWalletBalance(wallet, AssetDataManager.getDefault());
+            mPresenter.fetchWalletBalance(wallet, AssetManager.getInstance().getDefault());
         }
         mAdapter.replace(mWallets);
         mAdapter.notifyDataSetChanged();
@@ -117,7 +117,7 @@ public class WalletManagerActivity extends ExchangeServicePresenterActivity<Wall
 
     @Override
     public void onFetchWalletBalanceSuccess(WalletData wallet, double balance) {
-        wallet.setBalances(AssetDataManager.getDefault().getName(), balance);
+        wallet.setBalances(AssetManager.getInstance().getDefault().getName(), balance);
         mCompleteCount += 1;
         if (mCompleteCount == mWallets.size()) {
             mAdapter.notifyDataSetChanged();

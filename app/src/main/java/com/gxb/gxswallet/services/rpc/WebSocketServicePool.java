@@ -1,5 +1,7 @@
 package com.gxb.gxswallet.services.rpc;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +9,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
 import com.gxb.gxswallet.App;
+import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -28,11 +31,17 @@ import cy.agorise.graphenej.api.android.util.NetUtil;
  */
 
 public class WebSocketServicePool {
+    @SuppressLint("StaticFieldLeak")
     private static WebSocketServicePool sServicePool;
     private LinkedHashMap<String, WebSocketService> mWebSocketServiceMap;
     private HashMap<String, Status> mWebSocketServiceCompleteMap;
     private List<WebSocketService> mWebSocketServices;
     private Context mContext;
+
+    private OnAddConnectListener mOnAddConnectListener;
+    private OnDisconnectListener mOnDisconnectListener;
+    private String mAddConnectName;
+    private String mDisconnectName;
 
     public enum Status {
         /**
@@ -74,7 +83,7 @@ public class WebSocketServicePool {
         mWebSocketServices = new ArrayList<>();
     }
 
-    public void connect(String assetName, String url) {
+    private void connect(String assetName, String url) {
         WebSocketService service = new WebSocketService(mContext);
         service.connect(url, assetName);
         mWebSocketServiceMap.put(assetName, service);
@@ -107,10 +116,7 @@ public class WebSocketServicePool {
         void onDisconnectedSuccess();
     }
 
-    private OnAddConnectListener mOnAddConnectListener;
-    private OnDisconnectListener mOnDisconnectListener;
-    private String mAddConnectName;
-    private String mDisconnectName;
+
 
     public synchronized void addConnect(String assetName, String url, OnAddConnectListener listener) {
         mOnAddConnectListener = listener;
@@ -199,10 +205,10 @@ public class WebSocketServicePool {
 
     }
 
-    public void initPool() {
-        mContext = App.getInstance();
+    public void initPool(Application context) {
+        mContext = context;
         registerReceiver();
-        List<AssetData> assets = AssetDataManager.getEnableList();
+        List<AssetData> assets = AssetManager.getInstance().getEnableList();
         for (AssetData asset : assets) {
             connect(asset.getName(), asset.getNets().get(0));
         }
@@ -254,7 +260,6 @@ public class WebSocketServicePool {
             switch (action) {
                 case WebSocketService.ACTION_COMPLETE:
                     mWebSocketServiceCompleteMap.put(assetName, Status.CONNECTION_COMPLETE);
-//                    App.showToast(String.format(Locale.CHINA, "%s 数据连接成功", assetName));
                     if (Objects.equals(mAddConnectName, assetName) && mOnAddConnectListener != null) {
                         mAddConnectName = null;
                         mOnAddConnectListener.onConnectedSuccess();
@@ -263,11 +268,9 @@ public class WebSocketServicePool {
                     break;
                 case WebSocketService.ACTION_CONNECT_ERROR:
                     mWebSocketServiceCompleteMap.put(assetName, Status.CONNECTION_FAIL);
-//                    App.showToast(String.format(Locale.CHINA, "%s 数据连接失败,正在重连", assetName));
                     break;
                 case WebSocketService.ACTION_DISCONNECTED:
                     mWebSocketServiceCompleteMap.put(assetName, Status.CONNECTION_DISCONNECTED);
-//                    App.showToast(String.format(Locale.CHINA, "%s 数据连接断开,正在重连", assetName));
                     if (Objects.equals(mDisconnectName, assetName) && mOnDisconnectListener != null) {
                         mDisconnectName = null;
                         mOnDisconnectListener.onDisconnectedSuccess();
@@ -276,7 +279,7 @@ public class WebSocketServicePool {
                     break;
                 case WebSocketService.ACTION_CONNECT_TIMEOUT:
                     mWebSocketServiceCompleteMap.put(assetName, Status.CONNECTION_TIMEOUT);
-                    App.showToast("数据连接失败,请检查网络连接");
+                    App.showToast(R.string.connection_connect_failure);
                     if (Objects.equals(mAddConnectName, assetName) && mOnAddConnectListener != null) {
                         mAddConnectName = null;
                         mOnAddConnectListener.onConnectedFailure();

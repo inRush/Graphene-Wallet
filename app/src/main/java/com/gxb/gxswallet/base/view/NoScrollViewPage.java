@@ -1,4 +1,4 @@
-package com.gxb.gxswallet.base;
+package com.gxb.gxswallet.base.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

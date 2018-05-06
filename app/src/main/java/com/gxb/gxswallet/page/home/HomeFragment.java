@@ -18,11 +18,11 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.choose_coin.ChooseCoinActivity;
 import com.gxb.gxswallet.page.cointransaction.CoinTransactionHistoryActivity;
 import com.gxb.gxswallet.page.createwallet.CreateWalletActivity;
@@ -116,19 +116,25 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     }
 
     private void initCoinList() {
-        mCoinDatas = AssetDataManager.getEnableList();
+        mCoinDatas = AssetManager.getInstance().getEnableList();
         mCoinItems = mPresenter.convertToCoinItem(mCoinDatas);
-        mCoinRecyclerAdapter = new CoinRecyclerAdapter(mCoinItems);
-        coinRecycler.setAdapter(mCoinRecyclerAdapter);
-        coinRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mCoinRecyclerAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<CoinItem>() {
-            @Override
-            public void onItemClick(RecyclerAdapter.ViewHolder holder, CoinItem data) {
-                super.onItemClick(holder, data);
-                CoinTransactionHistoryActivity.start(getActivity(),
-                        WalletManager.getInstance().getCurrentWallet(), mCoinDatas.get(holder.getAdapterPosition()));
-            }
-        });
+        if (mCoinRecyclerAdapter == null) {
+            mCoinRecyclerAdapter = new CoinRecyclerAdapter(mCoinItems);
+            coinRecycler.setAdapter(mCoinRecyclerAdapter);
+            coinRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            mCoinRecyclerAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<CoinItem>() {
+                @Override
+                public void onItemClick(RecyclerAdapter.ViewHolder holder, CoinItem data) {
+                    super.onItemClick(holder, data);
+                    CoinTransactionHistoryActivity.start(getActivity(),
+                            WalletManager.getInstance().getCurrentWallet(), mCoinDatas.get(holder.getAdapterPosition()));
+                }
+            });
+        } else {
+            mCoinRecyclerAdapter.replace(mCoinItems);
+            mCoinRecyclerAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private void loadWallet(WalletData wallet) {
@@ -234,7 +240,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
     private boolean checkBalanceIsEmpty() {
         for (int i = 0; i < mCoinItems.size(); i++) {
             CoinItem coinItem = mCoinItems.get(i);
-            if (coinItem.getAmount() != 0 && coinItem.getName().equals("GXS")) {
+            if (coinItem.getAmount() != 0) {
                 return false;
             }
         }
@@ -346,14 +352,14 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                 String coin;
                                 if (res.length == 1) {
                                     amount = "";
-                                    coin = AssetDataManager.getDefault().getName();
+                                    coin = AssetManager.getInstance().getDefault().getName();
                                 } else if (res.length == 2) {
                                     if (res[1].split("=").length == 2) {
                                         amount = res[1].split("=")[1];
                                     } else {
                                         amount = "";
                                     }
-                                    coin = AssetDataManager.getDefault().getName();
+                                    coin = AssetManager.getInstance().getDefault().getName();
                                 } else {
                                     if (res[1].split("=").length == 2) {
                                         amount = res[1].split("=")[1];
@@ -363,7 +369,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                     if (res[2].split("=").length == 2) {
                                         coin = res[2].split("=")[1];
                                     } else {
-                                        coin = AssetDataManager.getDefault().getName();
+                                        coin = AssetManager.getInstance().getDefault().getName();
                                     }
                                 }
 
@@ -371,7 +377,7 @@ public class HomeFragment extends PresenterFragment<HomeContract.Presenter>
                                     amount = "0";
                                 }
                                 Double.parseDouble(amount);
-                                SendActivity.start(getActivity(), new Sender(account, amount, AssetDataManager.get(coin), ""));
+                                SendActivity.start(getActivity(), new Sender(account, amount, AssetManager.getInstance().get(coin), ""));
                                 App.showToast(R.string.scan_success);
                             } catch (Exception e) {
                                 App.showToast(R.string.scan_error);

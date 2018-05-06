@@ -1,9 +1,9 @@
 package com.gxb.gxswallet.page.receive;
 
-import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.sxds.common.presenter.BasePresenter;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class ReceivePresenter extends BasePresenter<ReceiveContract.View>
 
     @Override
     public List<AssetData> fetchSupportCoin() {
-        return AssetDataManager.getEnableList();
+        return AssetManager.getInstance().getEnableList();
     }
 
     @Override

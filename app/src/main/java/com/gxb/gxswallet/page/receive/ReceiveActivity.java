@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.config.Configure;
 import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;

@@ -13,8 +13,8 @@ import org.greenrobot.greendao.query.QueryBuilder;
  * @date 2018/3/23.
  */
 
-public class ContactManager extends BaseDaoManager<ContactData, Long> {
-    public ContactManager(Context context) {
+public class ContactDataManager extends BaseDaoManager<ContactData, Long> {
+    public ContactDataManager(Context context) {
         super(context);
     }
 

@@ -10,10 +10,10 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.backuptip.BackUpTipActivity;
 import com.gxb.gxswallet.page.walletdetail.dialogbuilder.ModifyPasswordDialogBuilder;
 import com.gxb.gxswallet.page.walletdetail.dialogbuilder.PrivateKeyDialogBuilder;
@@ -96,7 +96,7 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
     private void initMenus() {
         partOneSettings = new String[]{
                 getString(R.string.wallet_name),
-                getString(R.string.wallet_assets, AssetDataManager.getDefault().getName()),
+                getString(R.string.wallet_assets, AssetManager.getInstance().getDefault().getName()),
                 getString(R.string.modify_password),
         };
         partTwoSettings = new String[]{
@@ -108,9 +108,9 @@ public class WalletDetailActivity extends BaseActivity implements View.OnClickLi
         walletNameItem.setDetailText(mWalletData.getName());
 
         QMUICommonListItemView walletAssetsItem = mGroupListView.createItemView(partOneSettings[1]);
-        if (mWalletData.getBalances(AssetDataManager.getDefault().getName()) != null) {
+        if (mWalletData.getBalances(AssetManager.getInstance().getDefault().getName()) != null) {
             walletAssetsItem.setDetailText(String.valueOf(
-                    mWalletData.getBalances(AssetDataManager.getDefault().getName()))
+                    mWalletData.getBalances(AssetManager.getInstance().getDefault().getName()))
             );
         }
 

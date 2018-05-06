@@ -4,7 +4,7 @@ import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.contact.ContactData;
-import com.gxb.gxswallet.db.contact.ContactManager;
+import com.gxb.gxswallet.db.contact.ContactDataManager;
 import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.sxds.common.presenter.BasePresenter;
 
@@ -21,20 +21,20 @@ import cy.agorise.graphenej.models.WitnessResponse;
 public class AddContactPresenter extends BasePresenter<AddContactContract.View>
         implements AddContactContract.Presenter {
 
-    private ContactManager mContactManager;
+    private ContactDataManager mContactDataManager;
     private static final int CHECK_EXIST_LOADING_CODE = 0x11;
 
     AddContactPresenter(AddContactContract.View view) {
         super(view);
-        mContactManager = new ContactManager(App.getInstance());
+        mContactDataManager = new ContactDataManager(App.getInstance());
     }
 
     @Override
     public boolean saveContact(ContactData contact) {
-        if (mContactManager.isExist(contact)) {
+        if (mContactDataManager.isExist(contact)) {
             return false;
         }
-        return mContactManager.insert(contact);
+        return mContactDataManager.insert(contact);
     }
 
     @Override

@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.view.View;
 
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.main.MainActivity;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
@@ -75,7 +75,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         defaultWalletItem = mGroupListView.createItemView(getString(R.string.default_wallet));
         defaultWalletItem.setDetailText(WalletManager.getInstance().getDefaultWallet().getName());
         defaultAssetItem = mGroupListView.createItemView(getString(R.string.default_asset));
-        defaultAssetItem.setDetailText(AssetDataManager.getDefault().getName());
+        defaultAssetItem.setDetailText(AssetManager.getInstance().getDefault().getName());
         QMUIGroupListView.newSection(this)
                 .setTitle("")
                 .addItemView(defaultWalletItem, this)
@@ -100,7 +100,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initAssetNames() {
-        List<AssetData> assetDataList = AssetDataManager.getEnableList();
+        List<AssetData> assetDataList = AssetManager.getInstance().getEnableList();
         assetNames = new String[assetDataList.size()];
         int index = 0;
         for (AssetData asset : assetDataList) {
@@ -132,8 +132,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 .setCheckedIndex(checkedIndex)
                 .addItems(items, (dialog, which) -> {
                     dialog.dismiss();
-                    AssetData assetData = AssetDataManager.get(assetNames[which]);
-                    AssetDataManager.setDefault(assetData);
+                    AssetData assetData = AssetManager.getInstance().get(assetNames[which]);
+                    AssetManager.getInstance().setDefault(assetData);
                     defaultAssetItem.setDetailText(assetData.getName());
                 })
                 .show();
@@ -166,7 +166,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private int getDefaultAssetIndex() {
-        AssetData assetData = AssetDataManager.getDefault();
+        AssetData assetData = AssetManager.getInstance().getDefault();
         for (int i = 0; i < assetNames.length; i++) {
             if (assetData.getName().equals(assetNames[i])) {
                 return i;

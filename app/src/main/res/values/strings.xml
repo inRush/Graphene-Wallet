@@ -182,4 +182,5 @@
     <string name="not_allow_close_default_asset">不能关闭默认资产</string>
     <string name="more">更多</string>
     <string name="send_balance_not_allow_pay">发送账户余额不足</string>
+    <string name="connection_connect_failure">数据连接失败,请检查网络连接</string>
 </resources>

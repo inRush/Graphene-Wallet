@@ -16,7 +16,7 @@ import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.dialog.PasswordDialog;
-import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.cointransaction.model.TransactionHistory;
 import com.gxb.gxswallet.services.WalletService;
 import com.gxb.gxswallet.utils.jdenticon.Jdenticon;

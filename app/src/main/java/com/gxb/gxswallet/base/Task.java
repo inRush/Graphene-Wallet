@@ -1,4 +1,4 @@
-package com.gxb.gxswallet.common;
+package com.gxb.gxswallet.base;
 
 import io.reactivex.Observable;
 

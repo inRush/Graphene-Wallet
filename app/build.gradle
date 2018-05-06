@@ -42,7 +42,6 @@ android {
         exclude group: 'com.android.support', module: 'support-v4'
     }
     dexOptions {
-        // fuck !!!! fuck !!!!!!
         preDexLibraries = false
     }
     splits {
@@ -61,7 +60,7 @@ android {
 
 }
 greendao {
-    schemaVersion 11
+    schemaVersion 12
     daoPackage 'com.ping.greendao.gen'
     targetGenDir 'src/main/java'
 }

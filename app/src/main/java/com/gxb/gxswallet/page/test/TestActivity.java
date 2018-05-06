@@ -3,13 +3,13 @@ package com.gxb.gxswallet.page.test;
 import android.widget.TextView;
 
 import com.google.common.primitives.UnsignedLong;
+import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.Task;
+import com.gxb.gxswallet.base.Task;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.asset.AssetSymbol;
+import com.gxb.gxswallet.manager.AssetManager;
 import com.gxb.gxswallet.services.WalletService;
-import com.gxb.gxswallet.services.rpc.RetryWithDelay;
 import com.gxb.gxswallet.services.rpc.RpcTask;
 import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.gxb.gxswallet.utils.AssetsUtil;
@@ -73,8 +73,8 @@ public class TestActivity extends BaseActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        AssetDataManager.initCoin(this);
-        WebSocketServicePool.getInstance().initPool();
+        AssetManager.getInstance().init(App.getInstance());
+        WebSocketServicePool.getInstance().initPool(App.getInstance());
         findViewById(R.id.message).setOnClickListener(v -> {
             //        testMoreRequest();
 //        testRequest();
@@ -130,7 +130,7 @@ public class TestActivity extends BaseActivity {
     }
 
     private void testTransfer() {
-        AssetData assetData = AssetDataManager.getDefault();
+        AssetData assetData = AssetManager.getInstance().getDefault();
         WebSocketService service = WebSocketServicePool.getInstance().getService(assetData.getName());
         ECKey privateKey = DumpedPrivateKey.fromBase58(null, mWifKey).getKey();
         final BaseOperation[] operation = {null};
@@ -209,8 +209,8 @@ public class TestActivity extends BaseActivity {
     }
 
     private void testRequest() {
-        AssetDataManager.initCoin(this);
-        WebSocketServicePool.getInstance().initPool();
+        AssetManager.getInstance().init(App.getInstance());
+        WebSocketServicePool.getInstance().initPool(App.getInstance());
         ECKey privateKey = DumpedPrivateKey.fromBase58(null, "5HzsQXxAGgTKNBtMiaPQEXMrLKRTGDNpboBjyUUfucaqLpV8Asq").getKey();
         List<Address> addresses = new ArrayList<>();
         addresses.add(new Address(ECKey.fromPublicOnly(privateKey.getPubKey()), AssetSymbol.BTS.getName()));
@@ -219,7 +219,6 @@ public class TestActivity extends BaseActivity {
                     .generateTasks(GetAccountByName.class, new Class[]{String.class}, new Object[]{"in-rush"});
 
             Observable.fromArray(rpcTasks).flatMap(Task::run)
-                    .retryWhen(new RetryWithDelay(5, 5000))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<RpcTask>() {
@@ -249,8 +248,8 @@ public class TestActivity extends BaseActivity {
     }
 
     private void testMoreRequest() {
-        AssetDataManager.initCoin(this);
-        WebSocketServicePool.getInstance().initPool();
+        AssetManager.getInstance().init(App.getInstance());
+        WebSocketServicePool.getInstance().initPool(App.getInstance());
         ECKey privateKey = DumpedPrivateKey.fromBase58(null, mWifKey).getKey();
 
         List<Address> addresses = new ArrayList<>();

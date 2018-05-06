@@ -2,7 +2,7 @@ package com.gxb.gxswallet.page.editcontact;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.db.contact.ContactData;
-import com.gxb.gxswallet.db.contact.ContactManager;
+import com.gxb.gxswallet.db.contact.ContactDataManager;
 import com.sxds.common.presenter.BasePresenter;
 
 /**
@@ -12,17 +12,17 @@ import com.sxds.common.presenter.BasePresenter;
 
 public class EditContactPresenter extends BasePresenter<EditContactContract.View>
         implements EditContactContract.Presenter {
-    private ContactManager mContactManager;
+    private ContactDataManager mContactDataManager;
 
     public EditContactPresenter(EditContactContract.View view) {
         super(view);
-        mContactManager = new ContactManager(App.getInstance());
+        mContactDataManager = new ContactDataManager(App.getInstance());
     }
 
 
 
     @Override
     public boolean updateContact(ContactData contact) {
-        return mContactManager.update(contact);
+        return mContactDataManager.update(contact);
     }
 }

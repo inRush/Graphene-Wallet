@@ -17,9 +17,9 @@ import android.widget.TextView;
 import com.caverock.androidsvg.SVGParseException;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.contact.ContactData;
-import com.gxb.gxswallet.db.contact.ContactManager;
+import com.gxb.gxswallet.db.contact.ContactDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
 import com.gxb.gxswallet.page.contacts.ContactsFragment;
 import com.gxb.gxswallet.page.contacts.OnContactChangeListener;
 import com.gxb.gxswallet.page.editcontact.EditContactActivity;
@@ -61,7 +61,7 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
     private OnContactChangeListener mListener;
     private View mRootView;
     private ContactData mContact;
-    private ContactManager mContactManager;
+    private ContactDataManager mContactDataManager;
 
 
     @Override
@@ -88,7 +88,7 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mRootView == null) {
-            mContactManager = new ContactManager(getContext());
+            mContactDataManager = new ContactDataManager(getContext());
             mRootView = inflater.inflate(R.layout.dialog_contact_message, container, false);
             ButterKnife.bind(this, mRootView);
             Bundle bundle = getArguments();
@@ -144,7 +144,7 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
                 .addAction(getString(R.string.cancel), (dialog, index) -> dialog.dismiss())
                 .addAction(0, getString(R.string.delete), QMUIDialogAction.ACTION_PROP_NEGATIVE, (dialog, index) -> {
                     dialog.dismiss();
-                    if (mContactManager.delete(mContact)) {
+                    if (mContactDataManager.delete(mContact)) {
                         App.showToast(R.string.delete_success);
                         mListener.onChange();
                         dismiss();
@@ -159,7 +159,7 @@ public class ContactInfoFragment extends BottomSheetDialogFragment
     @OnClick(R.id.send_btn_contact_dialog)
     void onSendBtnClick() {
         SendActivity.start(getActivity(), new Sender(addressTv.getText().toString(),
-                "0", AssetDataManager.getDefault(), memoTv.getText().toString()));
+                "0", AssetManager.getInstance().getDefault(), memoTv.getText().toString()));
     }
 
 

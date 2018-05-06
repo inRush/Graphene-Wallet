@@ -2,8 +2,8 @@ package com.gxb.gxswallet.page.launch;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.firstin.FirstInActivity;
 import com.gxb.gxswallet.page.firstin.PermissionsFragment;
 import com.gxb.gxswallet.page.main.MainActivity;
@@ -38,13 +38,13 @@ public class LaunchActivity extends BaseActivity {
 
     private void init() {
         if (!NetworkUtil.isNetworkAvailable(this)) {
-            getWindow().getDecorView().postDelayed(this::init, 2000);
+            getWindow().getDecorView().postDelayed(this::init, 3000);
             App.showToast(R.string.network_unavailable);
             return;
         }
-        AssetDataManager.initCoin(this);
-        WalletManager.getInstance().init(this);
-        WebSocketServicePool.getInstance().initPool();
+        AssetManager.getInstance().init(App.getInstance());
+        WalletManager.getInstance().init(App.getInstance());
+        WebSocketServicePool.getInstance().initPool(App.getInstance());
         Run.onBackground(() -> {
             waitWebSocketPoolComplete();
             boolean hasAccount = WalletManager.getInstance().getAllWallet().size() > 0;
@@ -58,6 +58,9 @@ public class LaunchActivity extends BaseActivity {
 
     }
 
+    /**
+     * 等待WebSocket池初始化完成
+     */
     private void waitWebSocketPoolComplete() {
         try {
             Thread.sleep(1500);

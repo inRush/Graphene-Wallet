@@ -15,11 +15,11 @@ import com.google.common.base.Function;
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.dialog.PasswordDialog;
-import com.gxb.gxswallet.common.WalletManager;
 import com.gxb.gxswallet.config.Configure;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
+import com.gxb.gxswallet.manager.AssetManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.send.dialog.TransactionConfirmDialog;
 import com.gxb.gxswallet.page.send.model.Sender;
 import com.gxb.gxswallet.page.send.model.Transaction;
@@ -139,14 +139,14 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                 String coin;
                                 if (res.length == 1) {
                                     amount = "";
-                                    coin = AssetDataManager.getDefault().getName();
+                                    coin = AssetManager.getInstance().getDefault().getName();
                                 } else if (res.length == 2) {
                                     if (res[1].split("=").length == 2) {
                                         amount = res[1].split("=")[1];
                                     } else {
                                         amount = "";
                                     }
-                                    coin = AssetDataManager.getDefault().getName();
+                                    coin = AssetManager.getInstance().getDefault().getName();
                                 } else {
                                     if (res[1].split("=").length == 2) {
                                         amount = res[1].split("=")[1];
@@ -156,7 +156,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                     if (res[2].split("=").length == 2) {
                                         coin = res[2].split("=")[1];
                                     } else {
-                                        coin = AssetDataManager.getDefault().getName();
+                                        coin = AssetManager.getInstance().getDefault().getName();
                                     }
                                 }
 
@@ -166,7 +166,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                                 Double.parseDouble(amount);
                                 mSender.setTo(account);
                                 mSender.setAmount(amount);
-                                mSender.setAsset(AssetDataManager.get(coin));
+                                mSender.setAsset(AssetManager.getInstance().get(coin));
                                 initToAccountWidget();
                                 initAssetWidget();
                                 App.showToast(R.string.scan_success);
@@ -230,7 +230,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
                 .setCheckedIndex(checkedIndex)
                 .addItems(items, (dialog, which) -> {
                     dialog.dismiss();
-                    mSender.setAsset(AssetDataManager.get(mAssetNames[which]));
+                    mSender.setAsset(AssetManager.getInstance().get(mAssetNames[which]));
                     initAssetWidget();
                 })
                 .show();
@@ -394,7 +394,7 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
         String amount = amountEt.getText().toString();
         String memo = memoEt.getText().toString();
         try {
-            int num = (int) (Double.parseDouble(amount) * AssetDataManager.AMOUNT_SIZE);
+            int num = (int) (Double.parseDouble(amount) * AssetManager.AMOUNT_SIZE);
             mPresenter.send(privateKey, from, to, String.valueOf(num), mSender.getAsset(), memo);
         } catch (Exception e) {
             showError(R.string.amount_format_error);

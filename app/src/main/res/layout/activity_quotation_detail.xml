@@ -97,7 +97,7 @@
         android:layout_height="40dp"
         android:background="@drawable/tab_panel_bg"/>
 
-    <com.gxb.gxswallet.base.NoScrollViewPage
+    <com.gxb.gxswallet.base.view.NoScrollViewPage
         android:id="@+id/content_viewPager_quotation"
         android:layout_width="match_parent"
         android:layout_height="0dp"

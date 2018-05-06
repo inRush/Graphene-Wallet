@@ -7,7 +7,7 @@ import android.widget.ScrollView;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.common.WalletManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.services.WalletService;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;

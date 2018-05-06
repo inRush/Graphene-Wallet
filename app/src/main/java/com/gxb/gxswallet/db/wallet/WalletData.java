@@ -2,9 +2,7 @@ package com.gxb.gxswallet.db.wallet;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
-import com.gxb.sdk.models.Wallet;
 import com.gxb.sdk.models.wallet.AccountBalance;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -22,27 +20,20 @@ import java.util.HashMap;
 public class WalletData implements Parcelable {
     @Id(autoincrement = true)
     private Long id;
-    @NonNull
-    private String accountId;
-    @NonNull
     private String name;
-    @NonNull
     private String passwordPubKey;
-    @NonNull
     private String encryptionKey;
-    @NonNull
     private String encryptedWifkey;
     private boolean isBackUp;
     private String brainKey;
     @Transient
     private HashMap<String, Double> balances = new HashMap<>();
 
-    @Generated(hash = 890049944)
-    public WalletData(Long id, @NonNull String accountId, @NonNull String name,
-            @NonNull String passwordPubKey, @NonNull String encryptionKey,
-            @NonNull String encryptedWifkey, boolean isBackUp, String brainKey) {
+    @Generated(hash = 1784945456)
+    public WalletData(Long id, String name, String passwordPubKey,
+                      String encryptionKey, String encryptedWifkey, boolean isBackUp,
+                      String brainKey) {
         this.id = id;
-        this.accountId = accountId;
         this.name = name;
         this.passwordPubKey = passwordPubKey;
         this.encryptionKey = encryptionKey;
@@ -55,17 +46,6 @@ public class WalletData implements Parcelable {
     public WalletData() {
     }
 
-    public static WalletData fromWallet(Wallet wallet) {
-        WalletData walletData = new WalletData();
-        walletData.setId(null);
-        walletData.setName(wallet.getName());
-        walletData.setPasswordPubKey(wallet.getPasswordPubKey());
-        walletData.setEncryptionKey(wallet.getEncryptionKey());
-        walletData.setEncryptedWifkey(wallet.getEncryptedWifkey());
-        walletData.setIsBackUp(true);
-        walletData.setBrainKey("");
-        return walletData;
-    }
 
     public Long getId() {
         return this.id;
@@ -126,7 +106,7 @@ public class WalletData implements Parcelable {
         this.balances.put(name, balance);
     }
 
-    public void setBalances(HashMap<String,Double> balances){
+    public void setBalances(HashMap<String, Double> balances) {
         this.balances = balances;
     }
 
@@ -138,13 +118,6 @@ public class WalletData implements Parcelable {
         this.brainKey = brainKey;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getAccountId() {
-        return this.accountId;
-    }
 
     @Override
     public int describeContents() {
@@ -154,7 +127,6 @@ public class WalletData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.id);
-        dest.writeString(this.accountId);
         dest.writeString(this.name);
         dest.writeString(this.passwordPubKey);
         dest.writeString(this.encryptionKey);
@@ -164,9 +136,9 @@ public class WalletData implements Parcelable {
         dest.writeMap(this.balances);
     }
 
+    @SuppressWarnings("unchecked")
     protected WalletData(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.accountId = in.readString();
         this.name = in.readString();
         this.passwordPubKey = in.readString();
         this.encryptionKey = in.readString();

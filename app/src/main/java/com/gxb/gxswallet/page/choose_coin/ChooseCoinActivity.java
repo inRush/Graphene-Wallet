@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.db.asset.AssetData;
-import com.gxb.gxswallet.db.asset.AssetDataManager;
+import com.gxb.gxswallet.manager.AssetManager;
 import com.gxb.gxswallet.page.choose_coin.adapter.ChooseCoinRecyclerAdapter;
 import com.gxb.gxswallet.page.home.model.CoinItem;
 import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
@@ -71,7 +71,7 @@ public class ChooseCoinActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        List<AssetData> coinDatas = AssetDataManager.getAll();
+        List<AssetData> coinDatas = AssetManager.getInstance().getAll();
         mAdapter = new ChooseCoinRecyclerAdapter(convertToCoinItem(coinDatas));
         mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<CoinItem>() {
             @Override
@@ -79,7 +79,7 @@ public class ChooseCoinActivity extends BaseActivity {
                 super.onItemClick(holder, data);
                 int pos = holder.getAdapterPosition();
                 AssetData coinData = coinDatas.get(pos);
-                if (coinData.getName().equals(AssetDataManager.getDefault().getName())) {
+                if (coinData.getName().equals(AssetManager.getInstance().getDefault().getName())) {
                     showError(getString(R.string.not_allow_close_default_asset));
                     mAdapter.notifyItemChanged(pos);
                     return;
@@ -89,7 +89,7 @@ public class ChooseCoinActivity extends BaseActivity {
                     WebSocketServicePool.getInstance().disconnect(coinData.getName(),
                             () -> {
                                 dismissLoading(mDisableAssetLoadingCode);
-                                if (new AssetDataManager(ChooseCoinActivity.this).disableAsset(coinData)) {
+                                if (AssetManager.getInstance().disableAsset(coinData)) {
                                     showOk(getString(R.string.disable_success));
                                 } else {
                                     showError(getString(R.string.disable_failure));
@@ -103,7 +103,7 @@ public class ChooseCoinActivity extends BaseActivity {
                                 @Override
                                 public void onConnectedSuccess() {
                                     dismissLoading(mEnableAssetLoadingCode);
-                                    if (new AssetDataManager(ChooseCoinActivity.this).enableAsset(coinData)) {
+                                    if (AssetManager.getInstance().enableAsset(coinData)) {
                                         showOk(getString(R.string.enable_success));
                                     } else {
                                         showError(getString(R.string.enable_failure));

@@ -10,7 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.widget.TextView;
 
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.base.NoScrollViewPage;
+import com.gxb.gxswallet.base.view.NoScrollViewPage;
 import com.gxb.gxswallet.base.activity.ExchangeServicePresenterActivity;
 import com.gxb.gxswallet.page.quotationdetail.provider.ExchangeProvider;
 import com.gxb.gxswallet.page.quotationdetail.tabfragments.DayKLineTabFragment;
