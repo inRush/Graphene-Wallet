@@ -110,7 +110,7 @@ public class AddContactActivity extends PresenterActivity<AddContactContract.Pre
     }
 
     @Override
-    public void onCheckWalletExistSuccess(boolean isExist, String walletName) {
+    public void onCheckWalletExistSuccess(boolean isExist, String walletAddress) {
         if (!isExist) {
             showError(getString(R.string.address_not_exists));
             return;
@@ -127,10 +127,5 @@ public class AddContactActivity extends PresenterActivity<AddContactContract.Pre
         } else {
             showError(getString(R.string.address_is_exist));
         }
-    }
-
-    @Override
-    public void onCheckWalletExistError(Error error) {
-        showError(error.getMessage());
     }
 }

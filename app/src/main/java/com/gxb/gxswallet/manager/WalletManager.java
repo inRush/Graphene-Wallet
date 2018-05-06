@@ -8,7 +8,7 @@ import android.util.ArrayMap;
 
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.db.wallet.WalletDataManager;
-import com.gxb.gxswallet.utils.SharedPreferenceUtils;
+import com.sxds.common.helper.SharedPreferenceHelper;
 
 import java.util.List;
 
@@ -179,7 +179,7 @@ public class WalletManager {
      * @param wallet 需要设置的默认钱包
      */
     public void setDefaultWallet(WalletData wallet) {
-        SharedPreferenceUtils.putString(mContext, SP_DEFAULT_WALLET, wallet.getName());
+        SharedPreferenceHelper.putString(mContext, SP_DEFAULT_WALLET, wallet.getName());
     }
 
     /**
@@ -192,7 +192,7 @@ public class WalletManager {
         if (mWallets.size() == 0) {
             return null;
         }
-        String defaultName = SharedPreferenceUtils.getString(mContext, SP_DEFAULT_WALLET, null);
+        String defaultName = SharedPreferenceHelper.getString(mContext, SP_DEFAULT_WALLET, null);
         if (defaultName == null || mWallets.get(defaultName) == null) {
             setDefaultWallet(mWallets.valueAt(0));
             return mWallets.valueAt(0);

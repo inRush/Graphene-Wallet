@@ -1,18 +1,13 @@
 package com.gxb.gxswallet.db.asset;
 
 import android.content.Context;
-import android.util.ArrayMap;
 
-import com.gxb.gxswallet.App;
-import com.gxb.gxswallet.BuildConfig;
 import com.gxb.gxswallet.db.BaseDaoManager;
-import com.gxb.gxswallet.utils.SharedPreferenceUtils;
 import com.ping.greendao.gen.AssetDataDao;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.query.QueryBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

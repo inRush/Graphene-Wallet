@@ -14,45 +14,52 @@ public class BaseContract {
     public interface View<T extends Presenter> {
 
 
-
-
         /**
-         * 显示一个进度条
-         */
-        void showLoading(int code, String str);
-
-        /**
-         * 根据resource ID显示一个进度条
+         * 显示一个加载框
+         *
+         * @param code   加载框代号
+         * @param strRes 需要显示的字符串资源
          */
         void showLoading(int code, @StringRes int strRes);
 
+        /**
+         * 关闭所有加载框
+         */
         void dismissAllLoading();
 
         /**
-         * 关闭顶的进度条
+         * 关闭对应的加载框
          *
-         * @param code 代号
+         * @param code 加载框代号
          */
         void dismissLoading(int code);
-        /**
-         * 显示一个字符串错误
-         *
-         * @param str
-         */
-        void showError(String str);
-
-        void showOk(String str);
-
-        void showInfo(String str);
 
         /**
-         * 显示一个字符串错误
+         * 错误消息
          *
+         * @param strRes
          */
         void showError(@StringRes int strRes);
 
+        /**
+         * 错误消息(显示字符串)
+         *
+         * @param message 需要显示的消息
+         */
+        void showError(String message);
+
+        /**
+         * 成功消息
+         *
+         * @param strRes 需要显示的字符串资源
+         */
         void showOk(@StringRes int strRes);
 
+        /**
+         * 提示消息
+         *
+         * @param strRes 需要显示的字符串资源
+         */
         void showInfo(@StringRes int strRes);
 
         /**

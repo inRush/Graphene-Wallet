@@ -8,7 +8,7 @@ import com.gxb.gxswallet.BuildConfig;
 import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.asset.AssetDataManager;
 import com.gxb.gxswallet.db.asset.AssetSymbol;
-import com.gxb.gxswallet.utils.SharedPreferenceUtils;
+import com.sxds.common.helper.SharedPreferenceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,9 +105,9 @@ public class AssetManager {
     public AssetData getDefault() {
         String asset;
         if (BuildConfig.DEBUG) {
-            asset = SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_TEST, null);
+            asset = SharedPreferenceHelper.getString(App.getInstance(), SP_DEFAULT_KEY_TEST, null);
         } else {
-            asset = SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, null);
+            asset = SharedPreferenceHelper.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, null);
         }
         AssetData assetData = get(asset);
         if (assetData == null) {
@@ -123,9 +123,9 @@ public class AssetManager {
      */
     public void setDefault(AssetData asset) {
         if (BuildConfig.DEBUG) {
-            SharedPreferenceUtils.putString(App.getInstance(), SP_DEFAULT_KEY_TEST, asset.getName());
+            SharedPreferenceHelper.putString(App.getInstance(), SP_DEFAULT_KEY_TEST, asset.getName());
         } else {
-            SharedPreferenceUtils.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, asset.getName());
+            SharedPreferenceHelper.getString(App.getInstance(), SP_DEFAULT_KEY_PRODUCT, asset.getName());
         }
     }
 

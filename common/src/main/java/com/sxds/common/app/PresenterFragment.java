@@ -1,9 +1,8 @@
 package com.sxds.common.app;
 
 import android.content.Context;
-import android.os.Handler;
+import android.support.annotation.StringRes;
 
-import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.sxds.common.presenter.BaseContract;
 
 
@@ -33,41 +32,13 @@ public abstract class PresenterFragment<Presenter extends BaseContract.Presenter
     }
 
     @Override
-    public void showError(final String str) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dismissAllLoading();
-                final QMUITipDialog dialog = new QMUITipDialog.Builder(getContext())
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                    }
-                }, 1500);
-            }
-        });
-
-
-    }
-
-    @Override
     public void showLoading(int code, int strRes) {
         showLoading(code, getString(strRes));
     }
 
     @Override
-    public void showError(int strRes) {
-        showError(getString(strRes));
-    }
-
-    @Override
-    public void showOk(int strRes) {
-        showOk(getString(strRes));
+    public void showOk(@StringRes int strRes) {
+        super.showOk(strRes);
     }
 
     @Override
@@ -76,77 +47,23 @@ public abstract class PresenterFragment<Presenter extends BaseContract.Presenter
     }
 
     @Override
-    public void showLoading(final int code, final String str) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(getContext())
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                mLoadings.put(code, dialog);
-            }
-        });
+    public void showError(int strRes) {
+        showError(getString(strRes));
     }
 
-
     @Override
-    public void dismissLoading(int code) {
-        super.dismissLoading(code);
-        QMUITipDialog dialog = mLoadings.get(code);
-        if (dialog != null) {
-            dialog.dismiss();
-        }
+    public void showError(String message) {
+        super.showError(message);
     }
 
     @Override
     public void dismissAllLoading() {
-        for (int i = 0; i < mLoadings.size(); i++) {
-            QMUITipDialog dialog = mLoadings.valueAt(i);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        }
+        super.dismissAllLoading();
     }
 
     @Override
-    public void showOk(final String str) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(getContext())
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                delayDismissDialog(dialog, 1500);
-            }
-        });
-    }
-
-    @Override
-    public void showInfo(final String str) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(getContext())
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
-                        .setTipWord(str)
-                        .create();
-                dialog.show();
-                delayDismissDialog(dialog, 1500);
-            }
-        });
-    }
-
-    private void delayDismissDialog(final QMUITipDialog dialog, int delay) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        }, delay);
+    public void dismissLoading(int code) {
+        super.dismissLoading(code);
     }
 
     @Override

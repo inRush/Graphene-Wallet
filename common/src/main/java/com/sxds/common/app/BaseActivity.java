@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
@@ -96,35 +97,53 @@ public abstract class BaseActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                        .setTipWord(message)
-                        .create();
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_LOADING, message);
                 dialog.show();
                 mLoadings.put(code, dialog);
             }
         });
     }
 
-    protected void dismissLoading(int code) {
-        QMUITipDialog dialog = mLoadings.get(code);
-        if (dialog != null) {
-            dialog.dismiss();
-        }
+    protected void dismissLoading(final int code) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = mLoadings.get(code);
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    protected void dismissAllLoading() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < mLoadings.size(); i++) {
+                    QMUITipDialog dialog = mLoadings.valueAt(i);
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                }
+            }
+        });
+
     }
 
     protected void showOk(final String message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
-                        .setTipWord(message)
-                        .create();
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
                 dialog.show();
                 delayDismissDialog(dialog, 1500);
             }
         });
+    }
+
+    protected void showOk(@StringRes int strRes) {
+        showOk(getString(strRes));
     }
 
     protected void showError(final String message) {
@@ -132,44 +151,29 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void run() {
                 dismissAllLoading();
-                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
-                        .setTipWord(message)
-                        .create();
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_FAIL, message);
                 dialog.show();
                 delayDismissDialog(dialog, 1500);
             }
         });
     }
 
-    public void dismissAllLoading() {
-        for (int i = 0; i < mLoadings.size(); i++) {
-            QMUITipDialog dialog = mLoadings.valueAt(i);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        }
-    }
-
-    public void showError(int strRes) {
+    protected void showError(@StringRes int strRes) {
         showError(getString(strRes));
     }
 
-    public void showInfo(final String str) {
+    protected void showInfo(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                QMUITipDialog dialog = new QMUITipDialog.Builder(BaseActivity.this)
-                        .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
-                        .setTipWord(str)
-                        .create();
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_INFO, str);
                 dialog.show();
                 delayDismissDialog(dialog, 2000);
             }
         });
     }
 
-    public void showInfo(int strRes) {
+    protected void showInfo(@StringRes int strRes) {
         showInfo(getString(strRes));
     }
 

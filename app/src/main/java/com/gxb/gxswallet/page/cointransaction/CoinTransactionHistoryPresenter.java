@@ -1,5 +1,6 @@
 package com.gxb.gxswallet.page.cointransaction;
 
+import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.Task;
 import com.gxb.gxswallet.db.asset.AssetData;
 import com.gxb.gxswallet.db.wallet.WalletData;
@@ -128,7 +129,7 @@ public class CoinTransactionHistoryPresenter extends BasePresenter<CoinTransacti
 
                     @Override
                     public void onError(Throwable e) {
-                        getView().showError(e.getMessage());
+                        getView().showError(R.string.gain_failure);
                         getView().onGetTransactionHistorySuccess(histories);
                     }
 

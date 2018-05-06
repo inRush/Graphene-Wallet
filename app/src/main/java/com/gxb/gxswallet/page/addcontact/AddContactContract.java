@@ -10,8 +10,13 @@ import com.sxds.common.presenter.BaseContract;
 
 class AddContactContract {
     interface View extends BaseContract.View<Presenter> {
-        void onCheckWalletExistSuccess(boolean isExist,String walletName);
-        void onCheckWalletExistError(Error error);
+        /**
+         * 检查钱包是否存在的成功回调
+         *
+         * @param isExist       是否存在
+         * @param walletAddress 钱包的地址
+         */
+        void onCheckWalletExistSuccess(boolean isExist, String walletAddress);
 
     }
 
@@ -19,10 +24,16 @@ class AddContactContract {
         /**
          * 保存联系人
          *
-         * @param contact
+         * @param contact 联系人
+         * @return 是否保存成功
          */
         boolean saveContact(ContactData contact);
 
-        void checkWalletExist(String name);
+        /**
+         * 检查钱包是否存在
+         *
+         * @param address 钱包的地址
+         */
+        void checkWalletExist(String address);
     }
 }

@@ -71,63 +71,85 @@ public class ChooseCoinActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        List<AssetData> coinDatas = AssetManager.getInstance().getAll();
-        mAdapter = new ChooseCoinRecyclerAdapter(convertToCoinItem(coinDatas));
+        List<AssetData> assetDataList = AssetManager.getInstance().getAll();
+        mAdapter = new ChooseCoinRecyclerAdapter(convertToCoinItem(assetDataList));
         mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<CoinItem>() {
             @Override
             public void onItemClick(RecyclerAdapter.ViewHolder holder, CoinItem data) {
                 super.onItemClick(holder, data);
                 int pos = holder.getAdapterPosition();
-                AssetData coinData = coinDatas.get(pos);
-                if (coinData.getName().equals(AssetManager.getInstance().getDefault().getName())) {
+                AssetData assetData = assetDataList.get(pos);
+                if (assetData.getName().equals(AssetManager.getInstance().getDefault().getName())) {
                     showError(getString(R.string.not_allow_close_default_asset));
                     mAdapter.notifyItemChanged(pos);
                     return;
                 }
-                if (coinData.isEnable()) {
-                    showLoading(mDisableAssetLoadingCode, getString(R.string.disconnecting_data));
-                    WebSocketServicePool.getInstance().disconnect(coinData.getName(),
-                            () -> {
-                                dismissLoading(mDisableAssetLoadingCode);
-                                if (AssetManager.getInstance().disableAsset(coinData)) {
-                                    showOk(getString(R.string.disable_success));
-                                } else {
-                                    showError(getString(R.string.disable_failure));
-                                }
-                            });
-
+                if (assetData.isEnable()) {
+                    disableAsset(assetData);
                 } else {
-                    showLoading(mEnableAssetLoadingCode, getString(R.string.connecting_data));
-                    WebSocketServicePool.getInstance().addConnect(coinData.getName(), coinData.getNets().get(0)
-                            , new WebSocketServicePool.OnAddConnectListener() {
-                                @Override
-                                public void onConnectedSuccess() {
-                                    dismissLoading(mEnableAssetLoadingCode);
-                                    if (AssetManager.getInstance().enableAsset(coinData)) {
-                                        showOk(getString(R.string.enable_success));
-                                    } else {
-                                        showError(getString(R.string.enable_failure));
-                                    }
-                                }
-
-                                @Override
-                                public void onConnectedFailure() {
-                                    dismissLoading(mEnableAssetLoadingCode);
-                                    showError(getString(R.string.connect_error_please_retry));
-                                    mAdapter.notifyItemChanged(pos);
-                                }
-                            });
-
-
+                    enableAsset(assetData, pos);
                 }
             }
         });
         mCoinList.setAdapter(mAdapter);
     }
 
-    public List<CoinItem> convertToCoinItem(List<AssetData> coinDatas) {
+    /**
+     * 关闭资产
+     *
+     * @param assetData 资产数据
+     */
+    private void disableAsset(AssetData assetData) {
+        showLoading(mDisableAssetLoadingCode, getString(R.string.disconnecting_data));
+        WebSocketServicePool.getInstance().disconnect(assetData.getName(),
+                () -> {
+                    dismissLoading(mDisableAssetLoadingCode);
+                    if (AssetManager.getInstance().disableAsset(assetData)) {
+                        showOk(getString(R.string.disable_success));
+                    } else {
+                        showError(getString(R.string.disable_failure));
+                    }
+                });
+    }
+
+    /**
+     * 启用资产
+     *
+     * @param assetData 资产数据
+     * @param assetPos  资产位置
+     */
+    private void enableAsset(AssetData assetData, int assetPos) {
+        showLoading(mEnableAssetLoadingCode, getString(R.string.connecting_data));
+        WebSocketServicePool.getInstance().addConnect(assetData.getName(), assetData.getNets().get(0)
+                , new WebSocketServicePool.OnAddConnectListener() {
+                    @Override
+                    public void onConnectedSuccess() {
+                        dismissLoading(mEnableAssetLoadingCode);
+                        if (AssetManager.getInstance().enableAsset(assetData)) {
+                            showOk(getString(R.string.enable_success));
+                        } else {
+                            showError(getString(R.string.enable_failure));
+                        }
+                    }
+
+                    @Override
+                    public void onConnectedFailure() {
+                        dismissLoading(mEnableAssetLoadingCode);
+                        showError(getString(R.string.connect_error_please_retry));
+                        mAdapter.notifyItemChanged(assetPos);
+                    }
+                });
+    }
+
+    /**
+     * 将资产数据转换为列表的Item数据
+     *
+     * @param assetDataList 资产数据
+     * @return 列表Item数据
+     */
+    public List<CoinItem> convertToCoinItem(List<AssetData> assetDataList) {
         List<CoinItem> coinItems = new ArrayList<>();
-        for (AssetData coinData : coinDatas) {
+        for (AssetData coinData : assetDataList) {
             Bitmap icon = AssetsUtil.getImage(coinData.getIcon());
             coinItems.add(new CoinItem(icon, coinData.getName(), 0, coinData.getAssetId(), 0, coinData.getEnable()));
         }

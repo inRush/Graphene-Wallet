@@ -2,6 +2,7 @@ package com.sxds.common.app;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 
 import com.sxds.common.presenter.BaseContract;
 
@@ -30,33 +31,13 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
     }
 
     @Override
-    public void showError(final String str) {
-        super.showError(str);
+    public void showLoading(int code, int strRes) {
+        showLoading(code, getString(strRes));
     }
 
     @Override
-    public void showLoading(final int code, final String str) {
-        super.showLoading(code, str);
-    }
-
-    @Override
-    public void showOk(final String str) {
-        super.showOk(str);
-    }
-
-    @Override
-    public void showInfo(final String str) {
-        super.showInfo(str);
-    }
-
-    @Override
-    public void showError(int strRes) {
-        showError(getString(strRes));
-    }
-
-    @Override
-    public void showOk(int strRes) {
-        showOk(getString(strRes));
+    public void showOk(@StringRes int strRes) {
+        super.showOk(strRes);
     }
 
     @Override
@@ -65,10 +46,14 @@ public abstract class PresenterActivity<Presenter extends BaseContract.Presenter
     }
 
     @Override
-    public void showLoading(int code, int strRes) {
-        showLoading(code, getString(strRes));
+    public void showError(int strRes) {
+        showError(getString(strRes));
     }
 
+    @Override
+    public void showError(String message) {
+        super.showError(message);
+    }
 
     @Override
     public void dismissAllLoading() {

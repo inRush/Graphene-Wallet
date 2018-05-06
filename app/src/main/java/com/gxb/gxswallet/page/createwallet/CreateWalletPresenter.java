@@ -50,7 +50,7 @@ class CreateWalletPresenter extends BasePresenter<CreateWalletContract.View>
 
     @Override
     public void checkWalletExist(String name) {
-        getView().showLoading(CHECK_EXIST_LOADING_CODE, App.getInstance().getString(R.string.check_wallet_name));
+        getView().showLoading(CHECK_EXIST_LOADING_CODE, R.string.check_wallet_name);
         WalletService.getInstance().fetchAllAccountByName(name)
                 .map(accountMap -> accountMap.size() > 0)
                 .subscribeOn(Schedulers.io())

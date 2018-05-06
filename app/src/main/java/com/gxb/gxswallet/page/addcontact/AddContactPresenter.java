@@ -35,23 +35,23 @@ public class AddContactPresenter extends BasePresenter<AddContactContract.View>
     }
 
     @Override
-    public void checkWalletExist(String name) {
-        getView().showLoading(CHECK_EXIST_LOADING_CODE, App.getInstance().getString(R.string.check_wallet_name));
-        new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST),name).call(new WitnessResponseListener() {
+    public void checkWalletExist(String address) {
+        getView().showLoading(CHECK_EXIST_LOADING_CODE, R.string.check_wallet_name);
+        new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), address).call(new WitnessResponseListener() {
             @Override
             public void onSuccess(WitnessResponse response) {
                 getView().dismissLoading(CHECK_EXIST_LOADING_CODE);
                 if (response.result == null) {
-                    getView().onCheckWalletExistSuccess(false, name);
+                    getView().onCheckWalletExistSuccess(false, address);
                 } else {
-                    getView().onCheckWalletExistSuccess(true, name);
+                    getView().onCheckWalletExistSuccess(true, address);
                 }
             }
 
             @Override
             public void onError(BaseResponse.Error error) {
                 getView().dismissLoading(CHECK_EXIST_LOADING_CODE);
-                getView().onCheckWalletExistError(new Error(error.message));
+                getView().showError(error.message);
             }
         });
     }

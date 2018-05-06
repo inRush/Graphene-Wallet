@@ -41,7 +41,7 @@ public class ImportWalletPresenter extends BasePresenter<ImportWalletContract.Vi
                         }
                     });
         } catch (IllegalArgumentException e) {
-            getView().showError(App.getInstance().getString(R.string.activity_private_key_format_error));
+            getView().showError(R.string.activity_private_key_format_error);
         }
     }
 

@@ -2,16 +2,15 @@ package com.sxds.common.app;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
-
-import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,7 +23,9 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends android.support.v4.app.Fragment {
 
-    // 根布局
+    /**
+     * 根布局
+     */
     protected View mRoot;
     protected Unbinder mRootUnbinder;
     protected SparseArray<QMUITipDialog> mLoadings = new SparseArray<>();
@@ -33,8 +34,10 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
     protected int generateLoadingId() {
         return mCurrentLoadingId++;
     }
+
     /**
      * 在Fragment添加到Activity中去的时候
+     *
      * @param context 上下文
      */
     @Override
@@ -73,6 +76,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 
     /**
      * 初始化相关参数
+     *
      * @param bundle 参数bundle
      */
     protected void initArgs(Bundle bundle) {
@@ -90,7 +94,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
      * 初始化控件
      */
     protected void initWidget(View root) {
-        mRootUnbinder = ButterKnife.bind(this,root);
+        mRootUnbinder = ButterKnife.bind(this, root);
     }
 
     /**
@@ -100,53 +104,101 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 
     }
 
-    protected void showLoading(int code, String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_LOADING, message);
-        dialog.show();
-        mLoadings.put(code, dialog);
-    }
-
-    protected void dismissLoading(int code) {
-        QMUITipDialog dialog = mLoadings.get(code);
-        if (dialog != null) {
-            dialog.dismiss();
-        }
-    }
-
-    protected void showOk(String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
-        dialog.show();
-        Run.onBackground(new Action() {
+    protected void showLoading(final int code, final String message) {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void call() {
-                try {
-                    Thread.sleep(2000);
+            public void run() {
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_LOADING, message);
+                dialog.show();
+                mLoadings.put(code, dialog);
+            }
+        });
+    }
+
+    protected void dismissLoading(final int code) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = mLoadings.get(code);
+                if (dialog != null) {
                     dialog.dismiss();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         });
     }
 
-    protected void showError(String message) {
-        final QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_FAIL, message);
-        dialog.show();
-        Run.onBackground(new Action() {
+    protected void dismissAllLoading() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void call() {
-                try {
-                    Thread.sleep(2000);
-                    dialog.dismiss();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void run() {
+                for (int i = 0; i < mLoadings.size(); i++) {
+                    QMUITipDialog dialog = mLoadings.valueAt(i);
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
                 }
             }
         });
+
+    }
+
+    protected void showOk(final String message) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, message);
+                dialog.show();
+                delayDismissDialog(dialog, 1500);
+            }
+        });
+    }
+
+    protected void showOk(@StringRes int strRes) {
+        showOk(getString(strRes));
+    }
+
+    protected void showError(final String message) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissAllLoading();
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_FAIL, message);
+                dialog.show();
+                delayDismissDialog(dialog, 1500);
+            }
+        });
+    }
+
+    protected void showError(@StringRes int strRes) {
+        showError(getString(strRes));
+    }
+
+    protected void showInfo(final String str) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                QMUITipDialog dialog = getDialog(QMUITipDialog.Builder.ICON_TYPE_INFO, str);
+                dialog.show();
+                delayDismissDialog(dialog, 2000);
+            }
+        });
+    }
+
+    protected void showInfo(@StringRes int strRes) {
+        showInfo(getString(strRes));
+    }
+
+    private void delayDismissDialog(final QMUITipDialog dialog, int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, delay);
     }
 
     private QMUITipDialog getDialog(int iconType, String message) {
-        return new QMUITipDialog.Builder(getActivity())
+        return new QMUITipDialog.Builder(getContext())
                 .setIconType(iconType)
                 .setTipWord(message)
                 .create();
@@ -154,9 +206,10 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 
     /**
      * 返回按键触发时调用
-     * @return 返回True代表已经处理返回逻辑,Activity不用自己finish.返回False代表没有处理返回逻辑,Activity自己走自己的逻辑
+     *
+     * @return 返回True代表已经处理返回逻辑, Activity不用自己finish.返回False代表没有处理返回逻辑, Activity自己走自己的逻辑
      */
-    public boolean onBackPressed(){
+    public boolean onBackPressed() {
         return false;
     }
 }

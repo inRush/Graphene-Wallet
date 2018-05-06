@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.gxb.gxswallet.R;
 import com.gxb.gxswallet.base.dialog.PasswordDialog;
 import com.gxb.gxswallet.db.wallet.WalletData;
-import com.gxb.gxswallet.db.wallet.WalletDataManager;
+import com.gxb.gxswallet.manager.WalletManager;
 import com.gxb.gxswallet.page.main.MainActivity;
 import com.gxb.gxswallet.services.WalletService;
 import com.qmuiteam.qmui.widget.QMUITopBar;
@@ -34,12 +34,10 @@ public class BackUpTipActivity extends BaseActivity implements PasswordDialog.On
     TextView mUnlockWalletHintTV;
 
 
-    private static final int EXPORT_LOADING_KEY = 0x100;
     private static final String DATA_KEY = "wallet";
     private static final String START_KEY = "main";
     private WalletData mWalletData;
     private boolean isStartMain;
-    private WalletDataManager mWalletDataManager;
 
 
     public static void start(Activity activity, WalletData wallet, boolean startMain) {
@@ -66,28 +64,22 @@ public class BackUpTipActivity extends BaseActivity implements PasswordDialog.On
         mTopBar.addLeftBackImageButton().setOnClickListener(v -> showConfirm());
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        mWalletDataManager = new WalletDataManager(this);
-    }
-
     private void showConfirm() {
         new QMUIDialog.MessageDialogBuilder(this)
-                .setTitle("提示")
-                .setMessage("确定是否已经完成备份?")
-                .addAction("取消", (dialog, index) -> dialog.dismiss())
-                .addAction("确定", (dialog, index) -> {
+                .setTitle(getString(R.string.tip))
+                .setMessage(getString(R.string.confirm_backup_has_been_completed))
+                .addAction(getString(R.string.cancel), (dialog, index) -> dialog.dismiss())
+                .addAction(getString(R.string.ok), (dialog, index) -> {
                     dialog.dismiss();
                     mWalletData.setBrainKey("");
                     mWalletData.setIsBackUp(true);
-                    mWalletDataManager.update(mWalletData);
+                    WalletManager.getInstance().updateWallet(mWalletData);
                     finish();
                     if (isStartMain) {
                         MainActivity.start(this);
                     }
                 })
-                .addAction("下次再说", (dialog, index) -> {
+                .addAction(getString(R.string.next_time_say), (dialog, index) -> {
                     dialog.dismiss();
                     finish();
                     if (isStartMain) {

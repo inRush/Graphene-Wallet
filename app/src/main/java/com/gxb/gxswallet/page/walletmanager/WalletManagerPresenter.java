@@ -23,7 +23,7 @@ public class WalletManagerPresenter extends BasePresenter<WalletManagerContract.
 
     private WalletDataManager mWalletDataManager;
 
-    public WalletManagerPresenter(WalletManagerContract.View view) {
+    WalletManagerPresenter(WalletManagerContract.View view) {
         super(view);
         mWalletDataManager = new WalletDataManager(App.getInstance());
 

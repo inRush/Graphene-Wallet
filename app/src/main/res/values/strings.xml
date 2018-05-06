@@ -183,4 +183,8 @@
     <string name="more">更多</string>
     <string name="send_balance_not_allow_pay">发送账户余额不足</string>
     <string name="connection_connect_failure">数据连接失败,请检查网络连接</string>
+    <string name="gain_failure">获取失败</string>
+    <string name="tip">提示</string>
+    <string name="confirm_backup_has_been_completed">确定是否已经完成备份?</string>
+    <string name="next_time_say">下次再说</string>
 </resources>

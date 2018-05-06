@@ -1,4 +1,4 @@
-package com.gxb.gxswallet.utils;
+package com.sxds.common.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,10 +14,10 @@ import java.io.ObjectOutputStream;
 /**
  * @author xuzhou
  * @date 2016/9/12
- * SharedPreferenceUtils
+ * SharedPreferenceHelper
  */
 
-public class SharedPreferenceUtils {
+public class SharedPreferenceHelper {
 
     public static void putInt(Context context, String key, int value) {
         try {
