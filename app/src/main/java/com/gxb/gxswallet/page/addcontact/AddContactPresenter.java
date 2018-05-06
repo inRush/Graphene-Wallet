@@ -31,10 +31,7 @@ public class AddContactPresenter extends BasePresenter<AddContactContract.View>
 
     @Override
     public boolean saveContact(ContactData contact) {
-        if (mContactDataManager.isExist(contact)) {
-            return false;
-        }
-        return mContactDataManager.insert(contact);
+        return !mContactDataManager.isExist(contact) && mContactDataManager.insert(contact);
     }
 
     @Override

@@ -2,18 +2,14 @@ package com.gxb.gxswallet.page.createwallet;
 
 import com.gxb.gxswallet.App;
 import com.gxb.gxswallet.R;
-import com.gxb.gxswallet.db.asset.AssetSymbol;
 import com.gxb.gxswallet.db.wallet.WalletData;
 import com.gxb.gxswallet.services.WalletService;
-import com.gxb.gxswallet.services.rpc.WebSocketServicePool;
 import com.sxds.common.presenter.BasePresenter;
 
 import java.util.regex.Pattern;
 
-import cy.agorise.graphenej.api.GetAccountByName;
-import cy.agorise.graphenej.interfaces.WitnessResponseListener;
-import cy.agorise.graphenej.models.BaseResponse;
-import cy.agorise.graphenej.models.WitnessResponse;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author inrush
@@ -55,24 +51,14 @@ class CreateWalletPresenter extends BasePresenter<CreateWalletContract.View>
     @Override
     public void checkWalletExist(String name) {
         getView().showLoading(CHECK_EXIST_LOADING_CODE, App.getInstance().getString(R.string.check_wallet_name));
-
-        new GetAccountByName(WebSocketServicePool.getInstance().getService(AssetSymbol.GXS.TEST), name).call(new WitnessResponseListener() {
-            @Override
-            public void onSuccess(WitnessResponse response) {
-                getView().dismissLoading(CHECK_EXIST_LOADING_CODE);
-                if (response.result == null) {
-                    getView().onCheckWalletExistSuccess(false, name);
-                } else {
-                    getView().onCheckWalletExistSuccess(true, name);
-                }
-            }
-
-            @Override
-            public void onError(BaseResponse.Error error) {
-                getView().dismissLoading(CHECK_EXIST_LOADING_CODE);
-                getView().onCheckWalletExistError(new Error(error.message));
-            }
-        });
+        WalletService.getInstance().fetchAllAccountByName(name)
+                .map(accountMap -> accountMap.size() > 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(hasAccount -> getView().onCheckWalletExistSuccess(hasAccount, name), error -> {
+                    getView().dismissLoading(CHECK_EXIST_LOADING_CODE);
+                    getView().onCheckWalletExistError(new Error(error.getMessage()));
+                });
     }
 
 

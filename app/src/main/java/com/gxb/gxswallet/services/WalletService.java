@@ -447,7 +447,7 @@ public class WalletService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rpcTask -> {
                     if (rpcTask.getState() == Task.State.COMPLETE) {
-                        if (rpcTask.getData().result instanceof AccountProperties) {
+                        if (rpcTask.getData() != null && rpcTask.getData().result instanceof AccountProperties) {
                             AccountProperties account = (AccountProperties) rpcTask.getData().result;
                             result.put(rpcTask.getTag(), account);
                         }
