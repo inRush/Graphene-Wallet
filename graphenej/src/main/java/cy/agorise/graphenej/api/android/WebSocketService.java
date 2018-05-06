@@ -83,9 +83,9 @@ public class WebSocketService {
          */
         CONNECT_TIMEOUT,
         /**
-         * 处于初始化状态
+         * 处于未初始化状态
          */
-        CONNECTION_INITIALIZED,
+        CONNECTION_UNINITIALIZED,
         /**
          * 初始化成功
          */
@@ -141,7 +141,7 @@ public class WebSocketService {
     public WebSocketService(Context context) {
         mContext = context;
         mRetryIndex = 0;
-        this.mStatus = WsStatus.CONNECTION_INITIALIZED;
+        this.mStatus = WsStatus.CONNECTION_UNINITIALIZED;
         try {
             apiCode = new ApiCode();
             SSLContext sslContext = NaiveSSLContext.getInstance("TLS");
@@ -184,27 +184,44 @@ public class WebSocketService {
     }
 
 
+    /**
+     * 连接WebSocket
+     *
+     * @param url Socket Url
+     * @param tag Socket的Tag,通常是资产的名称
+     * @throws ExceptionInInitializerError 初始化WebSocket异常
+     */
     public void connect(String url, String tag) throws ExceptionInInitializerError {
         mSocketTag = tag;
         init(url);
         mHandler.post(mConnectTask);
     }
 
+    /**
+     * 所有连接任务完成
+     * (1) WebSocket连接完成
+     * (2) 各种ApiCode{@link ApiCode}以及ChainId初始化完成，
+     */
     private void connectionComplete() {
         setStatus(WsStatus.CONNECTION_INITIALIZED_SUCCESS);
         sendBroadcast(ACTION_COMPLETE);
         removeTimeoutTask();
     }
 
+    /**
+     * WebSocket连接失败
+     */
     private void connectionFailure() {
         setStatus(WsStatus.CONNECT_FAIL);
         sendBroadcast(ACTION_CONNECT_ERROR);
         reconnect();
     }
 
+    /**
+     * WebSocket连接断开
+     */
     private void connectionDisconncet() {
         setStatus(WsStatus.DISCONNECT);
-
         sendBroadcast(ACTION_DISCONNECTED);
         if (!isActiveDisconnect) {
             reconnect();
@@ -213,11 +230,15 @@ public class WebSocketService {
 
     /**
      * 提交超时任务,防止长时间未连接超时
+     * 在设定的超时时间内触发该任务
      */
     private void postTimeoutTask() {
         mHandler.postDelayed(mTimeoutTask, mTimeout);
     }
 
+    /**
+     * 任务完成,去除超时任务
+     */
     private void removeTimeoutTask() {
         mHandler.removeCallbacks(mTimeoutTask);
     }
@@ -256,6 +277,13 @@ public class WebSocketService {
         return mCurrentId++;
     }
 
+    /**
+     * 提交任务
+     *
+     * @param apiCall  Rpc任务封装
+     * @param listener 任务回调
+     * @throws Exception Socket未初始化完成异常
+     */
     public void call(ApiCall apiCall, OnResponseListener listener) throws Exception {
         if (this.mStatus != WsStatus.CONNECTION_INITIALIZED_SUCCESS) {
             throw new Exception("socket is not initialized");
@@ -268,35 +296,6 @@ public class WebSocketService {
         }
     }
 
-
-    private void setStatus(WsStatus status) {
-        this.mStatus = status;
-    }
-
-    public WsStatus getStatus() {
-        return this.mStatus;
-    }
-
-    public String getSocketTag() {
-        return mSocketTag;
-    }
-
-
-    public void setRetryCount(int retryCount) {
-        this.mRetryCount = retryCount;
-    }
-
-    public void setRetryDelay(int retryDelay) {
-        this.mRetryDelay = retryDelay;
-    }
-
-    public boolean isConnected() {
-        return mStatus == WsStatus.CONNECTION_INITIALIZED_SUCCESS;
-    }
-
-    public boolean isInitializedComplete() {
-        return mStatus == WsStatus.CONNECTION_INITIALIZED_SUCCESS;
-    }
 
     public void disconnect() {
         isActiveDisconnect = true;
@@ -330,11 +329,13 @@ public class WebSocketService {
             if (baseResponse.error != null) {
                 if (baseResponse.id >= LOW_ID) {
                     mCallbackMap.get(baseResponse.id).onError(baseResponse.error);
+                } else {
+                    connectionFailure();
                 }
             } else if (baseResponse.id == LOGIN_ID) {
                 sendCall(websocket, RPC.CALL_DATABASE, DATABASE_ID);
             } else if (baseResponse.id == DATABASE_ID) {
-                apiCode.setDataseId(getId(response));
+                apiCode.setDatabaseId(getId(response));
                 sendCall(websocket, RPC.CALL_NETWORK_BROADCAST, NETWORK_BROADCAST_ID);
             } else if (baseResponse.id == NETWORK_BROADCAST_ID) {
                 apiCode.setNetworkBroadcastId(getId(response));
@@ -397,5 +398,34 @@ public class WebSocketService {
             super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
             connectionDisconncet();
         }
+    }
+
+    private void setStatus(WsStatus status) {
+        this.mStatus = status;
+    }
+
+    public WsStatus getStatus() {
+        return this.mStatus;
+    }
+
+    public String getSocketTag() {
+        return mSocketTag;
+    }
+
+
+    public void setRetryCount(int retryCount) {
+        this.mRetryCount = retryCount;
+    }
+
+    public void setRetryDelay(int retryDelay) {
+        this.mRetryDelay = retryDelay;
+    }
+
+    public boolean isConnected() {
+        return mStatus == WsStatus.CONNECTION_INITIALIZED_SUCCESS;
+    }
+
+    public boolean isInitializedComplete() {
+        return mStatus == WsStatus.CONNECTION_INITIALIZED_SUCCESS;
     }
 }
