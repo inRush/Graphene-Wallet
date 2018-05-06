@@ -281,6 +281,17 @@ public class SendActivity extends PresenterActivity<SendContract.Presenter>
             showError(getString(R.string.amount_format_error));
             return;
         }
+        double amount = 0;
+        try {
+            amount = Double.parseDouble(amountEt.getText().toString());
+        }catch (Exception e){
+            showError(getString(R.string.amount_format_error));
+            return;
+        }
+        if (mCurrentWallet.getBalances(mSender.getAsset().getName()) < amount) {
+            showError(R.string.send_balance_not_allow_pay);
+            return;
+        }
         new PasswordDialog().setPasswordConfirmListener(this).show(getSupportFragmentManager(), "password");
     }
 
