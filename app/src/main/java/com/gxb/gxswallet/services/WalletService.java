@@ -137,13 +137,6 @@ public class WalletService {
     }
 
 
-    public void checkAddressIsExist(ECKey privateKey, ServerListener<Boolean> listener) {
-        List<AssetData> assetDataList = AssetDataManager.getEnableList();
-        for (AssetData assetData : assetDataList) {
-
-        }
-    }
-
     /**
      * 导入账户
      *
